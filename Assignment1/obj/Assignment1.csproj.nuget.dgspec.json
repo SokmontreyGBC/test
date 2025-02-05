@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\shaff\\RiderProjects\\COMP2139\\Assignment1\\Assignment1\\Assignment1.csproj": {}
+    "C:\\Users\\shaff\\Desktop\\Web Dev\\Assigntment1\\comp2139_assignment\\Assignment1\\Assignment1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\shaff\\RiderProjects\\COMP2139\\Assignment1\\Assignment1\\Assignment1.csproj": {
+    "C:\\Users\\shaff\\Desktop\\Web Dev\\Assigntment1\\comp2139_assignment\\Assignment1\\Assignment1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shaff\\RiderProjects\\COMP2139\\Assignment1\\Assignment1\\Assignment1.csproj",
+        "projectUniqueName": "C:\\Users\\shaff\\Desktop\\Web Dev\\Assigntment1\\comp2139_assignment\\Assignment1\\Assignment1.csproj",
         "projectName": "Assignment1",
-        "projectPath": "C:\\Users\\shaff\\RiderProjects\\COMP2139\\Assignment1\\Assignment1\\Assignment1.csproj",
+        "projectPath": "C:\\Users\\shaff\\Desktop\\Web Dev\\Assigntment1\\comp2139_assignment\\Assignment1\\Assignment1.csproj",
         "packagesPath": "C:\\Users\\shaff\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shaff\\RiderProjects\\COMP2139\\Assignment1\\Assignment1\\obj\\",
+        "outputPath": "C:\\Users\\shaff\\Desktop\\Web Dev\\Assigntment1\\comp2139_assignment\\Assignment1\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\shaff\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -36,9 +36,8 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+          "auditMode": "all"
+        }
       },
       "frameworks": {
         "net9.0": {
@@ -62,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\shaff\\.dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

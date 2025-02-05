@@ -10,4 +10,6 @@ public class InventoryController : Controller
     {
         return View();
     }
+    
+    
 }
