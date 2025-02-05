@@ -9,11 +9,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2133e0f-0a7e-4132-ad9c-0a6266939b72" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Assignment1/Data/ApplicationDbContext.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assignment1/Models/Product.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Assignment1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Assignment1/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/Controllers/InventoryController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/Controllers/InventoryController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/Views/Shared/_Layout.cshtml" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/Views/Shared/_Layout.cshtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment1/Assignment1.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/Assignment1.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment1/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment1/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/appsettings.Development.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.g.props" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.g.targets" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
@@ -31,18 +35,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "stadtt"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;stadtt&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/stadtt/comp2139_assignment.git",
-    "accountId": "a8872ae6-07ed-488a-95e0-d59621b6980a"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/stadtt/comp2139_assignment.git&quot;,
+    &quot;accountId&quot;: &quot;a8872ae6-07ed-488a-95e0-d59621b6980a&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../../COMP2139-Friday/COMP2139-ICE/COMP2139-ICE/Program.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -107,7 +111,8 @@
       <option name="presentableId" value="Default" />
       <updated>1738692236363</updated>
       <workItem from="1738692237523" duration="2022000" />
-      <workItem from="1738732648159" duration="4145000" />
+      <workItem from="1738732648159" duration="4168000" />
+      <workItem from="1738798550542" duration="1079000" />
     </task>
     <servers />
   </component>
