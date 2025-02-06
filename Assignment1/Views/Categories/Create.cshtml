@@ -1,4 +1,4 @@
-@model dynamic
+@model Category
 
 @{
     ViewBag.Title = "Create a Category";
@@ -6,3 +6,22 @@
 }
 
 <h2>Register a New Category</h2>
+
+<form asp-action="Create" method="post">
+    
+    <div class="form-group">
+        <label asp-for="CategoryName" class="control-label">Category Name:</label>
+        <input asp-for="CategoryName" class="form-control"></input>
+        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    </div>
+    <br/>
+    <div class="form-group">
+        <input type="submit" value="Create" class="btn btn-primary"/>
+    </div>
+    
+    @section Scripts{
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+</form>

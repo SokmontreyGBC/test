@@ -1,8 +1,38 @@
-
-
+@model List<Category>
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Categories";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h2>Temp Category View For Testing</h2>
+<br/>
+<div class="row">
+    <div>
+        <a class="btn btn-primary" asp-action="Create" asp-controller="Categories">Create Category</a>
+    </div>
+</div>
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+        </thead>
+
+        <tbody class="tableData">
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.CategoryId</td>
+                <td>@category.CategoryName</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No categories found.</p>
+}
