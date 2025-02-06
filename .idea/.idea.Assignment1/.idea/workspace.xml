@@ -9,23 +9,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f2133e0f-0a7e-4132-ad9c-0a6266939b72" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assignment1/Data/ApplicationDbContext.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assignment1/Models/Product.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Assignment1/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Assignment1/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/Assignment1.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/Assignment1.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/appsettings.Development.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.dgspec.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.g.props" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.g.props" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.g.targets" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Assignment1.csproj.nuget.g.targets" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.AssemblyInfo.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.GeneratedMSBuildEditorConfig.editorconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.assets.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/Debug/net9.0/Assignment1.assets.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/project.assets.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assignment1/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/project.packagespec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assignment1/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment1/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +103,7 @@
       <updated>1738692236363</updated>
       <workItem from="1738692237523" duration="2022000" />
       <workItem from="1738732648159" duration="4168000" />
-      <workItem from="1738798550542" duration="1079000" />
+      <workItem from="1738798550542" duration="4300000" />
     </task>
     <servers />
   </component>
