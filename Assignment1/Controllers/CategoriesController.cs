@@ -37,16 +37,4 @@ public class CategoriesController : Controller
         return View(category);
     }
     
-    [HttpGet]
-    public IActionResult Delete(int id)
-    {
-        var category = _context.Categories.Find(id);
-        if (category == null)
-        {
-            return NotFound();
-        }
-        _context.Categories.Remove(category);
-        _context.SaveChanges();
-        return RedirectToAction("Index");
-    }
 }

@@ -1,6 +1,6 @@
 @model List<Product>
 @{
-    ViewBag.Title = "Inventory";
+    ViewBag.Title = "Products";
     Layout = "_Layout";
 }
 
@@ -35,7 +35,6 @@
                 <td>@product.ProductPrice</td>
                 <td>@product.CategoryId</td>
                 <td>@product.StockId</td>
-                <td><a class="btn btn-danger" asp-action="Delete" asp-controller="Products" asp-route-id="@product.ProductId">Delete</a></td>
             </tr>
         }
         </tbody>

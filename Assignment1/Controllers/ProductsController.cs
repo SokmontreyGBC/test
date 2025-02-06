@@ -24,6 +24,7 @@ public class ProductsController : Controller
     [HttpGet]
     public IActionResult Create()
     {
+        ViewBag.Categories = _context.Categories.ToList();
         return View();
     }
     
@@ -37,20 +38,8 @@ public class ProductsController : Controller
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+        // TODO Error message
         return View(product);
-    }
-    
-    [HttpGet]
-    public IActionResult Delete(int id)
-    {
-        var product = _context.Products.Find(id);
-        if (product == null)
-        {
-            return NotFound();
-        }
-        _context.Products.Remove(product);
-        _context.SaveChanges();
-        return RedirectToAction("Index");
     }
     
 }
