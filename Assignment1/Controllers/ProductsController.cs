@@ -17,8 +17,8 @@ public class ProductsController : Controller
     }
     public IActionResult Index()
     {
-        //
-        var inventory = _context.Products.ToList();
+
+        var inventory = _context.Products.Include(p => p.Category).ToList();
         return View(inventory);
     }
     
@@ -51,9 +51,9 @@ public class ProductsController : Controller
         {
             return NotFound();
         }   
-        ViewBag.Categories = _context.Categories.Find(product.CategoryId);
+        ViewBag.Categories = _context.Categories.ToList();
         ViewBag.Quantity = _context.Stocks.Find(product.StockId);
-        ViewBag.Price = _context.Products.FirstOrDefault(p =>p.ProductId == id );
+        ViewBag.Price = _context.Products.FirstOrDefault(p => p.ProductId == id);
         return View(product);
     }
 

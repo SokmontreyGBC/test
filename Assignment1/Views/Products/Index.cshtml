@@ -34,16 +34,12 @@
                 <td>@product.ProductName</td> 
                 <td>@product.ProductDescription</td>
                 <td>@product.ProductPrice</td>
-                <td>@product.CategoryId</td>
-                <td>@product.StockId</td>
+                <td>@product.Category.CategoryName</td>
+                <td>@product.StockId</td> @*THIS NEEDS TO BE CHANGED TO REFLECT STOCK QUANTITY*@
                 <td>
                     <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-warning">Delete</a>
                     <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-primary">Edit</a>
-                   
-                    
                 </td>
-              
-                
             </tr>
         }
         

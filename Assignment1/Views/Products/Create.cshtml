@@ -15,7 +15,7 @@
             <label asp-for="ProductDescription" class="control-label"></label>
             <input asp-for="ProductDescription" class="form-control"/>
             <span asp-validation-for="ProductDescription" class="text-danger"></span>
-            <label asp-for="ProductPrice" class="control-label"></label>
+            <label asp-for="ProductPrice" class="control-label">Price</label>
             <input asp-for="ProductPrice" class="form-control"/>
             <span asp-validation-for="ProductPrice" class="text-danger"></span>
             <label asp-for="CategoryId" class="control-label">Category</label>
@@ -28,6 +28,9 @@
                     }
                 }
             </select>
+            <label asp-for="StockId" class="control-label">Stock</label>
+            <input asp-for="StockId" class="form-control"/>
+            <span asp-validation-for="StockId" class="text-danger"></span>
         </div>
         <br/>
         <div class="d-flex justify-content-end gap-2">
