@@ -1,6 +1,7 @@
 using Assignment1.Data;
 using Assignment1.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assignment1.Controllers;
 /*
@@ -40,6 +41,70 @@ public class ProductsController : Controller
         }
         // TODO Error message
         return View(product);
+    }
+
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        var product = _context.Products.Find(id);
+        if (product == null)
+        {
+            return NotFound();
+        }   
+        ViewBag.Categories = _context.Categories.Find(product.CategoryId);
+        ViewBag.Quantity = _context.Stocks.Find(product.StockId);
+        ViewBag.Price = _context.Products.FirstOrDefault(p =>p.ProductId == id );
+        return View(product);
+    }
+
+    [HttpPost]
+    public IActionResult Edit(int id,
+        [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,StockId")] Product product)
+    {
+        if (id != product.ProductId)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(product);
+                _context.SaveChanges();
+            }
+            catch
+                (DbUpdateConcurrencyException)
+            {
+                if (!ProductsExist(product.ProductId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+        return RedirectToAction("Index");
+        
+    }
+    public bool ProductsExist(int id)
+    {
+        return _context.Products.Any(e => e.ProductId == id);
+    }
+
+    public IActionResult Delete(int id)
+    {
+        var product = _context.Products.Find(id);
+        if (product != null)
+        {
+            _context.Products.Remove(product);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+            
+        }
+        return NotFound();
     }
     
 }
