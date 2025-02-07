@@ -94,17 +94,32 @@ public class ProductsController : Controller
         return _context.Products.Any(e => e.ProductId == id);
     }
 
+    [HttpGet]
     public IActionResult Delete(int id)
     {
-        var product = _context.Products.Find(id);
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+        if (product == null)
+        {
+            return NotFound();
+
+        }
+        return View(product);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+
+    public IActionResult DeleteConfirmed(int productid)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == productid);
         if (product != null)
         {
             _context.Products.Remove(product);
             _context.SaveChanges();
             return RedirectToAction("Index");
-            
         }
         return NotFound();
     }
+    
     
 }

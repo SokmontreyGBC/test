@@ -8,8 +8,10 @@ public class Product
 
     public int ProductId { get; set; }
     [Required]
+    [Display(Name = "Product Name")]
     public string ProductName { get; set; }
-
+    [Required]
+    [Display(Name = "Product Description")]
     public string ProductDescription { get; set; }
 
     public decimal ProductPrice { get; set; }
