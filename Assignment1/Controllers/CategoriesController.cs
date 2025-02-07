@@ -15,12 +15,14 @@ public class CategoriesController : Controller
     public IActionResult Index()
     {
         var categories = _context.Categories.ToList();
-        return View(categories);
+        return View(categories);    
     }
     
     [HttpGet]
     public IActionResult Create()
     {
+        // Write list of categories to variable
+        ViewBag.Categories = _context.Categories.ToList();
         return View();
     }
     
