@@ -39,7 +39,6 @@ public class ProductsController : Controller
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
-        // TODO Error message
         return View(product);
     }
 
