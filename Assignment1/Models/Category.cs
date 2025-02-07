@@ -7,8 +7,8 @@ public class Category
         CategoryId = categoryId;
         CategoryName = categoryName;
     }
+    public Category() { }
 
     public int CategoryId { get; set; }
-
     public string CategoryName { get; set; }
 }
