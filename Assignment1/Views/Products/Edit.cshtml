@@ -1,0 +1,40 @@
+﻿@model Product
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+                    <form asp-action="Edit" method="post">
+                        @Html.HiddenFor(model => model.ProductId)
+                        <div class="form-group">
+                            <label asp-for="ProductName" class="control-label"></label>
+                            <input asp-for="ProductName" class="form-control">
+                            <span asp-validation-for="ProductName" class="text-bg-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProductDescription" class="control-label"></label>
+                            <input asp-for="ProductDescription" class="form-control">
+                            <span asp-validation-for="ProductDescription" class="text-bg-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ProductPrice" class="control-label"></label>
+                            <input asp-for="ProductPrice" class="form-control">
+                            <span asp-validation-for="ProductPrice" class="text-bg-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+
+                    </form>
+
+
+@section Scripts{
+@{
+await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+}
+}
+
