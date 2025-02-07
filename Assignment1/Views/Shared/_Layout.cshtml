@@ -13,13 +13,13 @@
 
 <body>
 <div class="d-flex flex-row vh-100">
-    <div class="sidebar-width border-end">
-        <header class="p-4 d-flex flex-column ">
+    <div class="sidebar-width border-end d-flex">
+        <header class="p-4 align-self-stretch d-flex flex-column">
             <p class="font-monospace ">
                  Assignment1
             </p>
-            <nav class="flex-grow-1">
-                <ul class="navbar-nav">
+            <nav class="flex-grow-1 d-flex flex-column">
+                <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
                         <a class="nav-link @( (string)ViewData["Page"]! == "Home" ? "text-primary" : "text-dark") "
                            asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -35,6 +35,16 @@
                     <li class="nav-item">
                         <a class="nav-link @( (string)ViewData["Page"]! == "Categories" ? "text-primary" : "text-dark")"
                            asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="" class="nav-link"
+                           >Sign in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="" class="nav-link"
+                        >About us</a>
                     </li>
                 </ul>
             </nav>
