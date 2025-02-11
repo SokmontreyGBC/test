@@ -4,5 +4,4 @@ public enum UserType
 {
     Admin,
     User,
-    Guest,
 }

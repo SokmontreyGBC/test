@@ -11,6 +11,8 @@ public class Product
     public string? ProductDescription { get; set; }
 
     public decimal ProductPrice { get; set; }
+    
+    public int ProductStock { get; set; }
 
     public bool IsArchived { get; set; }
 
@@ -20,9 +22,7 @@ public class Product
 
     // navigation properties
 
-    public Category Category { get; set; }
+    public Category? Category { get; set; }
 
-    public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
-
-    public Stock Stock { get; set; }
+    public ICollection<CartItem>? CartItems { get; set; } = new List<CartItem>();
 }

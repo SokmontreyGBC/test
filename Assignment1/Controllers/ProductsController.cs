@@ -51,14 +51,13 @@ public class ProductsController : Controller
             return NotFound();
         }   
         ViewBag.Categories = _context.Categories.ToList();
-        ViewBag.Quantity = _context.Stocks.Find(product.StockId);
         ViewBag.Price = _context.Products.FirstOrDefault(p => p.ProductId == id);
         return View(product);
     }
 
     [HttpPost]
     public IActionResult Edit(int id,
-        [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,StockId")] Product product)
+        [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,ProductStock")] Product product)
     {
         if (id != product.ProductId)
         {
