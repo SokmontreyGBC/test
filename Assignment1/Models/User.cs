@@ -11,5 +11,5 @@ public class User
 
     // navigation properties
 
-    public ICollection<Cart> Carts { get; set; } = new List<Cart>();
+    public ICollection<Cart>? Carts { get; set; } = new List<Cart>();
 }

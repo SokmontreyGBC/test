@@ -14,5 +14,5 @@ public class Order
 
     // navigation properties
 
-    public Cart Cart { get; set; }
+    public Cart? Cart { get; set; }
 }
