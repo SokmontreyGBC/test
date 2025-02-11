@@ -4,21 +4,25 @@ namespace Assignment1.Models;
 
 public class Product
 {
- 
-
     public int ProductId { get; set; }
-    [Required]
-    [Display(Name = "Product Name")]
+
     public string ProductName { get; set; }
-    [Required]
-    [Display(Name = "Product Description")]
-    public string ProductDescription { get; set; }
+
+    public string? ProductDescription { get; set; }
 
     public decimal ProductPrice { get; set; }
 
+    public bool IsArchived { get; set; }
+
+    // foreign key properties
+
     public int CategoryId { get; set; }
- 
-    public int StockId { get; set; }
-    
-    public Category? Category { get; set; }
+
+    // navigation properties
+
+    public Category Category { get; set; }
+
+    public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+
+    public Stock Stock { get; set; }
 }

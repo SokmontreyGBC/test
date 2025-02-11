@@ -2,22 +2,17 @@ namespace Assignment1.Models;
 
 public class Order
 {
-    public Order(int orderId, int orderQuantity, DateTime orderDate, int productId, int userId)
-    {
-        OrderId = orderId;
-        OrderQuantity = orderQuantity;
-        OrderDate = orderDate;
-        ProductId = productId;
-        UserId = userId;
-    }
-
     public int OrderId { get; set; }
 
-    public int OrderQuantity { get; set; }
+    public OrderStatus OrderStatus { get; set; }
 
     public DateTime OrderDate { get; set; }
 
-    public int ProductId { get; set; }
+    // foreign key properties
 
-    public int UserId { get; set; }
+    public int CartId { get; set; }
+
+    // navigation properties
+
+    public Cart Cart { get; set; }
 }

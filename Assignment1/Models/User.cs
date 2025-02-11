@@ -3,13 +3,13 @@ namespace Assignment1.Models;
 
 public class User
 {
-    public User(int userId, UserType userType)
-    {
-        UserId = userId;
-        UserType = userType;
-    }
-
     public int UserId { get; set; }
 
+    public string? UserName { get; set; }
+
     public UserType UserType { get; set; }
+
+    // navigation properties
+
+    public ICollection<Cart> Carts { get; set; } = new List<Cart>();
 }
