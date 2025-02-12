@@ -15,12 +15,23 @@ public class ProductsController : Controller
     {
         _context = context;
     }
-    public IActionResult Index()
+    
+    [HttpGet]
+    public IActionResult Index(string searchString)
     {
-
+        
         var inventory = _context.Products.Include(p => p.Category).ToList();
+        if (!string.IsNullOrEmpty(searchString))
+        {
+             inventory = inventory.Where
+                (s => s.ProductName.ToLower().Contains(searchString.ToLower())).ToList();
+             
+        }
+        
         return View(inventory);
+        
     }
+    
     
     [HttpGet]
     public IActionResult Create()
