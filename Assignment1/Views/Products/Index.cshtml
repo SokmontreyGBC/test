@@ -20,10 +20,23 @@
                 <label>Find by name: <input type="text" name="searchString" value=""/></label>
                 <input type="submit" value="Search" class="btn btn-primary" />
                 <a asp-action="Index">Back to Full List</a>
+               
             </p>
 
         </div>
 
+    </form>
+</div>
+<div>
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+        <select name="sort" class="form-control">
+            <option value="default">Sort</option>
+            <option value="@ViewData["priceSort"]">Price:High > Low</option>
+            <option value="price_asc">Price:Low > High</option>
+        </select>
+        <input type="submit" value="Submit" class="btn btn-primary"/>
+        </div>
     </form>
 </div>
 
