@@ -17,20 +17,58 @@ public class ProductsController : Controller
     }
     
     [HttpGet]
-    public IActionResult Index(string searchString)
+    // public IActionResult Index(string searchString)
+    // {
+    //     
+    //     var inventory = _context.Products.Include(p => p.Category).ToList();
+    //     if (!string.IsNullOrEmpty(searchString))
+    //     {
+    //          inventory = inventory.Where
+    //             (s => s.ProductName.ToLower().Contains(searchString.ToLower())).ToList();
+    //          
+    //     }
+    //     
+    //     return View(inventory);
+    //     
+    // }
+    public IActionResult Index(string searchString,string sort)
     {
         
         var inventory = _context.Products.Include(p => p.Category).ToList();
         if (!string.IsNullOrEmpty(searchString))
         {
-             inventory = inventory.Where
+            inventory = inventory.Where
                 (s => s.ProductName.ToLower().Contains(searchString.ToLower())).ToList();
              
         }
-        
+        ViewData["nameSort"] = string.IsNullOrEmpty(sort) ? "name_dsc" : "";
+        ViewData["priceSort"] = string.IsNullOrEmpty(sort) ? "price_dsc" : "";
+        ViewData["stockSort"] = string.IsNullOrEmpty(sort) ? "stock_dsc" : "";
+        ViewData["categorySort"] = string.IsNullOrEmpty(sort) ? "category_dsc" : "";
+
+        switch (sort)
+        {
+            case "name_dsc":
+                inventory = inventory.OrderByDescending(s => s.ProductName).ToList();
+                 break;
+            case "price_dsc":
+                inventory = inventory.OrderByDescending(s => s.ProductPrice).ToList();
+                break;
+            case "stock_dsc":
+                inventory = inventory.OrderByDescending(s => s.ProductStock).ToList();
+                break;
+            case "category_dsc":
+                inventory = inventory.OrderByDescending(s => s.Category.CategoryName).ToList();
+                break;
+            default:
+                inventory = inventory.OrderBy(s => s.ProductName).ToList();
+                break;
+        }
+
         return View(inventory);
         
     }
+
     
     
     [HttpGet]

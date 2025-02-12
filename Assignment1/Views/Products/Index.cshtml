@@ -39,11 +39,11 @@
         <thead>
         <tr>
             <th>ID</th> 
-            <th><a asp-action="Index" class="text-dark"></a>Name</th>
+            <th><a asp-action="Index" asp-route-sort="@ViewData["nameSort"]" class="text-dark">Name</a></th>
             <th>Description</th>
-            <th><a asp-action="Index" class="text-dark">Price</a></th>
-            <th><a asp-action="Index" class="text-dark">Category</a></th>
-            <th><a asp-action="Index" class="text-dark">Stock</a></th>
+            <th><a asp-action="Index" asp-route-sort="@ViewData["priceSort"]" class="text-dark">Price</a></th>
+            <th><a asp-action="Index" asp-route-sort="@ViewData["categorySort"]" class="text-dark">Category</a></th>
+            <th><a asp-action="Index" asp-route-sort="@ViewData["stockSort"]" class="text-dark">Stock</a></th>
             <th> Actions </th>
         </tr>
         </thead>
