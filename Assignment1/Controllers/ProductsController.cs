@@ -37,6 +37,9 @@ public class ProductsController : Controller
             case "name_dsc":
                 inventory = inventory.OrderByDescending(s => s.ProductName).ToList();
                  break;
+            case "name_asc":
+                inventory = inventory.OrderBy(s => s.ProductName).ToList();
+                break;
             case "price_asc":
                 inventory = inventory.OrderBy(s => s.ProductPrice).ToList();
                 break;
@@ -47,8 +50,14 @@ public class ProductsController : Controller
             case "stock_dsc":
                 inventory = inventory.OrderByDescending(s => s.ProductStock).ToList();
                 break;
+            case "stock_asc":
+                inventory = inventory.OrderBy(s => s.ProductStock).ToList();
+                break;
             case "category_dsc":
                 inventory = inventory.OrderByDescending(s => s.Category.CategoryName).ToList();
+                break;
+            case "category_asc":
+                inventory = inventory.OrderBy(s => s.Category.CategoryName).ToList();
                 break;
             default:
                 inventory = inventory.OrderBy(s => s.ProductName).ToList();

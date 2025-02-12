@@ -34,6 +34,8 @@
             <option value="default">Sort</option>
             <option value="@ViewData["priceSort"]">Price:High > Low</option>
             <option value="price_asc">Price:Low > High</option>
+            <option value="name_asc">Name:A > Z</option>
+            <option value="@ViewData["nameSort"]">Name:Z > A</option>
         </select>
         <input type="submit" value="Submit" class="btn btn-primary"/>
         </div>
@@ -52,7 +54,7 @@
         <thead>
         <tr>
             <th>ID</th> 
-            <th><a asp-action="Index" asp-route-sort="@ViewData["nameSort"]" class="text-dark">Name</a></th>
+        <th><a asp-action="Index" asp-route-sort="@ViewData["nameSort"]" class="text-dark">Name</a></th>
             <th>Description</th>
             <th><a asp-action="Index" asp-route-sort="@ViewData["priceSort"]" class="text-dark">Price</a></th>
             <th><a asp-action="Index" asp-route-sort="@ViewData["categorySort"]" class="text-dark">Category</a></th>
