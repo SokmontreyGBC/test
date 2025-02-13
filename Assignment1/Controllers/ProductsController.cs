@@ -48,8 +48,6 @@ public class ProductsController : Controller
         
         ViewData["Categories"] = _context.Categories.ToList();
 
-        ViewData["Categories"] = _context.Categories.ToList();
-
         ViewData["LowerStockThreshold"] = 10;
 
         return View(inventory);
@@ -71,8 +69,7 @@ public class ProductsController : Controller
             .Where(p => String.IsNullOrWhiteSpace(searchString)
                         || p.ProductName.ToLower().Contains(searchString))
             .Where(p => String.IsNullOrWhiteSpace(selectedCategoriesString)
-                        || selectedCategories.Contains(p.Category.CategoryName))
-            .AsQueryable();
+                        || selectedCategories.Contains(p.Category.CategoryName));
 
         Expression<Func<Product, object>> sortColumnSelector = orderBy switch
         {
@@ -88,8 +85,11 @@ public class ProductsController : Controller
             ? inventory.OrderByDescending(sortColumnSelector)
             : inventory.OrderBy(sortColumnSelector);
 
+        var inventoryList = inventory.ToList();
+
         ViewData["OrderType"] = orderType;
-        return PartialView("_ProductRows", inventory.ToList());
+        ViewData["LowerStockThreshold"] = 10;
+        return PartialView("_ProductRows", inventoryList);
     }
 
     [HttpGet]
