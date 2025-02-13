@@ -51,18 +51,17 @@ public class InventoryController : Controller
         {
             return NotFound();
         }
-
-        /*
-         * check for active cart
-         * remove the product from the list
-         * save the list back to the session
-         */
         List<Product> cart = GetCart();
         var toRemove = cart.Find(p => p.ProductId == id);
         if (toRemove != null)
         {
             cart.Remove(toRemove);
             StashCart(cart);
+        }
+        // gross ajax stuff to stop the refresh problem with offcanvas
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+        {
+            return Json(new { success = true });
         }
         return RedirectToAction("Index");
     }
