@@ -75,7 +75,7 @@ else
                         <span>@item.ProductName - @item.ProductPrice</span>
                         <form asp-action="RemoveFromCart" asp-controller="Inventory" method="post">
                             <input type="hidden" name="id" value="@item.ProductId"/>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-outline-secondary">
                                 <i class="fa-solid fa-minus"></i>
                             </button>
                         </form>
@@ -87,6 +87,9 @@ else
         {
             <p>Your cart is empty.</p>
         }
+    </div>
+    <div class="offcanvas-end d-flex justify-content-end m-4">
+        <button class="btn btn-primary">Checkout</button>
     </div>
 </div>
 
