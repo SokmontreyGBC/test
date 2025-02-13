@@ -1,0 +1,73 @@
+@model List<Product>
+@{
+    ViewData["Page"] = "Inventory";
+    ViewBag.Title = "Inventory";
+    Layout = "_Layout";
+}
+<div class="row align-items-start">
+    <h2 class="col-auto">Client-Facing Inventory</h2>
+     <div class="col-auto ms-auto">  @* Align cart button to the right *@
+         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+             <i class="fa-solid fa-cart-shopping"></i>
+         </button>
+         </div>
+</div>
+
+<br/>
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th> 
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody class="tableData">
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.ProductName</td> 
+                <td>@product.ProductDescription</td>
+                <td>@product.ProductPrice</td>
+                <td>@product.Category.CategoryName</td>
+                <td>@product.ProductStock</td> @*THIS NEEDS TO BE CHANGED TO REFLECT STOCK QUANTITY*@
+                <td>
+                    <button asp-action="AddToCart" asp-controller="Inventory" asp-route-id="@product.ProductId"> <i class="fa-solid fa-arrow-up"></i> </button>
+                </td>
+            </tr>
+        }
+        
+        </tbody>
+    </table>
+    
+   
+}
+else
+{
+    <br/>
+    <p>No products found.</p>
+}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div> @*buttons for later?*@
+        <button>
+            <i class="fa-solid fa-minus"></i>
+        </button>
+        <button>
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+  </div>
+</div>
