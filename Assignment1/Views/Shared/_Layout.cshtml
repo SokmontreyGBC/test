@@ -29,12 +29,12 @@
                            asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @( (string)ViewData["Page"]! == "Products" ? "text-primary" : "text-dark")"
-                           asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                        <a class="nav-link @( (string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"
+                           asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @( (string)ViewData["Page"]! == "Inventory" ? "text-primary" : "text-dark")"
-                           asp-area="" asp-controller="Inventory" asp-action="Index">Inventory</a>
+                        <a class="nav-link @( (string)ViewData["Page"]! == "Products" ? "text-primary" : "text-dark")"
+                           asp-area="" asp-controller="Client" asp-action="Index">Products</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @( (string)ViewData["Page"]! == "Categories" ? "text-primary" : "text-dark")"

@@ -11,11 +11,11 @@ namespace Assignment1.Controllers;
  *  This is the employee inventory controller
  *  It is responsible for non-client facing actions
  */
-public class ProductsController : Controller
+public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public ProductsController(ApplicationDbContext context)
+    public AdminController(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -45,7 +45,7 @@ public class ProductsController : Controller
             "Category",
             "ProductStock"
         };
-        
+
         ViewData["Categories"] = _context.Categories.ToList();
 
         ViewData["LowerStockThreshold"] = 10;

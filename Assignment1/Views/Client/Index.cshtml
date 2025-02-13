@@ -1,9 +1,8 @@
 @model List<Product>
 @{
-    ViewData["Page"] = "Inventory";
-    ViewBag.Title = "Inventory";
+    ViewData["Page"] = "Products";
+    ViewBag.Title = "Products";
     Layout = "_Layout";
-    var cart = ViewBag.Cart as List<Product>;
 }
 
 <div class="row align-items-start">
@@ -30,7 +29,7 @@
     <div class="offcanvas-end d-flex justify-content-end m-4">
         <a class="btn btn-primary"
            asp-action="CheckoutOrder"
-           asp-controller="Inventory">
+           asp-controller="Client">
             Checkout
         </a>
     </div>

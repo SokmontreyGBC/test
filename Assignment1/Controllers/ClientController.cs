@@ -5,14 +5,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Assignment1.Controllers;
+
 /*
  *  This is the client inventory controller
  */
-public class InventoryController : Controller
+public class ClientController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public InventoryController(ApplicationDbContext context)
+    public ClientController(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -50,7 +51,8 @@ public class InventoryController : Controller
 
         if (cartItem == null)
         {
-            cartItem = new OrderItem {
+            cartItem = new OrderItem
+            {
                 ProductId = product.ProductId,
                 Quantity = 0
             };
@@ -82,7 +84,8 @@ public class InventoryController : Controller
 
         if (cartItem == null)
         {
-            cartItem = new OrderItem {
+            cartItem = new OrderItem
+            {
                 ProductId = product.ProductId,
                 Quantity = quantity
             };
@@ -105,6 +108,7 @@ public class InventoryController : Controller
         string cartJson = JsonSerializer.Serialize(cart);
         HttpContext.Session.SetString("Cart", cartJson);
     }
+
     public IActionResult CheckoutOrder()
     {
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
@@ -117,7 +121,7 @@ public class InventoryController : Controller
         };
         _context.Users.Add(user);
         _context.SaveChanges();
-        var order = new Order{UserId = user.UserId};
+        var order = new Order { UserId = user.UserId };
         _context.Orders.Add(order);
         _context.SaveChanges();
         int orderId = order.OrderId;
@@ -127,19 +131,18 @@ public class InventoryController : Controller
             {
                 OrderId = orderId, ProductId = item.ProductId, Quantity = item.Quantity
             });
-            
         }
+
         _context.SaveChanges();
-        var inventory = _context.OrderItems.Where(oi=>oi.OrderId==orderId).ToList();
-       
-        return View("OrderCheckout",inventory);
+        var inventory = _context.OrderItems.Where(oi => oi.OrderId == orderId).ToList();
+
+        return View("OrderCheckout", inventory);
     }
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult CheckoutOrder(Order order)
     {
-       
-
         return View();
     }
 }
