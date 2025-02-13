@@ -11,11 +11,11 @@ namespace Assignment1.Controllers;
  *  This is the employee inventory controller
  *  It is responsible for non-client facing actions
  */
-public class ProductsController : Controller
+public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public ProductsController(ApplicationDbContext context)
+    public AdminController(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -46,18 +46,30 @@ public class ProductsController : Controller
             "ProductStock"
         };
 
+        ViewData["Categories"] = _context.Categories.ToList();
+
+        ViewData["LowerStockThreshold"] = 10;
+
         return View(inventory);
     }
 
     [HttpGet]
-    public IActionResult GetProducts(string orderType = "desc", string orderBy = "Name", string searchString = "")
+    public IActionResult GetProducts(
+        string orderType = "desc",
+        string orderBy = "Name",
+        string searchString = "",
+        string selectedCategoriesString = "")
     {
         searchString = searchString.ToLower();
+        var selectedCategories = selectedCategoriesString
+            .Split(',');
+
         var inventory = _context.Products
             .Include(p => p.Category)
             .Where(p => String.IsNullOrWhiteSpace(searchString)
                         || p.ProductName.ToLower().Contains(searchString))
-            .AsQueryable();
+            .Where(p => String.IsNullOrWhiteSpace(selectedCategoriesString)
+                        || selectedCategories.Contains(p.Category.CategoryName));
 
         Expression<Func<Product, object>> sortColumnSelector = orderBy switch
         {
@@ -73,8 +85,11 @@ public class ProductsController : Controller
             ? inventory.OrderByDescending(sortColumnSelector)
             : inventory.OrderBy(sortColumnSelector);
 
+        var inventoryList = inventory.ToList();
+
         ViewData["OrderType"] = orderType;
-        return PartialView("_ProductRows", inventory.ToList());
+        ViewData["LowerStockThreshold"] = 10;
+        return PartialView("_ProductRows", inventoryList);
     }
 
     [HttpGet]

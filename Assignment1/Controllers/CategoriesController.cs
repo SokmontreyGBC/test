@@ -7,17 +7,18 @@ namespace Assignment1.Controllers;
 public class CategoriesController : Controller
 {
     private readonly ApplicationDbContext _context;
+
     public CategoriesController(ApplicationDbContext context)
     {
         _context = context;
     }
-    
+
     public IActionResult Index()
     {
         var categories = _context.Categories.ToList();
-        return View(categories);    
+        return View(categories);
     }
-    
+
     [HttpGet]
     public IActionResult Create()
     {
@@ -25,7 +26,7 @@ public class CategoriesController : Controller
         ViewBag.Categories = _context.Categories.ToList();
         return View();
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Category category)
@@ -36,7 +37,7 @@ public class CategoriesController : Controller
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         return View(category);
     }
-    
 }

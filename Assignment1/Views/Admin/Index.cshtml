@@ -1,9 +1,10 @@
 @model List<Product>
 @{
-    ViewData["Page"] = "Products";
-    ViewBag.Title = "Products";
+    ViewData["Page"] = "Admin";
+    ViewBag.Title = "Admin";
     Layout = "_Layout";
 }
+
 <div class="row align-items-start">
     <h2 class="col-auto">Current Inventory</h2>
     <div class="col-auto ms-auto">  @* Align cart button to the right *@
@@ -13,10 +14,9 @@
     </div>
 </div>
 
-<br/>
 <div class="row">
     <div>
-        <a class="btn btn-primary" asp-action="Create" asp-controller="Products">Add new Inventory Item</a>
+        <a class="btn btn-primary" asp-action="Create" asp-controller="Admin">Add new Inventory Item</a>
     </div>
 </div>
 
@@ -40,6 +40,13 @@
             <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
         </button>
     </div>
+
+    <p>Filter by category:</p>
+    @Html.Partial("_TagSelector", new
+    {
+        Id = "category-tag",
+        Tags = ViewData["Categories"] as List<Category>
+    })
 </div>
 
 <table class="table">
@@ -54,7 +61,7 @@
     </thead>
 
     <tbody class="tableData" id="product-rows-container">
-        @await Html.PartialAsync("_ProductRows", Model)
+        @await Html.PartialAsync("_ProductRows", Model, ViewData)
     </tbody>
 </table>
 
@@ -62,6 +69,7 @@
     let isDesc = false;
     let orderBy = "ID";
     let searchText = "";
+    let selectedCategoriesString = "";
 
     function orderByColumn(column) {
         orderBy = column;
@@ -78,7 +86,10 @@
 
     function getProducts() {
         $.ajax({
-            url: `/Products/GetProducts?orderType=${isDesc ? "desc" : "asc"}&orderBy=${orderBy}&searchString=${searchText}`,
+            url: `/Products/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
+                `&orderBy=${orderBy}` +
+                `&searchString=${searchText}` +
+                `&selectedCategoriesString=${selectedCategoriesString}`,
             type: "GET",
             success: function (data) {
                 $("#product-rows-container").html(data);
@@ -88,6 +99,20 @@
 
     $("#search-input").on("keyup", function () {
         searchText = $(this).val();
+        getProducts();
+    });
+
+    $(document).on('click', '.category-tag', function() {
+        const selectedCategories = $("#selected-category-tag-container")
+            .children()
+            .toArray()
+        selectedCategoriesString = selectedCategories.length
+            ? selectedCategories
+                .map(function(item) {
+                    return item.name;
+                })
+                .join(",")
+            : "";
         getProducts();
     });
 
