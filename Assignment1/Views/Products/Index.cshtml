@@ -22,22 +22,6 @@
                 <a asp-action="Index">Back to Full List</a>
                
             </p>
-
-        </div>
-
-    </form>
-</div>
-<div>
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
-        <select name="sort" class="form-control">
-            <option value="default">Sort</option>
-            <option value="@ViewData["priceSort"]">Price:High > Low</option>
-            <option value="price_asc">Price:Low > High</option>
-            <option value="name_asc">Name:A > Z</option>
-            <option value="@ViewData["nameSort"]">Name:Z > A</option>
-        </select>
-        <input type="submit" value="Submit" class="btn btn-primary"/>
         </div>
     </form>
 </div>
@@ -48,66 +32,65 @@
         <a class="btn btn-primary" asp-action="Create" asp-controller="Products">Add new Inventory Item</a>
     </div>
 </div>
-@if (Model.Any())
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th> 
-        <th><a asp-action="Index" asp-route-sort="@ViewData["nameSort"]" class="text-dark">Name</a></th>
-            <th>Description</th>
-            <th><a asp-action="Index" asp-route-sort="@ViewData["priceSort"]" class="text-dark">Price</a></th>
-            <th><a asp-action="Index" asp-route-sort="@ViewData["categorySort"]" class="text-dark">Category</a></th>
-            <th><a asp-action="Index" asp-route-sort="@ViewData["stockSort"]" class="text-dark">Stock</a></th>
-            <th> Actions </th>
-        </tr>
-        </thead>
 
-        <tbody class="tableData">
-        @foreach (var product in Model)
+<br/>
+
+<div class="d-inline-flex gap-2">
+    <select name="sort" class="form-control" onchange="orderByColumn(this.value)">
+        @foreach (var column in ViewData["OrderableColumns"] as List<string>)
         {
-            <tr>
-                <td>@product.ProductId</td>
-                <td>@product.ProductName</td> 
-                <td>@product.ProductDescription</td>
-                <td>@product.ProductPrice</td>
-                <td>@product.Category.CategoryName</td>
-                <td>@product.ProductStock</td> @*THIS NEEDS TO BE CHANGED TO REFLECT STOCK QUANTITY*@
-                <td>
-                    <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-warning">Delete</a>
-                    <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-primary">Edit</a>
-                </td>
-            </tr>
+            <option value="@column">@column</option>
         }
-        
-        </tbody>
-    </table>
-    
-   
-}
-else
-{
-    <br/>
-    <p>No products found.</p>
-}
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <div>
-      Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
-    </div>
-    <div class="dropdown mt-3">
-      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-        Dropdown button
-      </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-      </ul>
-    </div>
-  </div>
+    </select>
+    <button onclick="toggleOrderType()" class="btn btn-primary">
+        <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
+    </button>
 </div>
+
+<table class="table">
+    <thead>
+    <tr>
+        @foreach (var column in ViewData["Columns"] as List<string>)
+        {
+            <th> @column </th>
+        }
+        <th></th>
+    </tr>
+    </thead>
+
+    <tbody class="tableData" id="product-rows-container">
+    @await Html.PartialAsync("_ProductRows", Model)
+    </tbody>
+</table>
+
+<script>
+    let isDesc = true;
+    let orderBy = "ID";
+
+    function orderByColumn(column) {
+        orderBy = column;
+        getProducts();
+    }
+
+    function toggleOrderType() {
+        isDesc = !isDesc;
+        $("#order-arrow-icon").attr("class", isDesc
+            ? "fa-solid fa-arrow-down"
+            : "fa-solid fa-arrow-up");
+        getProducts();
+    }
+
+    function getProducts() {
+        $.ajax({
+            url: `/Products/GetProducts?orderType=${isDesc ? "desc" : "asc"}&orderBy=${orderBy}`,
+            type: "GET",
+            success: function (data) {
+                $("#product-rows-container").html(data);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        getProducts();
+    });
+</script>

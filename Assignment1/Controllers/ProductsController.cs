@@ -1,9 +1,12 @@
+using System.Globalization;
+using System.Linq.Expressions;
 using Assignment1.Data;
 using Assignment1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Assignment1.Controllers;
+
 /*
  *  This is the employee inventory controller
  *  It is responsible for non-client facing actions
@@ -11,72 +14,81 @@ namespace Assignment1.Controllers;
 public class ProductsController : Controller
 {
     private readonly ApplicationDbContext _context;
+
     public ProductsController(ApplicationDbContext context)
     {
         _context = context;
     }
-    
-    [HttpGet]
-    public IActionResult Index(string searchString,string sort)
-    {
-        
-        var inventory = _context.Products.Include(p => p.Category).ToList();
-        if (!string.IsNullOrEmpty(searchString))
-        {
-            inventory = inventory.Where
-                (s => s.ProductName.ToLower().Contains(searchString.ToLower())).ToList();
-             
-        }
-        ViewData["nameSort"] = string.IsNullOrEmpty(sort) ? "name_dsc" : "";
-        ViewData["priceSort"] = string.IsNullOrEmpty(sort) ? "price_dsc" : "";
-        ViewData["stockSort"] = string.IsNullOrEmpty(sort) ? "stock_dsc" : "";
-        ViewData["categorySort"] = string.IsNullOrEmpty(sort) ? "category_dsc" : "";
 
-        switch (sort)
+    [HttpGet]
+    public IActionResult Index()
+    {
+        var inventory = _context.Products
+            .Include(p => p.Category)
+            .ToList();
+
+        ViewData["Columns"] = new List<string>
         {
-            case "name_dsc":
-                inventory = inventory.OrderByDescending(s => s.ProductName).ToList();
-                 break;
-            case "name_asc":
-                inventory = inventory.OrderBy(s => s.ProductName).ToList();
-                break;
-            case "price_asc":
-                inventory = inventory.OrderBy(s => s.ProductPrice).ToList();
-                break;
-            case "price_dsc":
-                inventory = inventory.OrderByDescending(s => s.ProductPrice).ToList();
-                break;
-        
-            case "stock_dsc":
-                inventory = inventory.OrderByDescending(s => s.ProductStock).ToList();
-                break;
-            case "stock_asc":
-                inventory = inventory.OrderBy(s => s.ProductStock).ToList();
-                break;
-            case "category_dsc":
-                inventory = inventory.OrderByDescending(s => s.Category.CategoryName).ToList();
-                break;
-            case "category_asc":
-                inventory = inventory.OrderBy(s => s.Category.CategoryName).ToList();
-                break;
-            default:
-                inventory = inventory.OrderBy(s => s.ProductName).ToList();
-                break;
-        }
+            "ID",
+            "Name",
+            "Description",
+            "Price",
+            "Category",
+            "ProductStock"
+        };
+
+        ViewData["OrderableColumns"] = new List<string>
+        {
+            "ID",
+            "Name",
+            "Price",
+            "Category",
+            "ProductStock"
+        };
 
         return View(inventory);
-        
     }
 
-    
-    
+    [HttpGet]
+    public IActionResult GetProducts(string orderType = "desc", string orderBy = "Name")
+    {
+        var inventory = _context.Products
+            .Include(p => p.Category)
+            .ToList();
+
+        inventory = orderBy switch
+        {
+            "ID" => orderType == "desc"
+                ? inventory.OrderBy(p => p.ProductId).ToList()
+                : inventory.OrderByDescending(p => p.ProductId).ToList(),
+            "Name" => orderType == "desc"
+                ? inventory.OrderBy(p => p.ProductName).ToList()
+                : inventory.OrderByDescending(p => p.ProductName).ToList(),
+            "Price" => orderType == "desc"
+                ? inventory.OrderBy(p => p.ProductPrice).ToList()
+                : inventory.OrderByDescending(p => p.ProductPrice).ToList(),
+            "Category" => orderType == "desc"
+                ? inventory.OrderBy(p => p.Category.CategoryName).ToList()
+                : inventory.OrderByDescending(p => p.Category.CategoryName).ToList(),
+            "ProductStock" => orderType == "desc"
+                ? inventory.OrderBy(p => p.ProductStock).ToList()
+                : inventory.OrderByDescending(p => p.ProductStock).ToList(),
+            _ => orderType == "desc"
+                ? inventory.OrderBy(p => p.ProductName).ToList()
+                : inventory.OrderByDescending(p => p.ProductName).ToList()
+        };
+
+        ViewData["OrderType"] = orderType;
+        return PartialView("_ProductRows", inventory);
+    }
+
     [HttpGet]
     public IActionResult Create()
     {
         ViewBag.Categories = _context.Categories.ToList();
         return View();
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Product product)
@@ -87,6 +99,7 @@ public class ProductsController : Controller
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         return View(product);
     }
 
@@ -97,7 +110,8 @@ public class ProductsController : Controller
         if (product == null)
         {
             return NotFound();
-        }   
+        }
+
         ViewBag.Categories = _context.Categories.ToList();
         ViewBag.Price = _context.Products.FirstOrDefault(p => p.ProductId == id);
         return View(product);
@@ -105,7 +119,8 @@ public class ProductsController : Controller
 
     [HttpPost]
     public IActionResult Edit(int id,
-        [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,ProductStock")] Product product)
+        [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,ProductStock")]
+        Product product)
     {
         if (id != product.ProductId)
         {
@@ -132,9 +147,10 @@ public class ProductsController : Controller
                 }
             }
         }
+
         return RedirectToAction("Index");
-        
     }
+
     public bool ProductsExist(int id)
     {
         return _context.Products.Any(e => e.ProductId == id);
@@ -147,14 +163,13 @@ public class ProductsController : Controller
         if (product == null)
         {
             return NotFound();
-
         }
+
         return View(product);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-
     public IActionResult DeleteConfirmed(int productid)
     {
         var product = _context.Products.FirstOrDefault(p => p.ProductId == productid);
@@ -164,8 +179,7 @@ public class ProductsController : Controller
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         return NotFound();
     }
-    
-    
 }
