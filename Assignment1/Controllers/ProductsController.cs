@@ -50,10 +50,12 @@ public class ProductsController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetProducts(string orderType = "desc", string orderBy = "Name")
+    public IActionResult GetProducts(string orderType = "desc", string orderBy = "Name", string searchString = "")
     {
+        searchString = searchString.ToLower();
         var inventory = _context.Products
             .Include(p => p.Category)
+            .Where(p => String.IsNullOrWhiteSpace(searchString) || p.ProductName.ToLower().Contains(searchString))
             .ToList();
 
         inventory = orderBy switch

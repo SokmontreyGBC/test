@@ -13,17 +13,16 @@
     </div>
 </div>
 
-<div>
-    <form asp-action="Index" method="get">
-        <div class="form-actions no-color">
-            <p>
-                <label>Find by name: <input type="text" name="searchString" value=""/></label>
-                <input type="submit" value="Search" class="btn btn-primary" />
-                <a asp-action="Index">Back to Full List</a>
-               
-            </p>
-        </div>
-    </form>
+<div class="form-actions no-color">
+    <p>
+        <label>Find by name:
+            <input
+                type="text"
+                id="search-input"
+                value=""
+                />
+        </label>
+    </p>
 </div>
 
 <br/>
@@ -66,6 +65,7 @@
 <script>
     let isDesc = true;
     let orderBy = "ID";
+    let searchText = "";
 
     function orderByColumn(column) {
         orderBy = column;
@@ -82,13 +82,18 @@
 
     function getProducts() {
         $.ajax({
-            url: `/Products/GetProducts?orderType=${isDesc ? "desc" : "asc"}&orderBy=${orderBy}`,
+            url: `/Products/GetProducts?orderType=${isDesc ? "desc" : "asc"}&orderBy=${orderBy}&searchString=${searchText}`,
             type: "GET",
             success: function (data) {
                 $("#product-rows-container").html(data);
             }
         });
     }
+
+    $("#search-input").on("keyup", function () {
+        searchText = $(this).val();
+        getProducts();
+    });
 
     $(document).ready(function () {
         getProducts();
