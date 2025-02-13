@@ -37,7 +37,7 @@
             const productId = form.querySelector('input[name="id"]').value;
             const quantity = form.querySelector('input[name="quantity"]').value;
             $.ajax({
-                url: `/Inventory/UpdateCartQuantity?id=${productId}&quantity=${quantity}`,
+                url: `/Client/UpdateCartQuantity?id=${productId}&quantity=${quantity}`,
                 type: "GET",
                 success: function (data) {
                     alert(data);

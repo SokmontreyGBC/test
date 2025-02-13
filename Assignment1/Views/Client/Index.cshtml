@@ -84,7 +84,7 @@ else
     <script>
         function getCart() {
             $.ajax({
-                url: `/Inventory/GetCart`,
+                url: `/Client/GetCart`,
                 type: "GET",
                 success: function (data) {
                     $("#cart-container").html(data);
@@ -98,7 +98,7 @@ else
             const productId = form.querySelector('input[name="id"]').value;
             const quantity = form.querySelector('input[name="quantity"]').value;
             $.ajax({
-                url: `/Inventory/AddToCart?id=${productId}&quantity=${quantity}`,
+                url: `/Client/AddToCart?id=${productId}&quantity=${quantity}`,
                 type: "GET",
                 success: function (data) {
                     alert(data);
