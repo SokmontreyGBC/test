@@ -6,11 +6,11 @@
 }
 <div class="row align-items-start">
     <h2 class="col-auto">Current Inventory</h2>
-     <div class="col-auto ms-auto">  @* Align cart button to the right *@
-         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-             <i class="fa-solid fa-cart-shopping"></i>
-         </button>
-         </div>
+    <div class="col-auto ms-auto">  @* Align cart button to the right *@
+        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </button>
+    </div>
 </div>
 
 <br/>
@@ -19,66 +19,79 @@
         <a class="btn btn-primary" asp-action="Create" asp-controller="Products">Add new Inventory Item</a>
     </div>
 </div>
-@if (Model.Any())
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th> 
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Stock</th>
-            <th> Actions </th>
-        </tr>
-        </thead>
 
-        <tbody class="tableData">
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.ProductId</td>
-                <td>@product.ProductName</td> 
-                <td>@product.ProductDescription</td>
-                <td>@product.ProductPrice</td>
-                <td>@product.Category.CategoryName</td>
-                <td>@product.ProductStock</td> @*THIS NEEDS TO BE CHANGED TO REFLECT STOCK QUANTITY*@
-                <td>
-                    <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-warning">Delete</a>
-                    <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-primary">Edit</a>
-                </td>
-            </tr>
-        }
-        
-        </tbody>
-    </table>
-    
-   
-}
-else
-{
-    <br/>
-    <p>No products found.</p>
-}
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-  <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    <div>
-      Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+<div class="form-actions no-color">
+    <label>Find by name:
+        <input
+            type="text"
+            id="search-input"
+            value=""
+        />
+    </label>
+
+    <div class="d-inline-flex gap-2">
+        <select name="sort" class="form-control" onchange="orderByColumn(this.value)">
+            @foreach (var column in ViewData["OrderableColumns"] as List<string>)
+            {
+                <option value="@column">@column</option>
+            }
+        </select>
+        <button onclick="toggleOrderType()" class="btn btn-primary">
+            <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
+        </button>
     </div>
-    <div class="dropdown mt-3">
-      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-        Dropdown button
-      </button>
-      <ul class="dropdown-menu">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
-      </ul>
-    </div>
-  </div>
 </div>
+
+<table class="table">
+    <thead>
+    <tr>
+        @foreach (var column in ViewData["Columns"] as List<string>)
+        {
+            <th> @column </th>
+        }
+        <th></th>
+    </tr>
+    </thead>
+
+    <tbody class="tableData" id="product-rows-container">
+        @await Html.PartialAsync("_ProductRows", Model)
+    </tbody>
+</table>
+
+<script>
+    let isDesc = false;
+    let orderBy = "ID";
+    let searchText = "";
+
+    function orderByColumn(column) {
+        orderBy = column;
+        getProducts();
+    }
+
+    function toggleOrderType() {
+        isDesc = !isDesc;
+        $("#order-arrow-icon").attr("class", isDesc
+            ? "fa-solid fa-arrow-up"
+            : "fa-solid fa-arrow-down");
+        getProducts();
+    }
+
+    function getProducts() {
+        $.ajax({
+            url: `/Products/GetProducts?orderType=${isDesc ? "desc" : "asc"}&orderBy=${orderBy}&searchString=${searchText}`,
+            type: "GET",
+            success: function (data) {
+                $("#product-rows-container").html(data);
+            }
+        });
+    }
+
+    $("#search-input").on("keyup", function () {
+        searchText = $(this).val();
+        getProducts();
+    });
+
+    $(document).ready(function () {
+        getProducts();
+    });
+</script>
