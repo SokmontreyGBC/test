@@ -63,7 +63,7 @@ else
 }
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
@@ -72,8 +72,9 @@ else
                   <ul class="list-group">
                       @foreach (var item in cart)
                       {
-                          <li class="list-group-item">
-                              @item.ProductName - @item.ProductPrice
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                              <span>@item.ProductName - @item.ProductPrice</span>
+                              <button asp-action="RemoveFromCart" asp-controller="Inventory" class="btn btn-primary"><i class="fa-solid fa-minus"></i></button>
                           </li>
                       }
                   </ul>
@@ -82,14 +83,5 @@ else
               {
                   <p>Your cart is empty.</p>
               }
-      
-      <div> @*buttons for later?*@
-          <button>
-              <i class="fa-solid fa-minus"></i>
-          </button>
-          <button>
-              <i class="fa-solid fa-plus"></i>
-          </button>
-      </div>
   </div>
 </div>

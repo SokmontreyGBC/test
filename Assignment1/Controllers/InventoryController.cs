@@ -43,6 +43,30 @@ public class InventoryController : Controller
         StashCart(cart);
         return RedirectToAction("Index");
     }
+
+    public IActionResult RemoveFromCart(int id)
+    {
+        var product = _context.Products.Find(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        /*
+         * check for active cart
+         * remove the product from the list
+         * save the list back to the session
+         */
+        List<Product> cart = GetCart();
+        var toRemove = cart.Find(p => p.ProductId == id);
+        if (toRemove != null)
+        {
+            cart.Remove(toRemove);
+            StashCart(cart);
+        }
+        return RedirectToAction("Index");
+    }
+
     
     // CART SESSION COOKING
     private List<Product> GetCart()
