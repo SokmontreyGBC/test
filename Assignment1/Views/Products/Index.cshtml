@@ -61,7 +61,7 @@
     </thead>
 
     <tbody class="tableData" id="product-rows-container">
-        @await Html.PartialAsync("_ProductRows", Model)
+        @await Html.PartialAsync("_ProductRows", Model, ViewData)
     </tbody>
 </table>
 
