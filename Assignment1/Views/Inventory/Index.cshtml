@@ -5,13 +5,31 @@
     Layout = "_Layout";
     var cart = ViewBag.Cart as List<Product>;
 }
+
 <div class="row align-items-start">
     <h2 class="col-auto">Client-Facing Inventory</h2>
     <div class="col-auto ms-auto">
         @* Align cart button to the right *@
-        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+        <button class="btn btn-primary" type="button"
+                onclick="getCart()"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasExample"
+                aria-controls="offcanvasExample">
             <i class="fa-solid fa-cart-shopping"></i>
         </button>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" id="cart-container">
+        Hello
+    </div>
+    <div class="offcanvas-end d-flex justify-content-end m-4">
+        <button class="btn btn-primary">Checkout</button>
     </div>
 </div>
 
@@ -40,18 +58,18 @@
                 <td>@product.ProductDescription</td>
                 <td>@product.ProductPrice</td>
                 <td>@product.Category.CategoryName</td>
-                <td>@product.ProductStock</td> @*THIS NEEDS TO BE CHANGED TO REFLECT STOCK QUANTITY*@
+                <td>@product.ProductStock</td>
                 <td>
-                    <form asp-action="AddToCart" asp-controller="Inventory" method="post">
+                    <form class="add-to-cart-form">
                         <input type="hidden" name="id" value="@product.ProductId"/>
+                        <input type="number" name="quantity" value="1" min="0" max="@product.ProductStock" />
                         <button type="submit" class="btn btn-primary">
-                            <i class="fa-solid fa-arrow-up"></i>
+                            +
                         </button>
                     </form>
                 </td>
             </tr>
         }
-
         </tbody>
     </table>
 }
@@ -60,6 +78,7 @@ else
     <br/>
     <p>No products found.</p>
 }
+  
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
@@ -93,45 +112,31 @@ else
     </div>
 </div>
 
-@* AJAX to stop refresh issue on remove *@
 @section Scripts {
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // ALL THE BUTTONS THIS TIME
-            const removeButtons = document.querySelectorAll('.list-group-item button');
-            removeButtons.forEach(button => {
-                button.addEventListener('click', async function(e) {
-                    e.preventDefault();
-                    
-                    // this.id
-                    const form = button.closest('form');
-                    const productId = form.querySelector('input[name="id"]').value;
-                    
-                    // vile async trickery ensues
-                    try {
-                        const response = await fetch(`/Inventory/RemoveFromCart/${productId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        });
-                        if (response.ok) {
-                            // Remove the item
-                            const listItem = button.closest('.list-group-item');
-                            listItem.remove();
+        function getCart() {
+            $.ajax({
+                url: `/Inventory/GetCart`,
+                type: "GET",
+                success: function (data) {
+                    $("#cart-container").html(data);
+                }
+            });
+        }
 
-                            // If cart is empty
-                            const cartItems = document.querySelectorAll('.list-group-item');
-                            if (cartItems.length === 0) {
-                                const cartBody = document.querySelector('.offcanvas-body');
-                                cartBody.innerHTML = '<p>Your cart is empty.</p>';
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Error removing item:', error);
-                    }
-                });
+        $(".add-to-cart-form").submit(function (e) {
+            e.preventDefault();
+            const form = this;
+            const productId = form.querySelector('input[name="id"]').value;
+            const quantity = form.querySelector('input[name="quantity"]').value;
+            $.ajax({
+                url: `/Inventory/AddToCart?id=${productId}&quantity=${quantity}`,
+                type: "GET",
+                success: function (data) {
+                    alert(data);
+                }
             });
         });
+
     </script>
 }

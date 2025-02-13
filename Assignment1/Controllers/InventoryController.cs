@@ -17,72 +17,90 @@ public class InventoryController : Controller
         _context = context;
     }
 
+    [HttpGet]
     public IActionResult Index()
     {
-        var clientInventory = _context.Products.Include(p => p.Category).ToList();
-        ViewBag.Cart = GetCart();
-        return View(clientInventory);
+        var products = _context.Products.Include(p => p.Category).ToList();
+        return View(products);
     }
 
-    
-
-    public IActionResult AddToCart(int id)
+    [HttpGet]
+    public IActionResult GetCart()
     {
-        var product = _context.Products.Find(id);
-        if (product == null)
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+
+        foreach (var item in cart)
         {
-            return NotFound();
+            item.Product = _context.Products.Find(item.ProductId);
         }
-        /*
-         * check for active cart
-         * add the product to the list
-         * save the list back to the session
-         */
-        List<Product> cart = GetCart();
-        cart.Add(product);
-        StashCart(cart);
-        return RedirectToAction("Index");
+
+        return PartialView("_CartRows", cart);
     }
 
-    public IActionResult RemoveFromCart(int id)
+    [HttpGet]
+    public IActionResult AddToCart(int id, int quantity)
     {
         var product = _context.Products.Find(id);
-        if (product == null)
+        if (product == null) return Content("Product not found.");
+
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+        var cartItem = cart.Find(oi => oi.ProductId == product.ProductId);
+
+        if (cartItem == null)
         {
-            return NotFound();
+            cartItem = new OrderItem {
+                ProductId = product.ProductId,
+                Quantity = 0
+            };
+            cart.Add(cartItem);
         }
-        List<Product> cart = GetCart();
-        var toRemove = cart.Find(p => p.ProductId == id);
-        if (toRemove != null)
+
+        cartItem.Quantity += quantity;
+
+        if (cartItem.Quantity > product.ProductStock)
         {
-            cart.Remove(toRemove);
+            cartItem.Quantity = product.ProductStock;
             StashCart(cart);
+            return Content($"You can't have more than {product.ProductStock} of {product.ProductName} in your cart.");
         }
-        // gross ajax stuff to stop the refresh problem with offcanvas
-        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-        {
-            return Json(new { success = true });
-        }
-        return RedirectToAction("Index");
+
+        StashCart(cart);
+        return Content($"Successfully added {cartItem.Quantity} of {product.ProductName} to cart.");
     }
 
-    
-    // CART SESSION COOKING
-    private List<Product> GetCart()
+    [HttpGet]
+    public IActionResult UpdateCartQuantity(int id, int quantity)
     {
-        string cartJson = HttpContext.Session.GetString("Cart"); // why is the syntax for this so verbose lmao
-        // make empty list if !cart
-        if(string.IsNullOrEmpty(cartJson))
+        var product = _context.Products.Find(id);
+        if (product == null) return Content("Product not found.");
+
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+        var cartItem = cart.Find(oi => oi.ProductId == product.ProductId);
+
+        if (cartItem == null)
         {
-            return new List<Product>();
+            cartItem = new OrderItem {
+                ProductId = product.ProductId,
+                Quantity = quantity
+            };
+            cart.Add(cartItem);
         }
-        else
+
+        if (cartItem.Quantity > product.ProductStock)
         {
-            return JsonSerializer.Deserialize<List<Product>>(cartJson); // I just threw up in my mouth
+            cartItem.Quantity = product.ProductStock;
+            StashCart(cart);
+            return Content($"You can't have more than {product.ProductStock} of {product.ProductName} in your cart.");
         }
+
+        StashCart(cart);
+        return Content($"Successfully added {cartItem.Quantity} of {product.ProductName} to cart.");
     }
-    
-    private void StashCart(List<Product> cart)
+
+    private void StashCart(List<OrderItem> cart)
     {
         string cartJson = JsonSerializer.Serialize(cart);
         HttpContext.Session.SetString("Cart", cartJson);
