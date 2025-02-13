@@ -46,17 +46,28 @@ public class ProductsController : Controller
             "ProductStock"
         };
 
+        ViewData["Categories"] = _context.Categories.ToList();
+
         return View(inventory);
     }
 
     [HttpGet]
-    public IActionResult GetProducts(string orderType = "desc", string orderBy = "Name", string searchString = "")
+    public IActionResult GetProducts(
+        string orderType = "desc",
+        string orderBy = "Name",
+        string searchString = "",
+        string selectedCategoriesString = "")
     {
         searchString = searchString.ToLower();
+        var selectedCategories = selectedCategoriesString
+            .Split(',');
+
         var inventory = _context.Products
             .Include(p => p.Category)
             .Where(p => String.IsNullOrWhiteSpace(searchString)
                         || p.ProductName.ToLower().Contains(searchString))
+            .Where(p => String.IsNullOrWhiteSpace(selectedCategoriesString)
+                        || selectedCategories.Contains(p.Category.CategoryName))
             .AsQueryable();
 
         Expression<Func<Product, object>> sortColumnSelector = orderBy switch
