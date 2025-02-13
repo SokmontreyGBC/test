@@ -45,6 +45,10 @@ public class ProductsController : Controller
             "Category",
             "ProductStock"
         };
+        
+        ViewData["Categories"] = _context.Categories.ToList();
+
+        ViewData["LowerStockThreshold"] = 10;
 
         return View(inventory);
     }
