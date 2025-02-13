@@ -16,7 +16,7 @@
                 <td>
                     <form class="update-cart-form">
                         <input type="hidden" name="id" value="@item.ProductId"/>
-                        <input type="number" name="quantity" min="0" value="@item.Quantity" max="@item.Product.ProductStock" />
+                        <input type="number" name="quantity" min="1" value="@item.Quantity" max="@item.Product.ProductStock" style="width: 3rem;" />
                         <button type="submit"
                                 class="btn btn-outline-secondary">
                             Update
