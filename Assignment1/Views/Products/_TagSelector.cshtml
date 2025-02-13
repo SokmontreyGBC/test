@@ -1,0 +1,51 @@
+<div class="mb-4 d-flex flex-row gap-2">
+    <div id="available-@(Model.Id)-container" class="bg-secondary rounded-3 p-2 d-flex flex-row gap-2 " style="min-width: 10px;">
+        @foreach (var category in Model.Tags)
+        {
+            <button name="@category.CategoryName" class="@Model.Id ">
+                @category.CategoryName
+            </button>
+        }
+    </div>
+
+    <div id="selected-@(Model.Id)-container" class="bg-primary rounded-3 p-2 d-flex flex-row gap-2" style="min-width: 10px;">
+    </div>
+</div>
+
+<script>
+    $(document).on('click', '.@Model.Id', function() {
+        const $tag = $(this);
+        const $src = $tag.parent();
+        const $dst = $src.attr('id') === 'available-@(Model.Id)-container'
+            ? $('#selected-@(Model.Id)-container')
+            : $('#available-@(Model.Id)-container');
+        const $containers = $('#available-@(Model.Id)-container, #selected-@(Model.Id)-container');
+        const pos = new Map();
+
+        $containers.find('.@Model.Id').each(function() {
+            pos.set(this, $(this).offset());
+        });
+
+        if ($dst.attr('id') === 'selected-@(Model.Id)-container') $tag.prependTo($dst);
+        else $tag.appendTo($dst);
+
+        $containers.find('.@Model.Id').each(function() {
+            const $el = $(this);
+            const start = pos.get(this);
+            if (!start) return;
+
+            const end = $el.offset();
+            const dx = start.left - end.left;
+            const dy = start.top - end.top;
+
+            if (dx || dy) {
+                $el.css({ transform: `translate(${dx}px, ${dy}px)` });
+                this.offsetWidth;
+                $el.css({ transition: 'transform 300ms cubic-bezier(0.4, 0, 0.2, 1)', transform: 'translate(0, 0)' });
+                $el.one('transitionend', function() {
+                    $el.css({ transition: '', transform: '', 'transform-origin': '' });
+                });
+            }
+        });
+    });
+</script>
