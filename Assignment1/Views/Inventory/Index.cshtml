@@ -26,89 +26,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body" id="cart-container">
-        Hello
+        @* Cart Items will be injected here *@
     </div>
     <div class="offcanvas-end d-flex justify-content-end m-4">
         <button class="btn btn-primary">Checkout</button>
-    </div>
-</div>
-
-<br/>
-@if (Model.Any())
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Stock</th>
-            <th></th>
-        </tr>
-        </thead>
-
-        <tbody class="tableData">
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.ProductId</td>
-                <td>@product.ProductName</td>
-                <td>@product.ProductDescription</td>
-                <td>@product.ProductPrice</td>
-                <td>@product.Category.CategoryName</td>
-                <td>@product.ProductStock</td>
-                <td>
-                    <form class="add-to-cart-form">
-                        <input type="hidden" name="id" value="@product.ProductId"/>
-                        <input type="number" name="quantity" value="1" min="0" max="@product.ProductStock" />
-                        <button type="submit" class="btn btn-primary">
-                            +
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <br/>
-    <p>No products found.</p>
-}
-  
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body">
-        @if (cart != null && cart.Any())
-        {
-            <ul class="list-group">
-                @foreach (var item in cart)
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span>@item.ProductName - @item.ProductPrice</span>
-                        <form asp-action="RemoveFromCart" asp-controller="Inventory" method="post">
-                            <input type="hidden" name="id" value="@item.ProductId"/>
-                            <button type="submit" class="btn btn-outline-secondary">
-                                <i class="fa-solid fa-minus"></i>
-                            </button>
-                        </form>
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>Your cart is empty.</p>
-        }
-    </div>
-    <div class="offcanvas-end d-flex justify-content-end m-4">
-        <a asp-action="CheckoutOrder" class="btn btn-primary">Checkout</a>
     </div>
 </div>
 
