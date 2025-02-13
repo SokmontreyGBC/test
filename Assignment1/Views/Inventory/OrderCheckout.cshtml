@@ -1,0 +1,20 @@
+﻿@model List<OrderItem>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+
+<div>
+    
+    @{
+        foreach (var items in Model)
+        {
+            <p>@items.ProductId</p>
+            <p>@items.Quantity</p>
+        }
+    }
+    
+</div>
