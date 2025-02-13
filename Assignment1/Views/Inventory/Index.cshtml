@@ -98,7 +98,7 @@ else
             const quantity = form.querySelector('input[name="quantity"]').value;
             $.ajax({
                 url: `/Inventory/AddToCart?id=${productId}&quantity=${quantity}`,
-                type: "POST",
+                type: "GET",
                 success: function (data) {
                     alert(data);
                 }

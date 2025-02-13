@@ -5,7 +5,6 @@
         <thead>
         <tr>
             <th>Product</th>
-            <th>Quantity</th>
             <th></th>
         </tr>
         </thead>
@@ -13,20 +12,37 @@
         @foreach (var item in Model)
         {
             <tr>
-                @* <td>@item.Product.ProductName</td> *@
-                <td>@item.Quantity</td>
+                <td>@item.Product.ProductName</td>
                 <td>
-                    @* <form asp-action="RemoveFromCart" asp-controller="Inventory" method="post"> *@
-                    @*     <input type="hidden" name="id" value="@item.ProductId"/> *@
-                    @*     <input type="number" name="quantity" min="0" value="@item.Quantity" max="111" /> *@
-                    @*     <button type="submit" *@
-                    @*             class="btn btn-outline-secondary"> *@
-                    @*         Update *@
-                    @*     </button> *@
-                    @* </form> *@
+                    <form class="update-cart-form">
+                        <input type="hidden" name="id" value="@item.ProductId"/>
+                        <input type="number" name="quantity" min="0" value="@item.Quantity" max="@item.Product.ProductStock" />
+                        <button type="submit"
+                                class="btn btn-outline-secondary">
+                            Update
+                        </button>
+                    </form>
                 </td>
             </tr>
         }
         </tbody>
     </table>
 </div>
+
+@section Scripts {
+    <script>
+        $(".update-cart-form").submit(function (e) {
+            e.preventDefault();
+            const form = this;
+            const productId = form.querySelector('input[name="id"]').value;
+            const quantity = form.querySelector('input[name="quantity"]').value;
+            $.ajax({
+                url: `/Inventory/UpdateCartQuantity?id=${productId}&quantity=${quantity}`,
+                type: "GET",
+                success: function (data) {
+                    alert(data);
+                }
+            });
+        });
+    </script>
+}
