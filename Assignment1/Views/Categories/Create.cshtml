@@ -12,13 +12,21 @@
     <div class="form-group">
         <label asp-for="CategoryName" class="control-label">Category Name:</label>
         <input asp-for="CategoryName" class="form-control"></input>
+        @{
+        if (TempData["ErrorMessage"] != null)
+        {
+        <div class="text-danger" > @TempData["ErrorMessage"]</div>
+        }
+        }
         <span asp-validation-for="CategoryName" class="text-danger"></span>
     </div>
     <br/>
     <div class="form-group">
         <input type="submit" value="Create" class="btn btn-primary"/>
+       
     </div>
     
+   
     @section Scripts{
         @{
             await Html.RenderPartialAsync("_ValidationScriptsPartial");

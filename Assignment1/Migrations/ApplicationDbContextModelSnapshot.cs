@@ -36,7 +36,7 @@ namespace Assignment1.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Assignment1.Models.Order", b =>
@@ -60,7 +60,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Assignment1.Models.OrderItem", b =>
@@ -86,7 +86,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("Assignment1.Models.Product", b =>
@@ -120,7 +120,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Assignment1.Models.User", b =>
@@ -146,7 +146,7 @@ namespace Assignment1.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Assignment1.Models.Order", b =>

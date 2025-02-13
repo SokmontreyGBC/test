@@ -33,6 +33,12 @@ public class CategoriesController : Controller
     {
         if (ModelState.IsValid)
         {
+            if (checkIfCategoryExists(category.CategoryName))
+            {
+                TempData["ErrorMessage"] = "Category already exists";
+                return RedirectToAction("Create");
+                
+            }
             _context.Categories.Add(category);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -40,4 +46,19 @@ public class CategoriesController : Controller
 
         return View(category);
     }
+
+    public bool checkIfCategoryExists(string categoryName)
+    {
+        var category = _context.Categories.ToList();
+        foreach (var item in category)
+        {
+            if (item.CategoryName == categoryName)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
 }
