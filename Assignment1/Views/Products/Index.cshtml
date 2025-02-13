@@ -13,18 +13,6 @@
     </div>
 </div>
 
-<div class="form-actions no-color">
-    <p>
-        <label>Find by name:
-            <input
-                type="text"
-                id="search-input"
-                value=""
-                />
-        </label>
-    </p>
-</div>
-
 <br/>
 <div class="row">
     <div>
@@ -32,18 +20,26 @@
     </div>
 </div>
 
-<br/>
+<div class="form-actions no-color">
+    <label>Find by name:
+        <input
+            type="text"
+            id="search-input"
+            value=""
+        />
+    </label>
 
-<div class="d-inline-flex gap-2">
-    <select name="sort" class="form-control" onchange="orderByColumn(this.value)">
-        @foreach (var column in ViewData["OrderableColumns"] as List<string>)
-        {
-            <option value="@column">@column</option>
-        }
-    </select>
-    <button onclick="toggleOrderType()" class="btn btn-primary">
-        <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
-    </button>
+    <div class="d-inline-flex gap-2">
+        <select name="sort" class="form-control" onchange="orderByColumn(this.value)">
+            @foreach (var column in ViewData["OrderableColumns"] as List<string>)
+            {
+                <option value="@column">@column</option>
+            }
+        </select>
+        <button onclick="toggleOrderType()" class="btn btn-primary">
+            <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
+        </button>
+    </div>
 </div>
 
 <table class="table">
@@ -58,12 +54,12 @@
     </thead>
 
     <tbody class="tableData" id="product-rows-container">
-    @await Html.PartialAsync("_ProductRows", Model)
+        @await Html.PartialAsync("_ProductRows", Model)
     </tbody>
 </table>
 
 <script>
-    let isDesc = true;
+    let isDesc = false;
     let orderBy = "ID";
     let searchText = "";
 
@@ -75,8 +71,8 @@
     function toggleOrderType() {
         isDesc = !isDesc;
         $("#order-arrow-icon").attr("class", isDesc
-            ? "fa-solid fa-arrow-down"
-            : "fa-solid fa-arrow-up");
+            ? "fa-solid fa-arrow-up"
+            : "fa-solid fa-arrow-down");
         getProducts();
     }
 
