@@ -1,0 +1,17 @@
+@model List<Product>
+
+@foreach (var product in Model)
+{
+    <tr>
+        <td>@product.ProductId</td>
+        <td>@product.ProductName</td>
+        <td>@product.ProductDescription</td>
+        <td>@product.ProductPrice</td>
+        <td>@product.Category.CategoryName</td>
+        <td class="@(product.ProductStock < (int)ViewData["LowerStockThreshold"]! ? "text-bg-danger" : "")">@product.ProductStock</td>
+        <td>
+            <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-warning">Delete</a>
+            <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-primary">Edit</a>
+        </td>
+    </tr>
+}

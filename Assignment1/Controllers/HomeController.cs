@@ -18,17 +18,7 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Products()
-    {
-        return View();
-    }
-    
-    public IActionResult Categories()
-    {
-        return View();
-    }
-    
-    public IActionResult Inventory()
+    public IActionResult AboutUs()
     {
         return View();
     }

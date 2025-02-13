@@ -105,4 +105,41 @@ public class InventoryController : Controller
         string cartJson = JsonSerializer.Serialize(cart);
         HttpContext.Session.SetString("Cart", cartJson);
     }
+    public IActionResult CheckoutOrder()
+    {
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+
+        var user = new User
+        {
+            UserName = "admin",
+            UserEmail = "admin@admin.com",
+        };
+        _context.Users.Add(user);
+        _context.SaveChanges();
+        var order = new Order{UserId = user.UserId};
+        _context.Orders.Add(order);
+        _context.SaveChanges();
+        int orderId = order.OrderId;
+        foreach (var item in cart)
+        {
+            _context.OrderItems.Add(new OrderItem
+            {
+                OrderId = orderId, ProductId = item.ProductId, Quantity = item.Quantity
+            });
+            
+        }
+        _context.SaveChanges();
+        var inventory = _context.OrderItems.Where(oi=>oi.OrderId==orderId).ToList();
+       
+        return View("OrderCheckout",inventory);
+    }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult CheckoutOrder(Order order)
+    {
+       
+
+        return View();
+    }
 }

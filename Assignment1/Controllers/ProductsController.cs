@@ -1,9 +1,12 @@
+using System.Globalization;
+using System.Linq.Expressions;
 using Assignment1.Data;
 using Assignment1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Assignment1.Controllers;
+
 /*
  *  This is the employee inventory controller
  *  It is responsible for non-client facing actions
@@ -11,24 +14,80 @@ namespace Assignment1.Controllers;
 public class ProductsController : Controller
 {
     private readonly ApplicationDbContext _context;
+
     public ProductsController(ApplicationDbContext context)
     {
         _context = context;
     }
+
+    [HttpGet]
     public IActionResult Index()
     {
+        var inventory = _context.Products
+            .Include(p => p.Category)
+            .ToList();
 
-        var inventory = _context.Products.Include(p => p.Category).ToList();
+        ViewData["Columns"] = new List<string>
+        {
+            "ID",
+            "Name",
+            "Description",
+            "Price",
+            "Category",
+            "ProductStock"
+        };
+
+        ViewData["OrderableColumns"] = new List<string>
+        {
+            "ID",
+            "Name",
+            "Price",
+            "Category",
+            "ProductStock"
+        };
+        
+        ViewData["Categories"] = _context.Categories.ToList();
+
+        ViewData["LowerStockThreshold"] = 10;
+
         return View(inventory);
     }
-    
+
+    [HttpGet]
+    public IActionResult GetProducts(string orderType = "desc", string orderBy = "Name", string searchString = "")
+    {
+        searchString = searchString.ToLower();
+        var inventory = _context.Products
+            .Include(p => p.Category)
+            .Where(p => String.IsNullOrWhiteSpace(searchString)
+                        || p.ProductName.ToLower().Contains(searchString))
+            .AsQueryable();
+
+        Expression<Func<Product, object>> sortColumnSelector = orderBy switch
+        {
+            "ID" => p => p.ProductId,
+            "Name" => p => p.ProductName,
+            "Price" => p => p.ProductPrice,
+            "Category" => p => p.Category.CategoryName,
+            "ProductStock" => p => p.ProductStock,
+            _ => p => p.ProductId
+        };
+
+        inventory = orderType.ToLower() == "desc"
+            ? inventory.OrderByDescending(sortColumnSelector)
+            : inventory.OrderBy(sortColumnSelector);
+
+        ViewData["OrderType"] = orderType;
+        return PartialView("_ProductRows", inventory.ToList());
+    }
+
     [HttpGet]
     public IActionResult Create()
     {
         ViewBag.Categories = _context.Categories.ToList();
         return View();
     }
-    
+
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Product product)
@@ -39,6 +98,7 @@ public class ProductsController : Controller
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         return View(product);
     }
 
@@ -49,7 +109,8 @@ public class ProductsController : Controller
         if (product == null)
         {
             return NotFound();
-        }   
+        }
+
         ViewBag.Categories = _context.Categories.ToList();
         ViewBag.Price = _context.Products.FirstOrDefault(p => p.ProductId == id);
         return View(product);
@@ -57,7 +118,8 @@ public class ProductsController : Controller
 
     [HttpPost]
     public IActionResult Edit(int id,
-        [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,ProductStock")] Product product)
+        [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,ProductStock")]
+        Product product)
     {
         if (id != product.ProductId)
         {
@@ -84,9 +146,10 @@ public class ProductsController : Controller
                 }
             }
         }
+
         return RedirectToAction("Index");
-        
     }
+
     public bool ProductsExist(int id)
     {
         return _context.Products.Any(e => e.ProductId == id);
@@ -99,14 +162,13 @@ public class ProductsController : Controller
         if (product == null)
         {
             return NotFound();
-
         }
+
         return View(product);
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-
     public IActionResult DeleteConfirmed(int productid)
     {
         var product = _context.Products.FirstOrDefault(p => p.ProductId == productid);
@@ -116,8 +178,7 @@ public class ProductsController : Controller
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
+
         return NotFound();
     }
-    
-    
 }
