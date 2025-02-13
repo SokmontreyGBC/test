@@ -55,33 +55,26 @@ public class ProductsController : Controller
         searchString = searchString.ToLower();
         var inventory = _context.Products
             .Include(p => p.Category)
-            .Where(p => String.IsNullOrWhiteSpace(searchString) || p.ProductName.ToLower().Contains(searchString))
-            .ToList();
+            .Where(p => String.IsNullOrWhiteSpace(searchString)
+                        || p.ProductName.ToLower().Contains(searchString))
+            .AsQueryable();
 
-        inventory = orderBy switch
+        Expression<Func<Product, object>> sortColumnSelector = orderBy switch
         {
-            "ID" => orderType == "desc"
-                ? inventory.OrderBy(p => p.ProductId).ToList()
-                : inventory.OrderByDescending(p => p.ProductId).ToList(),
-            "Name" => orderType == "desc"
-                ? inventory.OrderBy(p => p.ProductName).ToList()
-                : inventory.OrderByDescending(p => p.ProductName).ToList(),
-            "Price" => orderType == "desc"
-                ? inventory.OrderBy(p => p.ProductPrice).ToList()
-                : inventory.OrderByDescending(p => p.ProductPrice).ToList(),
-            "Category" => orderType == "desc"
-                ? inventory.OrderBy(p => p.Category.CategoryName).ToList()
-                : inventory.OrderByDescending(p => p.Category.CategoryName).ToList(),
-            "ProductStock" => orderType == "desc"
-                ? inventory.OrderBy(p => p.ProductStock).ToList()
-                : inventory.OrderByDescending(p => p.ProductStock).ToList(),
-            _ => orderType == "desc"
-                ? inventory.OrderBy(p => p.ProductName).ToList()
-                : inventory.OrderByDescending(p => p.ProductName).ToList()
+            "ID" => p => p.ProductId,
+            "Name" => p => p.ProductName,
+            "Price" => p => p.ProductPrice,
+            "Category" => p => p.Category.CategoryName,
+            "ProductStock" => p => p.ProductStock,
+            _ => p => p.ProductId
         };
 
+        inventory = orderType.ToLower() == "desc"
+            ? inventory.OrderByDescending(sortColumnSelector)
+            : inventory.OrderBy(sortColumnSelector);
+
         ViewData["OrderType"] = orderType;
-        return PartialView("_ProductRows", inventory);
+        return PartialView("_ProductRows", inventory.ToList());
     }
 
     [HttpGet]
