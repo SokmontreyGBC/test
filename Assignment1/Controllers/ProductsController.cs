@@ -46,6 +46,8 @@ public class ProductsController : Controller
             "ProductStock"
         };
 
+        ViewData["LowerStockThreshold"] = 10;
+
         return View(inventory);
     }
 
