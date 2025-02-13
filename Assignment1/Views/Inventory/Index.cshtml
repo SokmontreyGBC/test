@@ -3,6 +3,7 @@
     ViewData["Page"] = "Inventory";
     ViewBag.Title = "Inventory";
     Layout = "_Layout";
+    var cart = ViewBag.Cart as List<Product>;
 }
 <div class="row align-items-start">
     <h2 class="col-auto">Client-Facing Inventory</h2>
@@ -40,7 +41,12 @@
                 <td>@product.Category.CategoryName</td>
                 <td>@product.ProductStock</td> @*THIS NEEDS TO BE CHANGED TO REFLECT STOCK QUANTITY*@
                 <td>
-                    <button asp-action="AddToCart" asp-controller="Inventory" asp-route-id="@product.ProductId"> <i class="fa-solid fa-arrow-up"></i> </button>
+                    <form asp-action="AddToCart" asp-controller="Inventory" method="post">
+                        <input type="hidden" name="id" value="@product.ProductId"/>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </button>
+                    </form>
                 </td>
             </tr>
         }
@@ -61,13 +67,29 @@ else
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <div class="offcanvas-body">
-    <div> @*buttons for later?*@
-        <button>
-            <i class="fa-solid fa-minus"></i>
-        </button>
-        <button>
-            <i class="fa-solid fa-plus"></i>
-        </button>
-    </div>
+      @if (cart != null && cart.Any())
+              {
+                  <ul class="list-group">
+                      @foreach (var item in cart)
+                      {
+                          <li class="list-group-item">
+                              @item.ProductName - @item.ProductPrice
+                          </li>
+                      }
+                  </ul>
+              }
+              else
+              {
+                  <p>Your cart is empty.</p>
+              }
+      
+      <div> @*buttons for later?*@
+          <button>
+              <i class="fa-solid fa-minus"></i>
+          </button>
+          <button>
+              <i class="fa-solid fa-plus"></i>
+          </button>
+      </div>
   </div>
 </div>

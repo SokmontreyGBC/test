@@ -20,8 +20,10 @@ public class InventoryController : Controller
     public IActionResult Index()
     {
         var clientInventory = _context.Products.Include(p => p.Category).ToList();
+        ViewBag.Cart = GetCart();
         return View(clientInventory);
     }
+
     
 
     public IActionResult AddToCart(int id)
@@ -31,8 +33,15 @@ public class InventoryController : Controller
         {
             return NotFound();
         }
-        return View(product);
-        
+        /*
+         * check for active cart
+         * add the product to the list
+         * save the list back to the session
+         */
+        List<Product> cart = GetCart();
+        cart.Add(product);
+        StashCart(cart);
+        return RedirectToAction("Index");
     }
     
     // CART SESSION COOKING
