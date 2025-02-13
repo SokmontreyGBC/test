@@ -6,49 +6,32 @@
     var cart = ViewBag.Cart as List<Product>;
 }
 
-@* TODO: put back the cart button and panel *@
-@* <div class="row align-items-start"> *@
-@*     <h2 class="col-auto">Client-Facing Inventory</h2> *@
-@*     <div class="col-auto ms-auto"> *@
-@*         $1$ Align cart button to the right #1# *@
-@*         <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"> *@
-@*             <i class="fa-solid fa-cart-shopping"></i> *@
-@*         </button> *@
-@*     </div> *@
-@* </div> *@
+<div class="row align-items-start">
+    <h2 class="col-auto">Client-Facing Inventory</h2>
+    <div class="col-auto ms-auto">
+        @* Align cart button to the right *@
+        <button class="btn btn-primary" type="button"
+                onclick="getCart()"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasExample"
+                aria-controls="offcanvasExample">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </button>
+    </div>
+</div>
 
-@* <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel"> *@
-@*     <div class="offcanvas-header"> *@
-@*         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5> *@
-@*         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button> *@
-@*     </div> *@
-@*     <div class="offcanvas-body"> *@
-@*         @if (cart != null && cart.Any()) *@
-@*         { *@
-@*             <ul class="list-group"> *@
-@*                 @foreach (var item in cart) *@
-@*                 { *@
-@*                     <li class="list-group-item d-flex justify-content-between align-items-center"> *@
-@*                         <span>@item.ProductName - @item.ProductPrice</span> *@
-@*                         <form asp-action="RemoveFromCart" asp-controller="Inventory" method="post"> *@
-@*                             <input type="hidden" name="id" value="@item.ProductId"/> *@
-@*                             <button type="submit" class="btn btn-outline-secondary"> *@
-@*                                 <i class="fa-solid fa-minus"></i> *@
-@*                             </button> *@
-@*                         </form> *@
-@*                     </li> *@
-@*                 } *@
-@*             </ul> *@
-@*         } *@
-@*         else *@
-@*         { *@
-@*             <p>Your cart is empty.</p> *@
-@*         } *@
-@*     </div> *@
-@*     <div class="offcanvas-end d-flex justify-content-end m-4"> *@
-@*         <button class="btn btn-primary">Checkout</button> *@
-@*     </div> *@
-@* </div> *@
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body" id="cart-container">
+        Hello
+    </div>
+    <div class="offcanvas-end d-flex justify-content-end m-4">
+        <button class="btn btn-primary">Checkout</button>
+    </div>
+</div>
 
 <br/>
 @if (Model.Any())
@@ -98,6 +81,16 @@ else
 
 @section Scripts {
     <script>
+        function getCart() {
+            $.ajax({
+                url: `/Inventory/GetCart`,
+                type: "GET",
+                success: function (data) {
+                    $("#cart-container").html(data);
+                }
+            });
+        }
+
         $(".add-to-cart-form").submit(function (e) {
             e.preventDefault();
             const form = this;
@@ -111,5 +104,6 @@ else
                 }
             });
         });
+
     </script>
 }

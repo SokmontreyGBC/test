@@ -24,6 +24,14 @@ public class InventoryController : Controller
         return View(products);
     }
 
+    [HttpGet]
+    public IActionResult GetCart()
+    {
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+        return PartialView("_CartRows", cart);
+    }
+
     [HttpPost]
     public IActionResult AddToCart(int id, int quantity)
     {
@@ -52,11 +60,9 @@ public class InventoryController : Controller
             StashCart(cart);
             return Content($"You can't have more than {product.ProductStock} of {product.ProductName} in your cart.");
         }
-        else
-        {
-            StashCart(cart);
-            return Content($"Successfully added {quantity} of {product.ProductName} to cart.");
-        }
+
+        StashCart(cart);
+        return Content($"Successfully added {quantity} of {product.ProductName} to cart.");
     }
 
     private void StashCart(List<OrderItem> cart)
