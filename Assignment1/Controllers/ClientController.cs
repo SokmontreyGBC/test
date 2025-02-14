@@ -91,20 +91,28 @@ public class ClientController : Controller
     }
 
     [HttpGet]
-    public IActionResult UpdateCartQuantity(int orderItemId, int quantity)
+    public IActionResult UpdateCartQuantity(int id, int quantity)
     {
+        var product = _context.Products.Find(id);
+        if (product == null)
+            return RedirectToAction("Index");
+
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+        var cartItem = cart.Find(oi => oi.ProductId == product.ProductId);
 
-        var cartItem = cart.Find(oi => oi.OrderItemId == orderItemId);
-        if (cartItem == null) return RedirectToAction("Index");
-
-        var product = _context.Products.Find(cartItem.ProductId);
-        if (product == null) return RedirectToAction("Index");
+        if (cartItem == null)
+        {
+            cartItem = new OrderItem
+            {
+                ProductId = product.ProductId,
+                Quantity = 0
+            };
+            cart.Add(cartItem);
+        }
 
         if (quantity > product.ProductStock) // TODO: handle error message
             return RedirectToAction("Index");
-
         if (quantity <= 0)
             return RedirectToAction("Index");
 
@@ -114,20 +122,19 @@ public class ClientController : Controller
     }
 
     [HttpGet]
-    public IActionResult DeleteCartItem(int orderItemId)
+    public IActionResult DeleteCartItem(int id)
     {
+        var product = _context.Products.Find(id);
+        if (product == null)
+            return RedirectToAction("Index");
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson);
-
-        if (cart == null) return RedirectToAction("Index");
-
-        var cartItem = cart.Find(oi => oi.OrderItemId == orderItemId);
+        var cartItem = cart.Find(oi => oi.ProductId == product.ProductId);
         if (cartItem != null)
         {
             cart.Remove(cartItem);
             StashCart(cart);
         }
-
         return RedirectToAction("Index");
     }
 
