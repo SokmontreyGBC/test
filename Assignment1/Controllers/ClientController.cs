@@ -111,15 +111,12 @@ public class ClientController : Controller
             cart.Add(cartItem);
         }
 
-        cartItem.Quantity = quantity;
-
-        if (cartItem.Quantity > product.ProductStock)
-        {
-            cartItem.Quantity = product.ProductStock;
-            StashCart(cart);
+        if (quantity > product.ProductStock) // TODO: handle error message
             return RedirectToAction("Index");
-        }
+        if (quantity <= 0)
+            return RedirectToAction("Index");
 
+        cartItem.Quantity = quantity;
         StashCart(cart);
         return RedirectToAction("Index");
     }
@@ -145,56 +142,6 @@ public class ClientController : Controller
     {
         string cartJson = JsonSerializer.Serialize(cart);
         HttpContext.Session.SetString("Cart", cartJson);
-    }
-
-    public async Task<IActionResult> CheckoutOrder()
-    {
-        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
-        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
-      
-        var user = new User
-        {
-            UserName = "admin",
-            UserEmail = "admin@admin.com",
-        };
-        _context.Users.Add(user);
-        _context.SaveChanges();
-        var order = new Order { UserId = user.UserId };
-        _context.Orders.Add(order);
-        _context.SaveChanges();
-        int orderId = order.OrderId;
-        foreach (var item in cart)
-        {
-            _context.OrderItems.Add(new OrderItem
-            {
-                OrderId = orderId, ProductId = item.ProductId, Quantity = item.Quantity, 
-            });
-        }
-
-        _context.SaveChanges();
-        var inventory = await _context.OrderItems.Where(oi => oi.OrderId == orderId).ToListAsync();
-       ViewBag.Products =  await _context.Products.ToListAsync();
-       decimal sum = 0;
-       foreach (var item in inventory)
-       {
-           foreach (var product in ViewBag.Products)
-           {
-               if (product.ProductId == item.ProductId)
-               {
-                   var currentCost = item.Quantity * product.ProductPrice;
-                   sum += currentCost;
-               }
-           }
-       }
-        TempData["sum"] = sum.ToString();
-        return View("OrderCheckout", inventory);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult CheckoutOrder(Order order)
-    {
-        return View();
     }
 
     [HttpGet]

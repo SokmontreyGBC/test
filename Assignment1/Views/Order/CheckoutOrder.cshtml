@@ -1,0 +1,63 @@
+﻿@model User
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+
+    decimal cost = 0;
+    foreach (var items in ViewBag.OrderItems)
+        cost += items.Product.ProductPrice * items.Quantity;
+}
+
+<h2>Order Summary Page</h2>
+<br>
+
+@foreach (var items in ViewBag.OrderItems)
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-row align-items-center">
+                    <div class="ms-3">
+                        <h5>@items.Product.ProductName</h5>
+                        <p class="small mb-0">@items.Product.ProductDescription</p>
+                    </div>
+                </div>
+                <div class="d-flex flex-row align-items-center">
+                    <div style="width: 50px;">
+                        <h6 class="fw-normal mb-0">@items.Quantity x</h6>
+                    </div>
+                    <div style="width: 80px;">
+                        <h6 class="mb-0">$@items.Product.ProductPrice</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="float-end">
+    <h5> Total Cost: $@cost</h5>
+</div>
+
+<div class="card p-4" style="margin-top: 10%;">
+    <h3> Guest Checkout </h3>
+    <form class="card-body"
+          asp-controller="Order"
+          asp-action="CheckoutOrder"
+          method="post">
+        <div class="form-group">
+            <label asp-for="UserName" class="control-label"></label>
+            <input asp-for="UserName" class="form-control"/>
+            <span asp-validation-for="UserName" class="text-danger"></span>
+            <label asp-for="UserEmail" class="control-label"></label>
+            <input asp-for="UserEmail" class="form-control"/>
+            <span asp-validation-for="UserEmail" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Order" class="btn btn-primary"/>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
