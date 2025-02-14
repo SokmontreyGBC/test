@@ -5,56 +5,78 @@
     Layout = "_Layout";
 }
 
-<div class="row">
-    <div>
-        <a class="btn btn-primary" asp-action="Create" asp-controller="Admin">Add new Inventory Item</a>
-    </div>
-</div>
-
-<div class="form-actions no-color">
-    <label>Find by name:
-        <input
-            type="text"
-            id="search-input"
-            value=""
-        />
-    </label>
-
-    <div class="d-inline-flex gap-2">
-        <select name="sort" class="form-control" onchange="orderByColumn(this.value)">
-            @foreach (var column in ViewData["OrderableColumns"] as List<string>)
-            {
-                <option value="@column">@column</option>
-            }
-        </select>
-        <button onclick="toggleOrderType()" class="btn btn-primary">
-            <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
-        </button>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="px-4 py-5 bg-light border-bottom">
+                <h1 class="display-4 fw-bold font-monospace text-start">Admin Panel</h1>
+                <p class="lead mb-4 font-monospace text-start">Manage your inventory items</p>
+            </div>
+        </div>
     </div>
 
-    <p>Filter by category:</p>
-    @Html.Partial("_TagSelector", new
-    {
-        Id = "category-tag",
-        Tags = ViewData["Categories"] as List<Category>
-    })
+    <div class="row g-0 mt-4">
+        <div class="col-12 p-4">
+            <div class="bg-white border p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="font-monospace m-0">Inventory Management</h2>
+                    <a class="btn btn-outline-dark font-monospace" asp-action="Create" asp-controller="Admin">
+                        Add New Item
+                    </a>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-md-4">
+                        <label class="font-monospace d-block mb-2">Find by name:</label>
+                        <input type="text" id="search-input" class="form-control font-monospace" placeholder="Search products...">
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label class="font-monospace d-block mb-2">Sort by:</label>
+                        <div class="d-flex gap-2">
+                            <select name="sort" class="form-select font-monospace" onchange="orderByColumn(this.value)">
+                                @foreach (var column in ViewData["OrderableColumns"] as List<string>)
+                                {
+                                    <option value="@column">@column</option>
+                                }
+                            </select>
+                            <button onclick="toggleOrderType()" class="btn btn-outline-dark">
+                                <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="font-monospace d-block mb-2">Filter by category:</label>
+                        @Html.Partial("_TagSelector", new
+                        {
+                            Id = "category-tag",
+                            Tags = ViewData["Categories"] as List<Category>
+                        })
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-borderless font-monospace">
+                        <thead class="border-bottom">
+                            <tr>
+                                @foreach (var column in ViewData["Columns"] as List<string>)
+                                {
+                                    <th class="text-muted">@column</th>
+                                }
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody class="tableData" id="product-rows-container">
+                            @await Html.PartialAsync("_ProductRows", Model, ViewData)
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<table class="table">
-    <thead>
-    <tr>
-        @foreach (var column in ViewData["Columns"] as List<string>)
-        {
-            <th> @column </th>
-        }
-        <th></th>
-    </tr>
-    </thead>
-
-    <tbody class="tableData" id="product-rows-container">
-        @await Html.PartialAsync("_ProductRows", Model, ViewData)
-    </tbody>
-</table>
 
 <script>
     let isDesc = false;
