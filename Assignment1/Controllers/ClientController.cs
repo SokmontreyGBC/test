@@ -119,6 +119,23 @@ public class ClientController : Controller
         return RedirectToAction("Index");
     }
 
+    [HttpGet]
+    public IActionResult DeleteCartItem(int id)
+    {
+        var product = _context.Products.Find(id);
+        if (product == null)
+            return RedirectToAction("Index");
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson);
+        var cartItem = cart.Find(oi => oi.ProductId == product.ProductId);
+        if (cartItem != null)
+        {
+            cart.Remove(cartItem);
+            StashCart(cart);
+        }
+        return RedirectToAction("Index");
+    }
+
     private void StashCart(List<OrderItem> cart)
     {
         string cartJson = JsonSerializer.Serialize(cart);
