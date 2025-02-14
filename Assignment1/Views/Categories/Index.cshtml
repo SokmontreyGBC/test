@@ -5,37 +5,70 @@
     Layout = "_Layout";
 }
 
-<h2>Temp Category View For Testing</h2>
-<br/>
-<div class="row">
-    <div>
-        <a class="btn btn-primary" asp-action="Create" asp-controller="Categories">Create Category</a>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="px-4 py-5 bg-light border-bottom">
+                <h1 class="display-4 fw-bold font-monospace text-start">Categories</h1>
+                <p class="lead mb-4 font-monospace text-start">Manage your product categories</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-0 mt-4">
+        <div class="col-12 p-4">
+            <div class="bg-white border p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="font-monospace m-0">Category List</h2>
+                    <a class="btn btn-outline-dark font-monospace" asp-action="Create" asp-controller="Categories">
+                        Create Category
+                    </a>
+                </div>
+
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-borderless font-monospace">
+                            <thead class="border-bottom">
+                            <tr>
+                                <th class="text-muted">ID</th>
+                                <th class="text-muted">Name</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody class="tableData">
+                            @foreach (var category in Model)
+                            {
+                                <tr class="border-bottom">
+                                    <td class="py-3">@category.CategoryId</td>
+                                    <td class="py-3">@category.CategoryName</td>
+                                    <td class="py-3 text-end">
+                                        <a class="btn btn-outline-dark btn-sm font-monospace me-2"
+                                           asp-action="Edit"
+                                           asp-controller="Categories"
+                                           asp-route-id="@category.CategoryId">
+                                            Edit
+                                        </a>
+                                        <a class="btn btn-outline-danger btn-sm font-monospace"
+                                           asp-action="Delete"
+                                           asp-controller="Categories"
+                                           asp-route-id="@category.CategoryId">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5 border">
+                        <p class="font-monospace mb-0">No categories found.</p>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </div>
-@if (Model.Any())
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th> 
-            <th>Name</th>
-            <th></th>
-        </tr>
-        </thead>
-
-        <tbody class="tableData">
-        @foreach (var category in Model)
-        {
-            <tr>
-                <td>@category.CategoryId</td>
-                <td>@category.CategoryName</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <br/>
-    <p>No categories found.</p>
-}

@@ -6,85 +6,97 @@
     Layout = "_Layout";
 }
 
-<div class="row align-items-start">
-    <h2 class="col-auto">Client-Facing Inventory</h2>
-    <div class="col-auto ms-auto">
-        @* Align cart button to the right *@
-        <button class="btn btn-primary" type="button"
-                onclick="getCart()"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasExample"
-                aria-controls="offcanvasExample">
-            <i class="fa-solid fa-cart-shopping"></i>
-        </button>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="px-4 py-5 bg-light border-bottom">
+                <h1 class="display-4 fw-bold font-monospace text-start">Client-Facing Inventory</h1>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-dark font-monospace" type="button"
+                            onclick="getCart()"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasExample"
+                            aria-controls="offcanvasExample">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="offcanvas offcanvas-end" style="width: 40%;" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header bg-light border-bottom"> 
+            <h5 class="offcanvas-title font-monospace" id="offcanvasExampleLabel">Cart</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body font-monospace" id="cart-container">
+        </div>
+
+        <div class="offcanvas-footer bg-light border-top p-3">
+            <a class="btn btn-dark font-monospace"
+               asp-action="CheckoutOrder"
+               asp-controller="Client">
+                Checkout
+            </a>
+        </div>
+    </div>
+  
+    <div class="row g-0 mt-4"> 
+        <div class="col-12 p-4">
+            <div class="bg-white border p-4">
+                @if (Model.Any())
+                {
+                        <table class="table table-borderless font-monospace"> 
+                            <thead class="border-bottom">
+                                <tr>
+                                    <th class="text-muted">ID</th>
+                                    <th class="text-muted">Name</th>
+                                    <th class="text-muted">Description</th>
+                                    <th class="text-muted">Price</th>
+                                    <th class="text-muted">Category</th>
+                                    <th class="text-muted">Stock</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach (var product in Model)
+                                {
+                                    <tr>
+                                        <td>@product.ProductId</td>
+                                        <td>@product.ProductName</td>
+                                        <td>@product.ProductDescription</td>
+                                        <td>@product.ProductPrice</td>
+                                        <td>@product.Category.CategoryName</td>
+                                        <td>@product.ProductStock</td>
+                                        <td>
+                                            <form class="add-to-cart-form d-flex">
+                                                <input type="hidden" name="id" value="@product.ProductId" />
+                                                <input type="number" name="quantity" value="1" min="1" max="@product.ProductStock" class="form-control font-monospace" style="width: 6rem" /> 
+                                                <button type="submit" class="btn btn-dark font-monospace"> 
+                                                    +
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                }
+                else
+                {
+                    <br />
+                    <p class="font-monospace">No products found.</p>
+                }
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="offcanvas offcanvas-end" style="width: 40%;" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Cart</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body" id="cart-container">
-    </div>
-    
-    <div class="offcanvas-end d-flex justify-content-end m-4">
-        <a class="btn btn-primary"
-           asp-action="CheckoutOrder"
-           asp-controller="Order">
-            Checkout
-        </a>
-    </div>
-</div>
-
-@if (Model.Any())
-{
-    <table class="table">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th>Stock</th>
-            <th></th>
-        </tr>
-        </thead>
-
-        <tbody class="tableData">
-        @foreach (var product in Model)
-        {
-            <tr>
-                <td>@product.ProductId</td>
-                <td>@product.ProductName</td>
-                <td>@product.ProductDescription</td>
-                <td>@product.ProductPrice</td>
-                <td>@product.Category.CategoryName</td>
-                <td>@product.ProductStock</td>
-                <td>
-                    <form class="add-to-cart-form">
-                        <input type="hidden" name="id" value="@product.ProductId"/>
-                        <input type="number" name="quantity" value="1" min="1" max="@product.ProductStock" style="width: 5rem;" />
-                        <button type="submit" class="btn btn-primary">
-                            +
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-else
-{
-    <br/>
-    <p>No products found.</p>
-}
-
-<div class="toast-container position-fixed bottom-0 end-0 p-3 m-3  ">
+<div class="toast-container position-fixed bottom-0 end-0 p-3 m-3">
     <div id="liveToast"
-         class="toast align-items-center text-bg-primary border-0"
+         class="toast align-items-center text-bg-primary border-0 font-monospace"
          role="alert"
          aria-live="assertive"
          aria-atomic="true">

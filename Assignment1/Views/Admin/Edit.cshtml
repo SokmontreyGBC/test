@@ -1,55 +1,76 @@
 ﻿@model Product
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Edit Product";
     Layout = "_Layout";
+    ViewData["Page"] = "Admin";
 }
-<div class="card p-4 w-50 mx-auto" style="margin-top: 10%;">
-    <form class="card-body" asp-action="Edit" method="post">
-        @Html.HiddenFor(model => model.ProductId)
-        <div class="form-group">
-            <label asp-for="ProductName" class="control-label"></label>
-            <input asp-for="ProductName" class="form-control">
-            <span asp-validation-for="ProductName" class="text-bg-danger"></span>
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="px-4 py-5 bg-light border-bottom">
+                <h1 class="display-4 fw-bold font-monospace text-start">Edit Product</h1>
+                <p class="lead mb-4 font-monospace text-start">Modify product details</p>
+            </div>
         </div>
-        <div class="form-group">
-            <label asp-for="ProductDescription" class="control-label"></label>
-            <input asp-for="ProductDescription" class="form-control">
-            <span asp-validation-for="ProductDescription" class="text-bg-danger"></span>
+    </div>
+
+    <div class="row g-0 justify-content-center mt-4">
+        <div class="col-12 col-md-8 col-lg-6 p-4">
+            <div class="bg-white border p-4">
+                <form asp-action="Edit" method="post">
+                    @Html.HiddenFor(model => model.ProductId)
+
+                    <div class="mb-4">
+                        <label asp-for="ProductName" class="form-label font-monospace">Product Name</label>
+                        <input asp-for="ProductName" class="form-control font-monospace" />
+                        <span asp-validation-for="ProductName" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ProductDescription" class="form-label font-monospace">Description</label>
+                        <textarea asp-for="ProductDescription" class="form-control font-monospace" rows="3"></textarea>
+                        <span asp-validation-for="ProductDescription" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ProductPrice" class="form-label font-monospace">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text font-monospace">$</span>
+                            <input asp-for="ProductPrice" class="form-control font-monospace" />
+                        </div>
+                        <span asp-validation-for="ProductPrice" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="CategoryId" class="form-label font-monospace">Category</label>
+                        <select asp-for="CategoryId" class="form-select font-monospace">
+                            <option value="" disabled selected>Select a category...</option>
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <option value="@category.CategoryId">@category.CategoryName</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ProductStock" class="form-label font-monospace">Stock Quantity</label>
+                        <input asp-for="ProductStock" class="form-control font-monospace" type="number" />
+                        <span asp-validation-for="ProductStock" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <a class="btn btn-outline-secondary font-monospace" asp-action="Index">Back to Inventory</a>
+                        <button type="submit" class="btn btn-outline-dark font-monospace">Save Changes</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <label asp-for="ProductPrice" class="control-label">Price</label>
-            <input asp-for="ProductPrice" class="form-control">
-            <span asp-validation-for="ProductPrice" class="text-bg-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="CategoryId" class="control-label">Category</label>
-            <select asp-for="CategoryId" class="form-select">
-                @{
-                    <option selected disabled hidden style="display: none; color: lightgrey" value="default">Choose an option...</option>
-                    @foreach (var category in ViewBag.Categories)
-                    {
-                        <option value="@category.CategoryId">@category.CategoryName</option>
-                    }
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label asp-for="ProductStock" class="form-label">Stock</label>
-            <input asp-for="ProductStock" class="form-control"/>
-            <span asp-validation-for="ProductStock" class="text-bg-danger"></span>
-        </div>
-        <br/>
-        <div class="d-flex justify-content-end gap-2 form-group">
-            <input type="submit" value="Save" class="btn btn-primary">
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-        </div>
-    </form>
+    </div>
 </div>
 
-@section Scripts{
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
-
