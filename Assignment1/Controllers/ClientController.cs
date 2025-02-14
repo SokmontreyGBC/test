@@ -43,11 +43,12 @@ public class ClientController : Controller
     public JsonResult AddToCart(int id, int quantity)
     {
         var product = _context.Products.Find(id);
-        if (product == null) return new JsonResult(new
-        {
-            success = false,
-            message = "Product not found."
-        });
+        if (product == null)
+            return new JsonResult(new
+            {
+                success = false,
+                message = "Product not found."
+            });
 
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
@@ -85,14 +86,11 @@ public class ClientController : Controller
     }
 
     [HttpGet]
-    public JsonResult UpdateCartQuantity(int id, int quantity)
+    public IActionResult UpdateCartQuantity(int id, int quantity)
     {
         var product = _context.Products.Find(id);
         if (product == null)
-            return new JsonResult(new
-            {
-                success = false, message = "Product not found."
-            });
+            return RedirectToAction("Index");
 
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
@@ -103,28 +101,22 @@ public class ClientController : Controller
             cartItem = new OrderItem
             {
                 ProductId = product.ProductId,
-                Quantity = quantity
+                Quantity = 0
             };
             cart.Add(cartItem);
         }
+
+        cartItem.Quantity = quantity;
 
         if (cartItem.Quantity > product.ProductStock)
         {
             cartItem.Quantity = product.ProductStock;
             StashCart(cart);
-            return new JsonResult(new
-            {
-                success = false,
-                message = $"You can't have more than {product.ProductStock} of {product.ProductName} in your cart."
-            });
+            return RedirectToAction("Index");
         }
 
         StashCart(cart);
-        return new JsonResult(new
-        {
-            success = true,
-            message = $"Successfully added {cartItem.Quantity} of {product.ProductName} to cart."
-        });
+        return RedirectToAction("Index");
     }
 
     private void StashCart(List<OrderItem> cart)
