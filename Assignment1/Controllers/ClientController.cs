@@ -64,19 +64,23 @@ public class ClientController : Controller
             cart.Add(cartItem);
         }
 
-        cartItem.Quantity += quantity;
+        var newQuantity = cartItem.Quantity + quantity;
 
-        if (cartItem.Quantity > product.ProductStock)
-        {
-            cartItem.Quantity = product.ProductStock;
-            StashCart(cart);
+        if (newQuantity > product.ProductStock)
             return new JsonResult(new
             {
                 success = false,
                 message = $"You can't have more than {product.ProductStock} of {product.ProductName} in your cart."
             });
-        }
 
+        if (newQuantity <= 0)
+            return new JsonResult(new
+            {
+                success = false,
+                message = $"You can't have zero items. Please delete the item instead."
+            });
+
+        cartItem.Quantity = newQuantity;
         StashCart(cart);
         return new JsonResult(new
         {
