@@ -20,11 +20,12 @@
                         <div class="d-flex flex-row align-items-center">
                             <div class="ms-3">
                                 
-                                    @foreach (var product in ViewBag.Products)
-                                        if (product.ProductId == items.ProductId)
-                                        {
-                                            <h5>@product.ProductName </h5>
-                                        }
+                                @foreach (var product in ViewBag.Products)
+                                    if (product.ProductId == items.ProductId)
+                                    {
+                                        <h5>@product.ProductName </h5>
+                                        <p class="small mb-0">@product.ProductDescription</p>
+                                    }
                             </div>
                                 
                         </div>
@@ -51,21 +52,20 @@
         <br>
        
         
-        <div class="card p-4" style="margin-top: 10%;">
-            <h3> Guest Checkout </h3>
-            <form class="card-body" asp-action="CheckoutOrder" method="post">
-                <div class="form-group">
-                    <label class="control-label">Name: </label>
-                    <input class="form-control"/>
-
-                    <label class="control-label">Email: </label>
-                    <input class="form-control"/>
-
-
-                </div>
-            </form>
-        </div>
-        <br></br>
-        <a asp-action="CheckoutOrder" class="btn btn-primary">Order</a>
-      
     }
+    <div class="card p-4" style="margin-top: 10%;">
+        <h3> Guest Checkout </h3>
+        <form class="card-body" asp-action="CheckoutOrder" method="post">
+            <div class="form-group">
+                <label class="control-label">Name: </label>
+                <input class="form-control"/>
+
+                <label class="control-label">Email: </label>
+                <input class="form-control"/>
+
+
+            </div>
+        </form>
+    </div>
+    <br></br>
+    <a asp-action="CheckoutOrder" class="btn btn-primary">Order</a>
