@@ -63,7 +63,7 @@ public class OrderController : Controller
                 oi => oi.ProductId,
                 p => p.ProductId,
                 (oi, p) => new OrderItem
-                {
+                {   
                     OrderItemId = oi.OrderItemId,
                     OrderId = oi.OrderId,
                     ProductId = p.ProductId,
@@ -111,6 +111,13 @@ public class OrderController : Controller
         _context.SaveChanges();
         return order;
     }
+    
+    [HttpGet]
+    public IActionResult CheckoutConfirm()
+    {
+        ViewBag.OrderItems = GetOrderItems();
+        return View();
+    }
 
     public List<OrderItem> CreateOrderItems(int orderId, List<OrderItem> cartItems)
     {
@@ -153,6 +160,7 @@ public class OrderController : Controller
         var orderItems = CreateOrderItems(order.OrderId, cartItems);
         UpdateProductStock(orderItems);
 
-        return RedirectToAction("Index", "Client");
+        TempData["Name"] = user.UserName;
+        return RedirectToAction("CheckoutConfirm", "Order");
     }
 }
