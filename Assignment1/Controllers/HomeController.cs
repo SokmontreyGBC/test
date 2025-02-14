@@ -17,6 +17,7 @@ public class HomeController : Controller
         _context = context;
     }
     
+    [HttpGet]
     public IActionResult Index()
     {
         var topProducts = _context.Products
@@ -27,6 +28,7 @@ public class HomeController : Controller
         return View(topProducts);
     }
     
+    [HttpGet]
     public IActionResult AboutUs()
     {
         return View();

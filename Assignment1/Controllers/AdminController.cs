@@ -128,6 +128,7 @@ public class AdminController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult Edit(int id,
         [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,ProductStock")]
         Product product)
