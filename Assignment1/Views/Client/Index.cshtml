@@ -80,17 +80,16 @@ else
     <p>No products found.</p>
 }
 
-
-<div class="toast-container position-fixed bottom-0 end-0 p-3  ">
-    <div id="liveToast" class="toast text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            @* <img src="..." class="rounded me-2" alt="..."> *@
-            <strong class="me-auto">Cart</strong>
-            @* <small>11 mins ago</small> *@
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div id="msg-container" class="toast-body">
-            
+<div class="toast-container position-fixed bottom-0 end-0 p-3 m-3  ">
+    <div id="liveToast"
+         class="toast align-items-center text-bg-primary border-0"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="msg-container">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
 </div>
@@ -108,7 +107,7 @@ else
                 }
             });
         }
-    
+
         $(".add-to-cart-form").submit(function (e) {
             e.preventDefault();
             const form = this;
@@ -117,24 +116,19 @@ else
             $.ajax({
                 url: `/Client/AddToCart?id=${productId}&quantity=${quantity}`,
                 type: "GET",
-                success: function (data) {
-                    @*liveToastElement.classList.add("text-bg-green")
-                    liveToastElement.classList.remove("text-bg-danger")*@
-                    $("#msg-container").html(data)
-                    toastBootstrap.show()
-                }
-                //error: function (data) {
-                  //  liveToastElement.classList.add("text-bg-green")
-                  //  liveToastElement.classList.remove("text-bg-danger")
-                  //  $("#msg-container").html(data)
-                   // toastBootstrap.show()
-               // }
+                complete: function (data) {
+                    const resp = JSON.parse(data.responseText);
+                    $('#msg-container').html(resp.message);
+                    if (resp.success) {
+                        liveToastElement[0].classList.add('text-bg-success');
+                        liveToastElement[0].classList.remove('text-bg-danger');
+                    } else {
+                        liveToastElement[0].classList.remove('text-bg-success');
+                        liveToastElement[0].classList.add('text-bg-danger');
+                    }
+                    toastBootstrap.show();
+                },
             });
         });
-    
-    
-    
-    
-    
     </script>
 }
