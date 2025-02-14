@@ -1,40 +1,40 @@
 ﻿@model Product
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Delete Product";
     Layout = "_Layout";
+    ViewData["Page"] = "Admin";
 }
 
-<h2>@ViewBag.Title</h2>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="px-4 py-5 bg-light border-bottom">
+                <h1 class="display-4 fw-bold font-monospace text-start">Delete Product</h1>
+                <p class="lead mb-4 font-monospace text-start">Are you sure you want to delete this product?</p>
+            </div>
+        </div>
+    </div>
 
+    <div class="row g-0 justify-content-center mt-4">
+        <div class="col-12 col-md-8 col-lg-6 p-4">
+            <div class="bg-white border p-4">
+                <dl class="row">
+                    <dt class="col-sm-3 font-monospace">Product Name</dt>
+                    <dd class="col-sm-9 font-monospace">@Html.DisplayFor(model => model.ProductName)</dd>
 
-<h3> Are you sure you want to delete this Product?</h3>
+                    <dt class="col-sm-3 font-monospace">Description</dt>
+                    <dd class="col-sm-9 font-monospace">@Html.DisplayFor(model => model.ProductDescription)</dd>
+                </dl>
 
-<div>
-
-    <hr/>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model=>model.ProductName)
-        </dt>
-        
-        <dd class="col-sm-2=10">
-            @Html.DisplayFor(model=>model.ProductName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model=>model.ProductDescription)
-        </dt>
-
-        <dd class="col-sm-2=10">
-            @Html.DisplayFor(model=>model.ProductDescription)
-        </dd>
-        
-    </dl>
-    <form asp-action="Delete" method="post">
-        @Html.HiddenFor(model => model.ProductId)
-        <input type="submit" value="Delete" class="btn btn-danger">
-        <a asp-action="index" class="btn btn-secondary">Cancel Delete</a>
-
-
-    </form>
+                <form asp-action="Delete" method="post" class="mt-4">
+                    @Html.HiddenFor(model => model.ProductId)
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="Index" class="btn btn-outline-secondary font-monospace">Cancel</a>
+                        <button type="submit" class="btn btn-danger font-monospace">Delete Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

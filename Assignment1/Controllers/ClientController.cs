@@ -111,15 +111,12 @@ public class ClientController : Controller
             cart.Add(cartItem);
         }
 
-        cartItem.Quantity = quantity;
-
-        if (cartItem.Quantity > product.ProductStock)
-        {
-            cartItem.Quantity = product.ProductStock;
-            StashCart(cart);
+        if (quantity > product.ProductStock) // TODO: handle error message
             return RedirectToAction("Index");
-        }
+        if (quantity <= 0)
+            return RedirectToAction("Index");
 
+        cartItem.Quantity = quantity;
         StashCart(cart);
         return RedirectToAction("Index");
     }

@@ -5,31 +5,45 @@
     Layout = "_Layout";
 }
 
-<h2>Register a New Category</h2>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="px-4 py-5 bg-light border-bottom">
+                <h1 class="display-4 fw-bold font-monospace text-start">Create a Category</h1>
+                <p class="lead mb-4 font-monospace text-start">Add a new category to your inventory</p>
+            </div>
+        </div>
+    </div>
 
-<form asp-action="Create" method="post">
-    
-    <div class="form-group">
-        <label asp-for="CategoryName" class="control-label">Category Name:</label>
-        <input asp-for="CategoryName" class="form-control"></input>
-        @{
-        if (TempData["ErrorMessage"] != null)
-        {
-        <div class="text-danger" > @TempData["ErrorMessage"]</div>
-        }
-        }
-        <span asp-validation-for="CategoryName" class="text-danger"></span>
+    <div class="row g-0 mt-4">
+        <div class="col-12 p-4">
+            <div class="bg-white border p-4">
+                <h2 class="font-monospace m-0 mb-4">New Category</h2>
+
+                <form asp-action="Create" method="post">
+                    <div class="form-group mb-3">
+                        <label asp-for="CategoryName" class="control-label font-monospace">Category Name:</label>
+                        <input asp-for="CategoryName" class="form-control font-monospace"></input>
+                        @{
+                            if (TempData["ErrorMessage"] != null)
+                            {
+                                <div class="text-danger">@TempData["ErrorMessage"]</div>
+                            }
+                        }
+                        <span asp-validation-for="CategoryName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-dark font-monospace" />
+                    </div>
+
+                    @section Scripts{
+                        @{
+                            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                        }
+                    }
+                </form>
+            </div>
+        </div>
     </div>
-    <br/>
-    <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary"/>
-       
-    </div>
-    
-   
-    @section Scripts{
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    }
-</form>
+</div>

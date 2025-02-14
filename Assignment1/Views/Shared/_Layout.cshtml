@@ -41,18 +41,18 @@
                            asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav">
-                    @* <li class="nav-item"> *@
-                    @*     <a href="" class="nav-link" *@
-                    @*        >Sign in</a> *@
-                    @* </li> *@
-                    <li class="nav-item">
-                        <a class="nav-link @( (string)ViewData["Page"]! == "About Us" ? "text-primary" : "text-dark")"
-                            asp-area="" asp-controller="Home" asp-action="AboutUs">
-                            About us
-                        </a>
-                    </li>
-                </ul>
+                @* <ul class="navbar-nav"> *@
+                @*     $1$ <li class="nav-item"> #1# *@
+                @*     $1$     <a href="" class="nav-link" #1# *@
+                @*     $1$        >Sign in</a> #1# *@
+                @*     $1$ </li> #1# *@
+                @*     <li class="nav-item"> *@
+                @*         <a class="nav-link @( (string)ViewData["Page"]! == "About Us" ? "text-primary" : "text-dark")" *@
+                @*             asp-area="" asp-controller="Home" asp-action="AboutUs"> *@
+                @*             About us *@
+                @*         </a> *@
+                @*     </li> *@
+                @* </ul> *@
             </nav>
         </header>
     </div>
