@@ -1,3 +1,4 @@
+@using Assignment1.Controllers
 @model List<Product>
 @{
     ViewData["Page"] = "Products";
@@ -26,10 +27,7 @@
     </div>
     <div class="offcanvas-body" id="cart-container">
     </div>
-    <div class="offcanvas-bottom d-flex justify-content-end">
-        <h4> </h4>
-        
-    </div>
+    
     <div class="offcanvas-end d-flex justify-content-end m-4">
         <a class="btn btn-primary"
            asp-action="CheckoutOrder"
@@ -134,5 +132,26 @@ else
                 },
             });
         });
+        
+        function getCart() {
+            $.ajax({
+                url: `/Client/GetCart`,
+                type: "GET",
+                success: function (data) {
+                    $("#cart-container").html(data);
+                    updateTotalCart();
+                }
+            });
+        }
+        
+        function updateTotalCart() {
+            $.ajax({
+                url: `/Client/GetTotalCart`,
+                type: "GET",
+                success: function (data) {
+                    $(".offcanvas-bottom h4").text(`Total: ${data.totalCart}`);
+                }
+            });
+        }
     </script>
 }
