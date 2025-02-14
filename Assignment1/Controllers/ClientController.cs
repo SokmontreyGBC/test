@@ -40,10 +40,14 @@ public class ClientController : Controller
     }
 
     [HttpGet]
-    public IActionResult AddToCart(int id, int quantity)
+    public JsonResult AddToCart(int id, int quantity)
     {
         var product = _context.Products.Find(id);
-        if (product == null) return Content("Product not found.");
+        if (product == null) return new JsonResult(new
+        {
+            success = false,
+            message = "Product not found."
+        });
 
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
@@ -65,18 +69,30 @@ public class ClientController : Controller
         {
             cartItem.Quantity = product.ProductStock;
             StashCart(cart);
-            return Content($"You can't have more than {product.ProductStock} of {product.ProductName} in your cart.");
+            return new JsonResult(new
+            {
+                success = false,
+                message = $"You can't have more than {product.ProductStock} of {product.ProductName} in your cart."
+            });
         }
 
         StashCart(cart);
-        return Content($"Successfully added {cartItem.Quantity} of {product.ProductName} to cart.");
+        return new JsonResult(new
+        {
+            success = true,
+            message = $"Successfully added {cartItem.Quantity} of {product.ProductName} to cart."
+        });
     }
 
     [HttpGet]
-    public IActionResult UpdateCartQuantity(int id, int quantity)
+    public JsonResult UpdateCartQuantity(int id, int quantity)
     {
         var product = _context.Products.Find(id);
-        if (product == null) return Content("Product not found.");
+        if (product == null)
+            return new JsonResult(new
+            {
+                success = false, message = "Product not found."
+            });
 
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
@@ -96,11 +112,19 @@ public class ClientController : Controller
         {
             cartItem.Quantity = product.ProductStock;
             StashCart(cart);
-            return Content($"You can't have more than {product.ProductStock} of {product.ProductName} in your cart.");
+            return new JsonResult(new
+            {
+                success = false,
+                message = $"You can't have more than {product.ProductStock} of {product.ProductName} in your cart."
+            });
         }
 
         StashCart(cart);
-        return Content($"Successfully added {cartItem.Quantity} of {product.ProductName} to cart.");
+        return new JsonResult(new
+        {
+            success = true,
+            message = $"Successfully added {cartItem.Quantity} of {product.ProductName} to cart."
+        });
     }
 
     private void StashCart(List<OrderItem> cart)

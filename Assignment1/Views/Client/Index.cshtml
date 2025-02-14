@@ -80,8 +80,24 @@ else
     <p>No products found.</p>
 }
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3 m-3  ">
+    <div id="liveToast"
+         class="toast align-items-center text-bg-primary border-0"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="msg-container">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
+        const liveToastElement = $("#liveToast")
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToastElement)
         function getCart() {
             $.ajax({
                 url: `/Client/GetCart`,
@@ -100,11 +116,19 @@ else
             $.ajax({
                 url: `/Client/AddToCart?id=${productId}&quantity=${quantity}`,
                 type: "GET",
-                success: function (data) {
-                    alert(data);
-                }
+                complete: function (data) {
+                    const resp = JSON.parse(data.responseText);
+                    $('#msg-container').html(resp.message);
+                    if (resp.success) {
+                        liveToastElement[0].classList.add('text-bg-success');
+                        liveToastElement[0].classList.remove('text-bg-danger');
+                    } else {
+                        liveToastElement[0].classList.remove('text-bg-success');
+                        liveToastElement[0].classList.add('text-bg-danger');
+                    }
+                    toastBootstrap.show();
+                },
             });
         });
-
     </script>
 }
