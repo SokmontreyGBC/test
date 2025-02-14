@@ -5,6 +5,7 @@
     <tr>
         <th>Product</th>
         <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +20,14 @@
                            max="@item.Product.ProductStock" style="width: 3rem;"/>
                     <button type="submit" class="btn btn-outline-secondary">
                         Update
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="get" asp-controller="Client" asp-action="DeleteCartItem">
+                    <input type="hidden" name="id" value="@item.ProductId"/>
+                    <button type="submit" class="btn btn-danger">
+                        Delete
                     </button>
                 </form>
             </td>
