@@ -63,7 +63,7 @@ public class OrderController : Controller
                 oi => oi.ProductId,
                 p => p.ProductId,
                 (oi, p) => new OrderItem
-                {
+                {   
                     OrderItemId = oi.OrderItemId,
                     OrderId = oi.OrderId,
                     ProductId = p.ProductId,
@@ -118,14 +118,21 @@ public class OrderController : Controller
 
         _context.OrderItems.AddRange(
             orderItems.Select(oi => new OrderItem
-            {
+            {   
                 OrderId = order.OrderId,
                 ProductId = oi.ProductId,
                 Quantity = oi.Quantity,
             })
         );
         _context.SaveChanges();
-
-        return RedirectToAction("Index", "Client");
+        TempData["Name"] = user.UserName;
+        return RedirectToAction("CheckoutConfirm", "Order");
+    }
+    
+    [HttpGet]
+    public IActionResult CheckoutConfirm()
+    {
+        ViewBag.OrderItems = GetOrderItems();
+        return View();
     }
 }
