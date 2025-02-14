@@ -3,14 +3,6 @@
 @{
     ViewBag.Title = "Order History";
     Layout = "_Layout";
-
-    foreach (var order in Model)
-    {
-        foreach (var item in order.OrderItems)
-        {
-            
-        }
-    }
 }
 
 <div class="container-fluid p-0">
@@ -26,34 +18,27 @@
     <div class="row g-0 mt-4">
         <div class="col-12 p-4">
             <div class="bg-white border p-4">
-                <div class="row g-4 mb-4">
-
-
-                    <div class="table-responsive">
-                        <table class="table table-borderless font-monospace">
-                            <thead class="border-bottom">
+                <div class="table-responsive">
+                    <table class="table table-borderless font-monospace">
+                        <thead class="border-bottom">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Order Date</th>
+                            <th>Total Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var order in Model)
+                        {
+                            var totalPrice = order.OrderItems.Sum(item => item.Product.ProductPrice * item.Quantity);
                             <tr>
-                                <th></th>
+                                <td>@order.OrderId</td>
+                                <td>@order.OrderDate</td>
+                                <td>$@totalPrice</td>
                             </tr>
-                            </thead>
-                            <tbody class="tableData" id="product-rows-container">
-                            @foreach (var order in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <h5 class="m-0 font-monospace">Order ID: @order.OrderId</h5>
-                                                <p class="m-0 font-monospace">Order Date: @order.OrderDate</p>
-                                                <p class="m-0 font-monospace">Total Price: $@order.TotalPrice</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                            </tbody>
-                        </table>
-                    </div>
+                        }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
