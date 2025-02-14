@@ -14,14 +14,15 @@
         <tr>
             <td>@item.Product.ProductName</td>
             <td>
-                <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity">
+                <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity" style="display: inline;">
                     <input type="hidden" name="id" value="@item.ProductId"/>
-                    <input type="number" name="quantity" min="1" value="@item.Quantity"
-                           max="@item.Product.ProductStock" style="width: 3rem;"/>
-                    <button type="submit" class="btn btn-outline-secondary">
+                    <input type="number" name="quantity" min="1" value="@item.Quantity" max="@item.Product.ProductStock" style="width: 3rem; display: inline;"/>
+                    <button type="submit" class="btn btn-outline-secondary" style="display: inline;">
                         Update
                     </button>
                 </form>
+                @{ decimal itemPrice = item.Product.ProductPrice * item.Quantity; }
+                <span style="display: inline;">$@itemPrice</span>
             </td>
             <td>
                 <form method="get" asp-controller="Client" asp-action="DeleteCartItem">
@@ -35,3 +36,6 @@
     }
     </tbody>
 </table>
+<div class="offcanvas-bottom d-flex justify-content-end">
+    <h4>Total: @ViewBag.TotalCart</h4>
+</div>

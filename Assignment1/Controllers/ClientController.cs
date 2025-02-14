@@ -22,6 +22,7 @@ public class ClientController : Controller
     public IActionResult Index()
     {
         var products = _context.Products.Include(p => p.Category).ToList();
+        ViewBag.TotalCart = TotalCart();
         return View(products);
     }
 
@@ -194,5 +195,27 @@ public class ClientController : Controller
     public IActionResult CheckoutOrder(Order order)
     {
         return View();
+    }
+
+    [HttpGet]
+    public JsonResult GetTotalCart()
+    {
+        var totalCart = TotalCart();
+        return new JsonResult(new { totalCart });
+    }
+    
+    public decimal TotalCart()
+    {
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+
+        decimal total = 0;
+        foreach (var item in cart)
+        {
+            var product = _context.Products.Find(item.ProductId);
+            total += product.ProductPrice * item.Quantity;
+        }
+
+        return total;
     }
 }
