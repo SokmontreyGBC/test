@@ -1,48 +1,37 @@
 @model List<OrderItem>
 
-<div>
-    <table class="table">
-        <thead>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
         <tr>
-            <th>Product</th>
-            <th></th>
+            <td>@item.Product.ProductName</td>
+            <td>
+                <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity">
+                    <input type="hidden" name="id" value="@item.ProductId"/>
+                    <input type="number" name="quantity" min="1" value="@item.Quantity"
+                           max="@item.Product.ProductStock" style="width: 3rem;"/>
+                    <button type="submit" class="btn btn-outline-secondary">
+                        Update
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="get" asp-controller="Client" asp-action="DeleteCartItem">
+                    <input type="hidden" name="id" value="@item.ProductId"/>
+                    <button type="submit" class="btn btn-danger">
+                        Delete
+                    </button>
+                </form>
+            </td>
         </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Product.ProductName</td>
-                <td>
-                    <form class="update-cart-form">
-                        <input type="hidden" name="id" value="@item.ProductId"/>
-                        <input type="number" name="quantity" min="1" value="@item.Quantity" max="@item.Product.ProductStock" style="width: 3rem;" />
-                        <button type="submit"
-                                class="btn btn-outline-secondary">
-                            Update
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-</div>
-
-@section Scripts {
-    <script>
-        $(".update-cart-form").submit(function (e) {
-            e.preventDefault();
-            const form = this;
-            const productId = form.querySelector('input[name="id"]').value;
-            const quantity = form.querySelector('input[name="quantity"]').value;
-            $.ajax({
-                url: `/Client/UpdateCartQuantity?id=${productId}&quantity=${quantity}`,
-                type: "GET",
-                success: function (data) {
-                    alert(data);
-                }
-            });
-        });
-    </script>
-}
+    }
+    </tbody>
+</table>
