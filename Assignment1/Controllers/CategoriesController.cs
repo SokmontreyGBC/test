@@ -33,7 +33,7 @@ public class CategoriesController : Controller
     {
         if (ModelState.IsValid)
         {
-            if (checkIfCategoryExists(category.CategoryName))
+            if (CheckIfCategoryExists(category.CategoryName))
             {
                 TempData["ErrorMessage"] = "Category already exists";
                 return RedirectToAction("Create");
@@ -47,7 +47,7 @@ public class CategoriesController : Controller
         return View(category);
     }
 
-    public bool checkIfCategoryExists(string categoryName)
+    public bool CheckIfCategoryExists(string categoryName)
     {
         var category = _context.Categories.ToList();
         foreach (var item in category)
