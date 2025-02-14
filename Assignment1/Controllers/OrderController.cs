@@ -1,12 +1,14 @@
+using System.Text.Json;
 using Assignment1.Data;
 using Assignment1.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment1.Controllers;
 
-public class OrderController : Controller   
+public class OrderController : Controller
 {
     private readonly ApplicationDbContext _context;
+
     public OrderController(ApplicationDbContext context)
     {
         _context = context;
@@ -50,7 +52,80 @@ public class OrderController : Controller
             return BadRequest(ex.Message);
         }
     }
-    
-    
-    
+
+
+    private List<OrderItem> GetOrderItems()
+    {
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+        var products = _context.Products.ToList();
+        return cart.Join(products,
+                oi => oi.ProductId,
+                p => p.ProductId,
+                (oi, p) => new OrderItem
+                {
+                    OrderItemId = oi.OrderItemId,
+                    OrderId = oi.OrderId,
+                    ProductId = p.ProductId,
+                    Quantity = oi.Quantity,
+                    Product = p
+                })
+            .ToList();
+    }
+
+    [HttpGet]
+    public IActionResult CheckoutOrder()
+    {
+        ViewBag.OrderItems = GetOrderItems();
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult CheckoutOrder(User userForm)
+    {
+        var orderItems = GetOrderItems();
+        if (!ModelState.IsValid)
+        {
+            ViewBag.OrderItems = orderItems;
+            return View(userForm);
+        }
+
+        // find by email
+        var user = _context.Users
+            .FirstOrDefault(u => u.UserEmail == userForm.UserEmail);
+        if (user == null)
+        {
+            user = new User
+            {
+                UserId = userForm.UserId,
+                UserEmail = userForm.UserEmail,
+                UserName = userForm.UserName,
+                UserType = userForm.UserType
+            };
+            _context.Users.Add(user);
+            _context.SaveChanges();
+        }
+
+        var order = new Order
+        {
+            OrderDate = DateTime.UtcNow,
+            OrderStatus = OrderStatus.Pending,
+            UserId = user.UserId
+        };
+        _context.Orders.Add(order);
+        _context.SaveChanges();
+
+        _context.OrderItems.AddRange(
+            orderItems.Select(oi => new OrderItem
+            {
+                OrderId = order.OrderId,
+                ProductId = oi.ProductId,
+                Quantity = oi.Quantity,
+            })
+        );
+        _context.SaveChanges();
+
+        return RedirectToAction("Index", "Client");
+    }
 }
