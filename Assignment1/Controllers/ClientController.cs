@@ -81,7 +81,7 @@ public class ClientController : Controller
         return new JsonResult(new
         {
             success = true,
-            message = $"Successfully added {cartItem.Quantity} of {product.ProductName} to cart."
+            message = $"Successfully added {quantity} of {product.ProductName} to cart."
         });
     }
 
