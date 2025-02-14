@@ -116,6 +116,7 @@ public class OrderController : Controller
     public IActionResult CheckoutConfirm()
     {
         ViewBag.OrderItems = GetOrderItems();
+        HttpContext.Session.Remove("Cart");
         return View();
     }
 
