@@ -1,0 +1,46 @@
+@model List<Order>
+
+@{
+    ViewBag.Title = "Order History";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="px-4 py-5 bg-light border-bottom">
+                <h1 class="display-4 fw-bold font-monospace text-start">Order History</h1>
+                <p class="lead mb-4 font-monospace text-start">View previous orders</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-0 mt-4">
+        <div class="col-12 p-4">
+            <div class="bg-white border p-4">
+                <div class="table-responsive">
+                    <table class="table table-borderless font-monospace">
+                        <thead class="border-bottom">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Order Date</th>
+                            <th>Total Price</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var order in Model)
+                        {
+                            var totalPrice = order.OrderItems.Sum(item => item.Product.ProductPrice * item.Quantity);
+                            <tr>
+                                <td>@order.OrderId</td>
+                                <td>@order.OrderDate</td>
+                                <td>$@totalPrice</td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

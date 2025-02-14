@@ -37,6 +37,8 @@ public class ClientController : Controller
             item.Product = _context.Products.Find(item.ProductId);
         }
 
+        ViewBag.TotalCart = TotalCart();
+
         return PartialView("_CartRows", cart);
     }
 

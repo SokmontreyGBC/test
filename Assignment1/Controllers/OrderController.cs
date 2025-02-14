@@ -2,6 +2,7 @@ using System.Text.Json;
 using Assignment1.Data;
 using Assignment1.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Assignment1.Controllers;
 
@@ -167,5 +168,15 @@ public class OrderController : Controller
 
         TempData["Name"] = user.UserName;
         return RedirectToAction("CheckoutConfirm", "Order");
+    }
+
+    [HttpGet]
+    public IActionResult AllOrders()
+    {
+        var orderList = _context.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product)
+            .ToList();
+        return View(orderList);
     }
 }

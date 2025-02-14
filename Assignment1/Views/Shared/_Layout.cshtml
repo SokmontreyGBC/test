@@ -29,17 +29,30 @@
                            asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @( (string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"
-                           asp-area="" asp-controller="Admin" asp-action="Index">Admin</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link @( (string)ViewData["Page"]! == "Products" ? "text-primary" : "text-dark")"
                            asp-area="" asp-controller="Client" asp-action="Index">Products</a>
                     </li>
+                </ul>
+                <ul class="navbar-nav flex-grow">
                     <li class="nav-item">
-                        <a class="nav-link @( (string)ViewData["Page"]! == "Categories" ? "text-primary" : "text-dark")"
-                           asp-area="" asp-controller="Categories" asp-action="Index">Categories</a>
+                        <a class="nav-link @((string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"
+                           asp-area="" asp-controller="Admin" asp-action="Index">
+                            Admin
+                        </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link @((string)ViewData["Page"]! == "Categories" ? "text-primary" : "text-dark")"
+                           asp-area="" asp-controller="Categories" asp-action="Index">
+                            Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @((string)ViewData["Page"]! == "Order History" ? "text-primary" : "text-dark")"
+                           asp-area="" asp-controller="Order" asp-action="AllOrders">
+                            Order History
+                        </a>
+                    </li>
+                    
                 </ul>
                 @* <ul class="navbar-nav"> *@
                 @*     $1$ <li class="nav-item"> #1# *@
