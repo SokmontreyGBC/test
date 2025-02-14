@@ -133,7 +133,7 @@ public class ClientController : Controller
         HttpContext.Session.SetString("Cart", cartJson);
     }
 
-    public IActionResult CheckoutOrder()
+    public async Task<IActionResult> CheckoutOrder()
     {
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
@@ -158,9 +158,21 @@ public class ClientController : Controller
         }
 
         _context.SaveChanges();
-        var inventory = _context.OrderItems.Where(oi => oi.OrderId == orderId).ToList();
-       ViewBag.Categories = _context.Categories.ToList();
-       ViewBag.Products = _context.Products.ToList();
+        var inventory = await _context.OrderItems.Where(oi => oi.OrderId == orderId).ToListAsync();
+       ViewBag.Products =  await _context.Products.ToListAsync();
+       decimal sum = 0;
+       foreach (var item in inventory)
+       {
+           foreach (var product in ViewBag.Products)
+           {
+               if (product.ProductId == item.ProductId)
+               {
+                   var currentCost = item.Quantity * product.ProductPrice;
+                   sum += currentCost;
+               }
+           }
+       }
+        TempData["sum"] = sum.ToString();
         return View("OrderCheckout", inventory);
     }
 

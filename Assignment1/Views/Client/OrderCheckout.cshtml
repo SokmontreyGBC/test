@@ -4,12 +4,12 @@
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
+    var cost = TempData["sum"] as string;
 }
 
 <h2>Order Summary Page</h2>
 <br>
 
-    
     @{
         foreach (var items in Model)
         {
@@ -19,23 +19,34 @@
                     <div class="d-flex justify-content-between">
                         <div class="d-flex flex-row align-items-center">
                             <div class="ms-3">
-                                <h5>ProductName: </h5>
+                                
+                                    @foreach (var product in ViewBag.Products)
+                                        if (product.ProductId == items.ProductId)
+                                        {
+                                            <h5>@product.ProductName </h5>
+                                        }
                             </div>
+                                
                         </div>
                         <div class="d-flex flex-row align-items-center">
                             <div style="width: 50px;">
                                 <h6 class="fw-normal mb-0">@items.Quantity x</h6>
                             </div>
                             <div style="width: 80px;">
-                                <h6 class="mb-0">$$Product Cost</h6>
+                                @foreach (var product in ViewBag.Products)
+                                    if (product.ProductId == items.ProductId)
+                                    {
+                                        <h6 class="mb-0">$@product.ProductPrice</h6>
+                                    }
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         }
+        <br/>
         <div class="float-end">
-            <h5> Total Cost :  ??? </h5>
+            <h5> Total Cost: $@cost   </h5>
         </div>
         <br>
        
