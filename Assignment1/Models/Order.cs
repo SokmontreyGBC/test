@@ -9,4 +9,5 @@ public class Order
 
     public User? User { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public decimal TotalPrice => OrderItems.Sum(item => item.Product.ProductPrice * item.Quantity);
 }

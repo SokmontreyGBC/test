@@ -163,4 +163,11 @@ public class OrderController : Controller
         TempData["Name"] = user.UserName;
         return RedirectToAction("CheckoutConfirm", "Order");
     }
+
+    [HttpGet]
+    public IActionResult AllOrders()
+    {
+        var orderList = _context.Orders.ToList();
+        return View(orderList);
+    }
 }
