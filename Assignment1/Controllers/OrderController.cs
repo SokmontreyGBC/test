@@ -1,12 +1,14 @@
+using System.Text.Json;
 using Assignment1.Data;
 using Assignment1.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment1.Controllers;
 
-public class OrderController : Controller   
+public class OrderController : Controller
 {
     private readonly ApplicationDbContext _context;
+
     public OrderController(ApplicationDbContext context)
     {
         _context = context;
@@ -50,7 +52,47 @@ public class OrderController : Controller
             return BadRequest(ex.Message);
         }
     }
-    
-    
-    
+
+
+    private List<OrderItem> GetOrderItems()
+    {
+        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
+        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
+        var products = _context.Products.ToList();
+        return cart.Join(products,
+            oi => oi.ProductId,
+            p => p.ProductId,
+            (oi, p) => new OrderItem
+            {
+                OrderItemId = oi.OrderItemId,
+                OrderId = oi.OrderId,
+                ProductId = p.ProductId,
+                Quantity = oi.Quantity,
+                Product = p
+            })
+            .ToList();
+    }
+
+    [HttpGet]
+    public IActionResult CheckoutOrder()
+    {
+        ViewBag.OrderItems = GetOrderItems();
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult CheckoutOrder(User userForm)
+    {
+        var orderItems = GetOrderItems();
+        if (!ModelState.IsValid)
+        {
+            ViewBag.OrderItems = orderItems;
+            return View(userForm);
+        }
+
+
+
+        return RedirectToAction("Index", "Client");
+    }
 }
