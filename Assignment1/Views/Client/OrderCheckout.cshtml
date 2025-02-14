@@ -34,11 +34,27 @@
                 </div>
             </div>
         }
-        
-        
-        <br>
         <div class="float-end">
             <h5> Total Cost :  ??? </h5>
         </div>
+        <br>
+       
+        
+        <div class="card p-4" style="margin-top: 10%;">
+            <h3> Guest Checkout </h3>
+            <form class="card-body" asp-action="CheckoutOrder" method="post">
+                <div class="form-group">
+                    <label class="control-label">Name: </label>
+                    <input class="form-control"/>
+
+                    <label class="control-label">Email: </label>
+                    <input class="form-control"/>
+
+
+                </div>
+            </form>
+        </div>
+        <br></br>
         <a asp-action="CheckoutOrder" class="btn btn-primary">Order</a>
+      
     }
