@@ -137,7 +137,7 @@ public class ClientController : Controller
     {
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
-
+      
         var user = new User
         {
             UserName = "admin",
@@ -153,13 +153,14 @@ public class ClientController : Controller
         {
             _context.OrderItems.Add(new OrderItem
             {
-                OrderId = orderId, ProductId = item.ProductId, Quantity = item.Quantity
+                OrderId = orderId, ProductId = item.ProductId, Quantity = item.Quantity, 
             });
         }
 
         _context.SaveChanges();
         var inventory = _context.OrderItems.Where(oi => oi.OrderId == orderId).ToList();
-
+       ViewBag.Categories = _context.Categories.ToList();
+       ViewBag.Products = _context.Products.ToList();
         return View("OrderCheckout", inventory);
     }
 
