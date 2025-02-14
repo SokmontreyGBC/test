@@ -20,6 +20,7 @@ public class Product
     public bool IsArchived { get; set; }
     [Required]
     [Display(Name = "Stock")]
+    [Range(0, int.MaxValue)]
     public int ProductStock { get; set; }
 
     public Category? Category { get; set; }
