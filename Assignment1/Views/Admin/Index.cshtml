@@ -1,135 +1,130 @@
-    @model List<Product>
-    @{
-        ViewData["Page"] = "Admin";
-        ViewBag.Title = "Admin";
-        Layout = "_Layout";
-    }
+@model List<Product>
+@{
+    ViewData["Page"] = "Admin";
+    ViewBag.Title = "Admin";
+    Layout = "_Layout";
+}
 
-    <div class="container-fluid p-0">
-        <div class="row g-0">
-            <div class="col-12">
-                <div class="px-4 py-5 bg-light border-bottom">
-                    <h1 class="display-4 fw-bold font-monospace text-start">Admin Panel</h1>
-                    <p class="lead mb-4 font-monospace text-start">Manage your inventory items</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="row g-0 mt-4">
-            <div class="col-12 p-4">
-                <div class="bg-white border p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 class="font-monospace m-0">Inventory Management</h2>
-                        <a class="btn btn-outline-dark font-monospace" asp-action="Create" asp-controller="Admin">
-                            Add New Item
-                        </a>
-                    </div>
-
-                    <div class="row g-4 mb-4">
-                        <div class="col-md-4">
-                            <label class="font-monospace d-block mb-2">Find by name:</label>
-                            <input type="text" id="search-input" class="form-control font-monospace" placeholder="Search products...">
-                        </div>
-
-                        <div class="col-md-4">
-                            <label class="font-monospace d-block mb-2">Sort by:</label>
-                            <div class="d-flex gap-2">
-                                <select name="sort" class="form-select font-monospace" onchange="orderByColumn(this.value)">
-                                    @foreach (var column in ViewData["OrderableColumns"] as List<string>)
-                                    {
-                                        <option value="@column">@column</option>
-                                    }
-                                </select>
-                                <button onclick="toggleOrderType()" class="btn btn-outline-dark">
-                                    <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
-                                </button>
-
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                                                <label class="font-monospace d-block mb-2">Filter by category:</label>
-                                                @Html.Partial("_TagSelector", new
-                                                {
-                                                    Id = "category-tag",
-                                                    Tags = ViewData["Categories"] as List<Category>
-                                                })
-                                            </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-borderless font-monospace">
-                                <thead class="border-bottom">
-                                <tr>
-                                    @foreach (var column in ViewData["Columns"] as List<string>)
-                                    {
-                                        <th class="text-muted">@column</th>
-                                    }
-                                    <th></th>
-                                </tr>
-                                </thead>
-
-                                <tbody class="tableData" id="product-rows-container">
-                                @await Html.PartialAsync("_ProductRows", Model, ViewData)
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="row g-0">
+    <div class="col-12">
+        <div class="px-4 py-2 bg-light border-bottom">
+            <h1 class="display-4 fw-bold font-monospace text-start">Admin Panel</h1>
+            <p class="lead mb-4 font-monospace text-start">Manage your inventory items</p>
         </div>
     </div>
+</div>
 
-    <script>
-        let isDesc = false;
-        let orderBy = "ID";
-        let searchText = "";
-        let selectedCategoriesString = "";
+<div class="row g-0 mt-4 col-12 ">
+    <div class="d-flex align-items-center gap-4">
+        <div class="d-flex align-items-center gap-2">
+            <i class="fas fa-search text-muted"></i>
+            <div class="col-md-auto">
+                <input type="text" id="search-input" class="form-control font-monospace" placeholder="Search products...">
+            </div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-arrow-down-wide-short text-muted"></i>
+            <div class="d-flex gap-2">
+                <select name="sort" class="form-select font-monospace" onchange="orderByColumn(this.value)">
+                    @foreach (var column in ViewData["OrderableColumns"] as List<string>)
+                    {
+                        <option value="@column">@column</option>
+                    }
+                </select>
+                <button onclick="toggleOrderType()" class="btn btn-outline-dark">
+                    <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
+                </button>
+            </div>
+        </div>
 
-        function orderByColumn(column) {
-            orderBy = column;
-            getProducts();
-        }
+        <div class="flex-grow-1"></div>
 
-        function toggleOrderType() {
-            isDesc = !isDesc;
-            $("#order-arrow-icon").attr("class", isDesc
-                ? "fa-solid fa-arrow-up"
-                : "fa-solid fa-arrow-down");
-            getProducts();
-        }
+        <a class="btn btn-outline-dark font-monospace" asp-action="Create" asp-controller="Admin">
+            Add New Item
+        </a>
+    </div>
 
-        function getProducts() {
-            $.ajax({
-                url: `/Admin/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
-                    `&orderBy=${orderBy}` +
-                    `&searchString=${searchText}` +
-                    `&selectedCategoriesString=${selectedCategoriesString}`,
-                type: "GET",
-                success: function (data) {
-                    $("#product-rows-container").html(data);
-                }
-            });
-        }
+    <div class="d-flex mt-2 gap-2 align-items-center">
+        <i class="fa-solid fa-filter text-muted"></i>
+        @Html.Partial("_TagSelector", new
+        {
+            Id = "category-tag",
+            Tags = ViewData["Categories"] as List<Category>
+        })
+    </div>
+</div>
 
-        $("#search-input").on("keyup", function () {
-            searchText = $(this).val();
-            getProducts();
+
+<div class="table-responsive border mt-4 rounded-3">
+    <table class="table table-borderless font-monospace">
+        <thead class="border-bottom">
+        <tr>
+            @foreach (var column in ViewData["Columns"] as List<string>)
+            {
+                <th class="text-muted">@column</th>
+            }
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody class="tableData" id="product-rows-container">
+        @await Html.PartialAsync("_ProductRows", Model, ViewData)
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let isDesc = false;
+    let orderBy = "ID";
+    let searchText = "";
+    let selectedCategoriesString = "";
+
+    function orderByColumn(column) {
+        orderBy = column;
+        getProducts();
+    }
+
+    function toggleOrderType() {
+        isDesc = !isDesc;
+        $("#order-arrow-icon").attr("class", isDesc
+            ? "fa-solid fa-arrow-up"
+            : "fa-solid fa-arrow-down");
+        getProducts();
+    }
+
+    function getProducts() {
+        $.ajax({
+            url: `/Admin/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
+                `&orderBy=${orderBy}` +
+                `&searchString=${searchText}` +
+                `&selectedCategoriesString=${selectedCategoriesString}`,
+            type: "GET",
+            success: function (data) {
+                $("#product-rows-container").html(data);
+            }
         });
+    }
 
-        $(document).on('click', '.category-tag', function() {
-            const selectedCategories = $("#selected-category-tag-container")
-                .children()
-                .toArray()
-            selectedCategoriesString = selectedCategories.length
-                ? selectedCategories
-                    .map(function(item) {
-                        return item.name;
-                    })
-                    .join(",")
-                : "";
-            getProducts();
-        });
+    $("#search-input").on("keyup", function () {
+        searchText = $(this).val();
+        getProducts();
+    });
 
-        $(document).ready(function () {
-            getProducts();
-        });
-    </script>
+    $(document).on('click', '.category-tag', function() {
+        const selectedCategories = $("#selected-category-tag-container")
+            .children()
+            .toArray()
+        selectedCategoriesString = selectedCategories.length
+            ? selectedCategories
+                .map(function(item) {
+                    return item.name;
+                })
+                .join(",")
+            : "";
+        getProducts();
+    });
+
+    $(document).ready(function () {
+        getProducts();
+    });
+</script>

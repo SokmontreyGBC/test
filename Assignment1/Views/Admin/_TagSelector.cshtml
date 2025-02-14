@@ -1,14 +1,14 @@
-<div class="mb-4 d-flex flex-row gap-2">
-    <div id="available-@(Model.Id)-container" class="bg-secondary-subtle rounded-3 p-2 d-flex flex-row gap-2 " style="min-width: 10px;">
+<div class="d-flex flex-row gap-2">
+    <div id="available-@(Model.Id)-container" class="border border-dark-subtle rounded-3 p-1 d-flex flex-row gap-2 " style="min-width: 10px;">
         @foreach (var category in Model.Tags)
         {
-            <button name="@category.CategoryName" class="@Model.Id ">
+            <button name="@category.CategoryName" class="@Model.Id btn btn-xs btn-dark" style="padding: 0.1rem 0.2rem;">
                 @category.CategoryName
             </button>
         }
     </div>
 
-    <div id="selected-@(Model.Id)-container" class="bg-info rounded-3 p-2 d-flex flex-row gap-2" style="min-width: 10px;">
+    <div id="selected-@(Model.Id)-container" class="bg-dark rounded-3 p-1 d-flex flex-row gap-2" style="min-width: 10px;">
     </div>
 </div>
 
