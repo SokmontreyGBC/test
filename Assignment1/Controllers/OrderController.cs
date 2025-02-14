@@ -80,51 +80,78 @@ public class OrderController : Controller
         return View();
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult CheckoutOrder(User userForm)
+    public User GetOrCreateUser(string email, string name)
     {
-        var orderItems = GetOrderItems();
-        if (!ModelState.IsValid)
-        {
-            ViewBag.OrderItems = orderItems;
-            return View(userForm);
-        }
-
         // find by email
         var user = _context.Users
-            .FirstOrDefault(u => u.UserEmail == userForm.UserEmail);
+            .FirstOrDefault(u => u.UserEmail == email);
         if (user == null)
         {
             user = new User
             {
-                UserId = userForm.UserId,
-                UserEmail = userForm.UserEmail,
-                UserName = userForm.UserName,
-                UserType = userForm.UserType
+                UserEmail = email,
+                UserName = name,
+                UserType = UserType.Guest
             };
             _context.Users.Add(user);
             _context.SaveChanges();
         }
+        return user;
+    }
 
+    public Order CreateOrder(int userId)
+    {
         var order = new Order
         {
             OrderDate = DateTime.UtcNow,
             OrderStatus = OrderStatus.Pending,
-            UserId = user.UserId
+            UserId = userId
         };
         _context.Orders.Add(order);
         _context.SaveChanges();
+        return order;
+    }
 
-        _context.OrderItems.AddRange(
-            orderItems.Select(oi => new OrderItem
-            {
-                OrderId = order.OrderId,
-                ProductId = oi.ProductId,
-                Quantity = oi.Quantity,
-            })
-        );
+    public List<OrderItem> CreateOrderItems(int orderId, List<OrderItem> cartItems)
+    {
+        var orderItems = cartItems.Select(oi => new OrderItem
+        {
+            OrderId = orderId,
+            ProductId = oi.ProductId,
+            Quantity = oi.Quantity
+        }).ToList();
+        _context.OrderItems.AddRange(orderItems);
         _context.SaveChanges();
+        return orderItems;
+    }
+
+    public void UpdateProductStock(List<OrderItem> orderItems)
+    {
+        orderItems.ForEach(oi =>
+        {
+            var product = _context.Products.Find(oi.ProductId);
+            if (product == null) return;
+            product.ProductStock -= oi.Quantity;
+            _context.Products.Update(product);
+        });
+        _context.SaveChanges();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult CheckoutOrder(User userForm)
+    {
+        var cartItems = GetOrderItems();
+        if (!ModelState.IsValid)
+        {
+            ViewBag.OrderItems = cartItems;
+            return View(userForm);
+        }
+
+        var user = GetOrCreateUser(userForm.UserEmail, userForm.UserName ?? "Guest");
+        var order = CreateOrder(user.UserId);
+        var orderItems = CreateOrderItems(order.OrderId, cartItems);
+        UpdateProductStock(orderItems);
 
         return RedirectToAction("Index", "Client");
     }
