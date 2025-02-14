@@ -76,6 +76,10 @@ public class OrderController : Controller
     [HttpGet]
     public IActionResult CheckoutOrder()
     {
+        if (HttpContext.Session.GetString("Cart") == null || HttpContext.Session.GetString("Cart") == "[]")
+        {
+            return RedirectToAction("Index", "Client");
+        }
         ViewBag.OrderItems = GetOrderItems();
         return View();
     }
