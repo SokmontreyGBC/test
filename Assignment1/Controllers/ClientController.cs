@@ -145,13 +145,6 @@ public class ClientController : Controller
         string cartJson = JsonSerializer.Serialize(cart);
         HttpContext.Session.SetString("Cart", cartJson);
     }
-
-    [HttpGet]
-    public JsonResult GetTotalCart()
-    {
-        var totalCart = TotalCart();
-        return new JsonResult(new { totalCart });
-    }
     
     public decimal TotalCart()
     {
