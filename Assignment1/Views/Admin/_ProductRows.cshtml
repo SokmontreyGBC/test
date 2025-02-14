@@ -10,8 +10,8 @@
         <td>@product.Category.CategoryName</td>
         <td class="@(product.ProductStock < (int)ViewData["LowerStockThreshold"]! ? "text-bg-danger" : "")">@product.ProductStock</td>
         <td>
-            <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-warning">Delete</a>
-            <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-primary">Edit</a>
+            <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-outline-danger btn-sm font-monospace">Delete</a>
+            <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-outline-dark btn-sm font-monospace me-2">Edit</a>
         </td>
     </tr>
 }

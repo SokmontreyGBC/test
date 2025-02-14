@@ -30,7 +30,7 @@
                         <label class="font-monospace d-block mb-2">Find by name:</label>
                         <input type="text" id="search-input" class="form-control font-monospace" placeholder="Search products...">
                     </div>
-                    
+
                     <div class="col-md-4">
                         <label class="font-monospace d-block mb-2">Sort by:</label>
                         <div class="d-flex gap-2">
@@ -43,22 +43,25 @@
                             <button onclick="toggleOrderType()" class="btn btn-outline-dark">
                                 <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
                             </button>
+
+                            <button type="button" class="btn btn-outline-dark" id="popoverButton" data-bs-toggle="popover" data-bs-html="true" data-bs-content="<div>Popover content goes here</div>">
+                                <i class="fa-regular fa-filter"></i>
+                            </button>
+
                         </div>
                     </div>
-
                     <div class="col-md-4">
-                        <label class="font-monospace d-block mb-2">Filter by category:</label>
-                        @Html.Partial("_TagSelector", new
-                        {
-                            Id = "category-tag",
-                            Tags = ViewData["Categories"] as List<Category>
-                        })
-                    </div>
-                </div>
+                                            <label class="font-monospace d-block mb-2">Filter by category:</label>
+                                            @Html.Partial("_TagSelector", new
+                                            {
+                                                Id = "category-tag",
+                                                Tags = ViewData["Categories"] as List<Category>
+                                            })
+                                        </div>
 
-                <div class="table-responsive">
-                    <table class="table table-borderless font-monospace">
-                        <thead class="border-bottom">
+                    <div class="table-responsive">
+                        <table class="table table-borderless font-monospace">
+                            <thead class="border-bottom">
                             <tr>
                                 @foreach (var column in ViewData["Columns"] as List<string>)
                                 {
@@ -66,12 +69,13 @@
                                 }
                                 <th></th>
                             </tr>
-                        </thead>
+                            </thead>
 
-                        <tbody class="tableData" id="product-rows-container">
+                            <tbody class="tableData" id="product-rows-container">
                             @await Html.PartialAsync("_ProductRows", Model, ViewData)
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -132,4 +136,12 @@
     $(document).ready(function () {
         getProducts();
     });
+    
+    document.addEventListener('DOMContentLoaded', function () {
+            var popoverTrigger = document.getElementById('popoverButton');
+            var popover = new bootstrap.Popover(popoverTrigger, {
+                container: 'body',
+                html: true
+            });
+        });
 </script>
