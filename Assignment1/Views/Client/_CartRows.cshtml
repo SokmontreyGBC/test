@@ -14,18 +14,10 @@
         <tr>
             <td>@item.Product.ProductName</td>
             <td>
-<<<<<<< Updated upstream
                 <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity" style="display: inline;">
                     <input type="hidden" name="id" value="@item.ProductId"/>
                     <input type="number" name="quantity" min="1" value="@item.Quantity" max="@item.Product.ProductStock" style="width: 3rem; display: inline;"/>
                     <button type="submit" class="btn btn-outline-secondary" style="display: inline;">
-=======
-                <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity">
-                    <input type="hidden" name="orderItemId" value="@item.OrderItemId"/>
-                    <input type="number" name="quantity" min="1" value="@item.Quantity"
-                           max="@item.Product.ProductStock" style="width: 3rem;"/>
-                    <button type="submit" class="btn btn-outline-secondary">
->>>>>>> Stashed changes
                         Update
                     </button>
                 </form>
@@ -34,7 +26,7 @@
             </td>
             <td>
                 <form method="get" asp-controller="Client" asp-action="DeleteCartItem">
-                    <input type="hidden" name="orderItemId" value="@item.OrderItemId"/>
+                    <input type="hidden" name="id" value="@item.ProductId"/>
                     <button type="submit" class="btn btn-danger">
                         Delete
                     </button>
