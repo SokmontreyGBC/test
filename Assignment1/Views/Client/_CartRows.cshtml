@@ -1,41 +1,54 @@
 @model List<OrderItem>
 
-<table class="table">
-    <thead>
-    <tr>
-        <th>Product</th>
-        <th></th>
-        <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Product.ProductName</td>
-            <td>
-                <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity" style="display: inline;">
-                    <input type="hidden" name="id" value="@item.ProductId"/>
-                    <input type="number" name="quantity" min="1" value="@item.Quantity" max="@item.Product.ProductStock" style="width: 3rem; display: inline;"/>
-                    <button type="submit" class="btn btn-outline-secondary" style="display: inline;">
-                        Update
-                    </button>
-                </form>
-                @{ decimal itemPrice = item.Product.ProductPrice * item.Quantity; }
-                <span style="display: inline;">$@itemPrice</span>
-            </td>
-            <td>
-                <form method="get" asp-controller="Client" asp-action="DeleteCartItem">
-                    <input type="hidden" name="id" value="@item.ProductId"/>
-                    <button type="submit" class="btn btn-danger">
-                        Delete
-                    </button>
-                </form>
-            </td>
-        </tr>
-    }
-    </tbody>
-</table>
-<div class="offcanvas-bottom d-flex justify-content-end">
-    <h4>Total: @ViewBag.TotalCart</h4>
+<div class="container-fluid p-0">
+    <div class="row g-0 mt-4">
+        <div class="col-12 p-4">
+            <div class="bg-white border p-4">
+                <h2 class="font-monospace m-0 mb-4">Shopping Cart</h2>
+
+                <div class="table-responsive">
+                    <table class="table table-borderless font-monospace">
+                        <thead class="border-bottom">
+                            <tr>
+                                <th class="text-muted">Product</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Product.ProductName</td>
+                                    <td>
+                                        <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity" style="display: inline;">
+                                            <input type="hidden" name="id" value="@item.ProductId" />
+                                            <input type="number" name="quantity" min="1" value="@item.Quantity" max="@item.Product.ProductStock" class="form-control font-monospace" style="width: 4rem; display: inline;" />
+                                            <button type="submit" class="btn btn-outline-dark font-monospace" style="display: inline;">
+                                                Update
+                                            </button>
+                                        </form>
+                                        @{ decimal itemPrice = item.Product.ProductPrice * item.Quantity; }
+                                        <span style="display: inline;">$@itemPrice</span>
+                                    </td>
+                                    <td>
+                                        <form method="get" asp-controller="Client" asp-action="DeleteCartItem">
+                                            <input type="hidden" name="id" value="@item.ProductId" />
+                                            <button type="submit" class="btn btn-danger font-monospace">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-end mt-3">  @* Moved total outside table and added margin top*@
+                    <h4 class="font-monospace">Total: @ViewBag.TotalCart</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
