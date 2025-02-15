@@ -8,65 +8,51 @@
     foreach (var items in ViewBag.OrderItems)
         cost += items.Product.ProductPrice * items.Quantity;
 }
-<div class="container-fluid p-0">
-    <div class="row g-0">
-        <div class="col-12">
-            <div class="px-4 py-5 bg-light border-bottom">
-                <h4 class="display-4  font-monospace text-start">Order Summary</h4>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-0 justify-content-center mt-4">
-        <div class="col-12 col-md-8 col-lg-6 p-4">
-            <div class="bg-white border p-4">
-                @foreach (var items in ViewBag.OrderItems)
-                {
-                    <div class="card mb-3 border-0 shadow-sm">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <h5 class="font-monospace">@items.Product.ProductName</h5>
-                                    <p class="small mb-0 font-monospace text-muted">@items.Product.ProductDescription</p>
-                                </div>
-                                <div class="text-end">
-                                    <h6 class="fw-normal mb-0 font-monospace">@items.Quantity x</h6>
-                                    <h6 class="mb-0 font-monospace">$@items.Product.ProductPrice</h6>
-                                </div>
-                            </div>
+<div class="d-flex flex-row gap-4">
+    <div class="flex-grow-1 bg-white border p-4 card">
+        <h3 class="font-monospace">Order Summary</h3>
+        <br>
+        @foreach (var items in ViewBag.OrderItems)
+        {
+            <div class="card mb-3 border ">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h5 class="font-monospace">@items.Product.ProductName</h5>
+                            <p class="small mb-0 font-monospace text-muted">@items.Product.ProductDescription</p>
+                        </div>
+                        <div class="text-end">
+                            <h6 class="fw-normal mb-0 font-monospace">@items.Quantity x</h6>
+                            <h6 class="mb-0 font-monospace">$@items.Product.ProductPrice</h6>
                         </div>
                     </div>
-                }
-
-                <div class="float-end">
-                    <h5 class="fw-bold font-monospace">Total Cost: $@cost</h5>
                 </div>
             </div>
+        }
+
+        <div class="d-flex justify-content-end">
+            <h5 class="fw-bold font-monospace">Total Cost: $@cost</h5>
         </div>
     </div>
 
-    <div class="row g-0 justify-content-center mt-4">
-        <div class="col-12 col-md-8 col-lg-6 p-4">
-            <div class="bg-white border p-4">
-                <h3 class="font-monospace">Guest Checkout</h3>
-                <form asp-controller="Order" asp-action="CheckoutOrder" method="post">
-                    <div class="mb-3">
-                        <label asp-for="UserName" class="form-label font-monospace">Name</label>
-                        <input asp-for="UserName" class="form-control font-monospace" />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
-                    </div>
-                    <div class="mb-3">
-                        <label asp-for="UserEmail" class="form-label font-monospace">Email</label>
-                        <input asp-for="UserEmail" class="form-control font-monospace" />
-                        <span asp-validation-for="UserEmail" class="text-danger"></span>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <a asp-controller="Client" asp-action="Index" class="btn btn-dark w-50 font-monospace">Go Back</a>
-                        <button type="submit" class="btn btn-primary w-50 font-monospace">Place Order</button>
-                    </div>
-                </form>
+    <div class="flex-grow-1 bg-white border p-4 card">
+        <h3 class="font-monospace">Guest Checkout</h3>
+        <form asp-controller="Order" asp-action="CheckoutOrder" method="post">
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label font-monospace">Name</label>
+                <input asp-for="UserName" class="form-control font-monospace" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-        </div>
+            <div class="mb-3">
+                <label asp-for="UserEmail" class="form-label font-monospace">Email</label>
+                <input asp-for="UserEmail" class="form-control font-monospace" />
+                <span asp-validation-for="UserEmail" class="text-danger"></span>
+            </div>
+            <div class="d-flex gap-2">
+                <a asp-controller="Client" asp-action="Index" class="btn btn-outline-dark w-50 font-monospace">Go Back</a>
+                <button type="submit" class="btn btn-dark w-50 font-monospace">Place Order</button>
+            </div>
+        </form>
     </div>
 </div>
 
