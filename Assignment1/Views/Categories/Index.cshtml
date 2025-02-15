@@ -33,7 +33,6 @@
                             <tr>
                                 <th class="text-muted">ID</th>
                                 <th class="text-muted">Name</th>
-                                <th></th>
                             </tr>
                             </thead>
                             <tbody class="tableData">
@@ -41,19 +40,12 @@
                             {
                                 <tr class="border-bottom">
                                     <td class="py-3">@category.CategoryId</td>
-                                    <td class="py-3">@category.CategoryName</td>
-                                    <td class="py-3 text-end">
-                                        <a class="btn btn-outline-dark btn-sm font-monospace me-2"
-                                           asp-action="Edit"
-                                           asp-controller="Categories"
-                                           asp-route-id="@category.CategoryId">
-                                            Edit
-                                        </a>
-                                        <a class="btn btn-outline-danger btn-sm font-monospace"
-                                           asp-action="Delete"
-                                           asp-controller="Categories"
-                                           asp-route-id="@category.CategoryId">
-                                            Delete
+                                    <td class="py-3">
+                                        <a class="btn-sm font-monospace"
+                                           asp-controller="Client"
+                                           asp-action="Index"
+                                           asp-route-selectedCategoryString="@category.CategoryName">
+                                            @category.CategoryName
                                         </a>
                                     </td>
                                 </tr>

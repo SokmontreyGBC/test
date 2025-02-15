@@ -3,6 +3,7 @@
     ViewData["Page"] = "Products";
     ViewBag.Title = "Products";
     Layout = "_Layout";
+    string selectedCategoryString = ViewData["SelectedCategoryString"] as string ?? "";
 }
 
 <div class="row g-0">
@@ -124,7 +125,7 @@
     let isDesc = false;
     let orderBy = "ID";
     let searchText = "";
-    let selectedCategoriesString = "";
+    let selectedCategoriesString = "@selectedCategoryString";
 
     function orderByColumn(column) {
         orderBy = column;

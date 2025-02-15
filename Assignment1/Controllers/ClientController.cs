@@ -19,7 +19,7 @@ public class ClientController : Controller
     }
 
     [HttpGet]
-    public IActionResult Index()
+    public IActionResult Index(string selectedCategoryString = "")
     {
         var products = _context.Products
             .Include(p => p.Category)
@@ -45,8 +45,8 @@ public class ClientController : Controller
         };
 
         ViewData["Categories"] = _context.Categories.ToList();
-
         ViewData["LowerStockThreshold"] = 10;
+        ViewData["SelectedCategoryString"] = selectedCategoryString;
 
         return View(products);
     }
