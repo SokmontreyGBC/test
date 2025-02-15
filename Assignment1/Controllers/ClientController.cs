@@ -21,8 +21,33 @@ public class ClientController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        var products = _context.Products.Include(p => p.Category).ToList();
-        ViewBag.TotalCart = TotalCart();
+        var products = _context.Products
+            .Include(p => p.Category)
+            .ToList();
+
+        ViewData["Columns"] = new List<string>
+        {
+            "ID",
+            "Name",
+            "Description",
+            "Price",
+            "Category",
+            "ProductStock"
+        };
+
+        ViewData["OrderableColumns"] = new List<string>
+        {
+            "ID",
+            "Name",
+            "Price",
+            "Category",
+            "ProductStock"
+        };
+
+        ViewData["Categories"] = _context.Categories.ToList();
+
+        ViewData["LowerStockThreshold"] = 10;
+
         return View(products);
     }
 
