@@ -185,6 +185,21 @@
     const liveToastElement = $("#liveToast")
     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToastElement)
 
+    const message = "@TempData["Message"]";
+    const isSuccess = "@TempData["Success"]" === "True";
+
+    if (message) {
+        $("#msg-container").html(message);
+        if (isSuccess) {
+            liveToastElement[0].classList.add('text-bg-success');
+            liveToastElement[0].classList.remove('text-bg-danger');
+        } else {
+            liveToastElement[0].classList.add('text-bg-danger');
+            liveToastElement[0].classList.remove('text-bg-success');
+        }
+        toastBootstrap.show();
+    }
+
     function onAddToCart(e) {
         e.preventDefault();
         const form = this;
