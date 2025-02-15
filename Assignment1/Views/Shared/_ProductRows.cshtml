@@ -1,18 +1,5 @@
 @model List<Product>
 
-@functions
-{
-    public string GetStockColor(int stock)
-    {
-        // different levels of stock
-        var colors = new[] { "text-bg-danger", "text-bg-warning", "" };
-        var stockThresholds = (int)ViewData["LowerStockThreshold"];
-        if (stock < stockThresholds / 2) return colors[0];
-        if (stock < stockThresholds) return colors[1];
-        return colors[2];
-    }
-}
-
 @foreach (var product in Model)
 {
     <tr>
@@ -21,14 +8,33 @@
         <td>@product.ProductDescription</td>
         <td>@product.ProductPrice</td>
         <td>@product.Category.CategoryName</td>
-        <td class="@(GetStockColor(product.ProductStock))">@product.ProductStock</td>
+        <td>
+            @{ var stockThresholds = (int)ViewData["LowerStockThreshold"]; }
+
+            @if (product.ProductStock < stockThresholds / 2)
+            {
+                <i class="fa-solid fa-triangle-exclamation text-danger" style="font-size: 0.8rem;"></i>
+            } else if (product.ProductStock < stockThresholds)
+            {
+                <i class="fa-solid fa-triangle-exclamation text-warning" style="font-size: 0.8rem;"></i>
+            } else {
+                <i class="fa-solid fa-circle-check text-success" style="font-size: 0.8rem;"></i>
+            }
+            @product.ProductStock
+        </td>
         @if (ViewData["IsAdmin"] as bool? == true)
         {
             <td>
-                <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-outline-danger btn-sm font-monospace">
+                <a asp-action="Delete"
+                   asp-controller="Admin"
+                   asp-route-id="@product.ProductId"
+                   class="btn btn-outline-danger btn-sm font-monospace">
                     <i class="fa-solid fa-trash"></i>
                 </a>
-                <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-outline-dark btn-sm font-monospace me-2">
+                <a asp-action="Edit"
+                   asp-controller="Admin"
+                   asp-route-id="@product.ProductId"
+                   class="btn btn-outline-dark btn-sm font-monospace me-2">
                     <i class="fa-solid fa-pen"></i>
                 </a>
             </td>
