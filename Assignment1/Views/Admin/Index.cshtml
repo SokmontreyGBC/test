@@ -14,37 +14,70 @@
     </div>
 </div>
 
-<div class="row g-0 mt-4 col-12 ">
-    <div class="d-flex align-items-center gap-4">
-        <div class="d-flex align-items-center gap-2">
-            <i class="fas fa-search text-muted"></i>
-            <div class="col-md-auto">
-                <input type="text" id="search-input" class="form-control font-monospace" placeholder="Search products...">
-            </div>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-            <i class="fa-solid fa-arrow-down-wide-short text-muted"></i>
-            <div class="d-flex gap-2">
-                <select name="sort" class="form-select font-monospace" onchange="orderByColumn(this.value)">
-                    @foreach (var column in ViewData["OrderableColumns"] as List<string>)
-                    {
-                        <option value="@column">@column</option>
-                    }
-                </select>
-                <button onclick="toggleOrderType()" class="btn btn-outline-dark">
-                    <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
-                </button>
-            </div>
-        </div>
+@* <div class="row g-0 mt-4 col-12 "> *@
+@*     <div class="d-flex align-items-center gap-4"> *@
+@*         <div class="d-flex align-items-center gap-2"> *@
+@*             <i class="fas fa-search text-muted"></i> *@
+@*             <div class="col-md-auto"> *@
+@*                 <input type="text" id="search-input" class="form-control font-monospace" placeholder="Search products..."> *@
+@*             </div> *@
+@*         </div> *@
+@*         <div class="d-flex align-items-center gap-2"> *@
+@*             <i class="fa-solid fa-arrow-down-wide-short text-muted"></i> *@
+@*             <div class="d-flex gap-2"> *@
+@*                 <select name="sort" class="form-select font-monospace" onchange="orderByColumn(this.value)"> *@
+@*                     @foreach (var column in ViewData["OrderableColumns"] as List<string>) *@
+@*                     { *@
+@*                         <option value="@column">@column</option> *@
+@*                     } *@
+@*                 </select> *@
+@*                 <button onclick="toggleOrderType()" class="btn btn-outline-dark"> *@
+@*                     <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i> *@
+@*                 </button> *@
+@*             </div> *@
+@*         </div> *@
+@* *@
+@*         <div class="flex-grow-1"></div> *@
+@* *@
+@*         <a class="btn btn-outline-dark font-monospace" asp-action="Create" asp-controller="Admin"> *@
+@*             Add New Item *@
+@*         </a> *@
+@*     </div> *@
+@* *@
+@*     <div class="d-flex mt-2 gap-2 align-items-center"> *@
+@*         <i class="fa-solid fa-filter text-muted"></i> *@
+@*         @Html.Partial("_TagSelector", new *@
+@*         { *@
+@*             Id = "category-tag", *@
+@*             Tags = ViewData["Categories"] as List<Category> *@
+@*         }) *@
+@*     </div> *@
+@* </div> *@
 
-        <div class="flex-grow-1"></div>
-
-        <a class="btn btn-outline-dark font-monospace" asp-action="Create" asp-controller="Admin">
-            Add New Item
-        </a>
+<div class="d-flex align-items-center gap-4 pt-4">
+    <div class="d-flex align-items-center gap-2">
+        <i class="fas fa-search text-muted"></i>
+        <div class="col-md-auto">
+            <input type="text" id="search-input" class="form-control font-monospace" placeholder="Search products...">
+        </div>
     </div>
 
-    <div class="d-flex mt-2 gap-2 align-items-center">
+    <div class="d-flex align-items-center gap-2">
+        <i class="fa-solid fa-arrow-down-wide-short text-muted"></i>
+        <div class="d-flex gap-2">
+            <select name="sort" class="form-select font-monospace" onchange="orderByColumn(this.value)">
+                @foreach (var column in ViewData["OrderableColumns"] as List<string>)
+                {
+                    <option value="@column">@column</option>
+                }
+            </select>
+            <button onclick="toggleOrderType()" class="btn btn-outline-dark">
+                <i class="fa-solid fa-arrow-down" id="order-arrow-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2 align-items-center">
         <i class="fa-solid fa-filter text-muted"></i>
         @Html.Partial("_TagSelector", new
         {
@@ -52,8 +85,15 @@
             Tags = ViewData["Categories"] as List<Category>
         })
     </div>
-</div>
 
+    <div class="flex-grow-1"></div>
+
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-dark font-monospace" asp-action="Create" asp-controller="Admin">
+            +
+        </a>
+    </div>
+</div>
 
 <div class="table-responsive border mt-4 rounded-3">
     <table class="table table-borderless font-monospace">
@@ -68,7 +108,7 @@
         </thead>
 
         <tbody class="tableData" id="product-rows-container">
-        @await Html.PartialAsync("_ProductRows", Model, ViewData)
+        @* @await Html.PartialAsync("_ProductRows", Model, ViewData) *@
         </tbody>
     </table>
 </div>
@@ -94,10 +134,11 @@
 
     function getProducts() {
         $.ajax({
-            url: `/Admin/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
+            url: `/Product/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
                 `&orderBy=${orderBy}` +
                 `&searchString=${searchText}` +
-                `&selectedCategoriesString=${selectedCategoriesString}`,
+                `&selectedCategoriesString=${selectedCategoriesString}` +
+                `&isAdmin=${true}`,
             type: "GET",
             success: function (data) {
                 $("#product-rows-container").html(data);

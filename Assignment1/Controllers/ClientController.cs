@@ -21,8 +21,33 @@ public class ClientController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        var products = _context.Products.Include(p => p.Category).ToList();
-        ViewBag.TotalCart = TotalCart();
+        var products = _context.Products
+            .Include(p => p.Category)
+            .ToList();
+
+        ViewData["Columns"] = new List<string>
+        {
+            "ID",
+            "Name",
+            "Description",
+            "Price",
+            "Category",
+            "ProductStock"
+        };
+
+        ViewData["OrderableColumns"] = new List<string>
+        {
+            "ID",
+            "Name",
+            "Price",
+            "Category",
+            "ProductStock"
+        };
+
+        ViewData["Categories"] = _context.Categories.ToList();
+
+        ViewData["LowerStockThreshold"] = 10;
+
         return View(products);
     }
 
@@ -32,14 +57,11 @@ public class ClientController : Controller
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
 
-        foreach (var item in cart)
-        {
-            item.Product = _context.Products.Find(item.ProductId);
-        }
+        cart.ForEach(i => i.Product = _context.Products.Find(i.ProductId));
 
         ViewBag.TotalCart = TotalCart();
 
-        return PartialView("_CartRows", cart);
+        return PartialView("_CartDetails", cart);
     }
 
     [HttpGet]
