@@ -3,39 +3,51 @@
 <div class="container-fluid p-0">
     <div class="row g-0 mt-4">
         <div class="col-12 p-4">
-            <div class="bg-white border p-4">
+            <div class="bg-white border card p-2">
                 <div class="table-responsive">
                     <table class="table table-borderless font-monospace">
                         <thead class="border-bottom">
                             <tr>
                                 <th class="text-muted">Product</th>
+                                <th class="text-muted">Price</th>
                                 <th></th>
-                                <th></th>
+                                <th class="text-muted">Total</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td>@item.Product.ProductName</td>
-                                    <td>
+                                    <td class="align-middle">
+                                        @item.Product.ProductName
+                                    </td>
+                                    <td class="align-middle">
+                                        $@item.Product.ProductPrice
+                                    </td>
+                                    <td class="d-flex flex-row gap-2 align-items-center">
                                         <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity" style="display: inline;">
                                             <input type="hidden" name="id" value="@item.ProductId" />
-                                            <input type="number" name="quantity" min="1" value="@item.Quantity" max="@item.Product.ProductStock" class="form-control font-monospace" style="width: 4rem; display: inline;" />
-                                            <button type="submit" class="btn btn-outline-dark font-monospace" style="display: inline;">
+                                            <span>x</span>
+                                            <input type="number"
+                                                   name="quantity"
+                                                   min="1"
+                                                   value="@item.Quantity"
+                                                   max="@item.Product.ProductStock"
+                                                   class="form-control font-monospace "
+                                                   style="width: 4rem; display: inline; font-size: 0.8rem;" />
+                                            <button type="submit" class="btn btn-sm btn-outline-dark font-monospace" style="display: inline;">
                                                 Update
                                             </button>
                                         </form>
-                                        @{ decimal itemPrice = item.Product.ProductPrice * item.Quantity; }
-                                        <span style="display: inline;">$@itemPrice</span>
-                                    </td>
-                                    <td>
                                         <form method="get" asp-controller="Client" asp-action="DeleteCartItem">
                                             <input type="hidden" name="id" value="@item.ProductId" />
-                                            <button type="submit" class="btn btn-danger font-monospace">
-                                                Delete
+                                            <button type="submit" class="btn btn-sm btn-light text-danger font-monospace">
+                                                <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </form>
+                                    </td>
+                                    <td class="align-middle">
+                                        <span class="font-monospace">$@(item.Product.ProductPrice * item.Quantity)</span>
                                     </td>
                                 </tr>
                             }
@@ -43,8 +55,8 @@
                     </table>
                 </div>
 
-                <div class="d-flex justify-content-end mt-3">
-                    <h4 class="font-monospace">Total: @ViewBag.TotalCart</h4>
+                <div class="d-flex justify-content-end mt-3 mr-4">
+                    <h6 class="font-monospace">Total: $@ViewBag.TotalCart</h6>
                 </div>
             </div>
         </div>
