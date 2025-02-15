@@ -57,14 +57,11 @@ public class ClientController : Controller
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
 
-        foreach (var item in cart)
-        {
-            item.Product = _context.Products.Find(item.ProductId);
-        }
+        cart.ForEach(i => i.Product = _context.Products.Find(i.ProductId));
 
         ViewBag.TotalCart = TotalCart();
 
-        return PartialView("_CartRows", cart);
+        return PartialView("_CartDetails", cart);
     }
 
     [HttpGet]

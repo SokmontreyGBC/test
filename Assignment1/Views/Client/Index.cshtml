@@ -45,6 +45,42 @@
             Tags = ViewData["Categories"] as List<Category>
         })
     </div>
+
+    <div class="flex-grow-1"></div>
+
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-outline-dark font-monospace" type="button"
+                onclick="getCart()"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasExample"
+                aria-controls="offcanvasExample">
+            <i class="fa-solid fa-cart-shopping"></i>
+        </button>
+    </div>
+</div>
+
+@* ============================== CART Offcavas ============================== *@
+
+<div class="offcanvas offcanvas-end"
+     style="width: 50%;" tabindex="-1"
+     id="offcanvasExample"
+     aria-labelledby="offcanvasExampleLabel">
+
+    <div class="offcanvas-header bg-light border-bottom">
+        <h5 class="offcanvas-title font-monospace" id="offcanvasExampleLabel">Shopping Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+
+    <div class="offcanvas-body font-monospace" id="cart-container">
+    </div>
+
+    <div class="offcanvas-footer bg-light border-top p-3 d-flex justify-content-end">
+        <a class="btn btn-dark font-monospace"
+           asp-action="CheckoutOrder"
+           asp-controller="Order">
+            Checkout
+        </a>
+    </div>
 </div>
 
 
@@ -61,11 +97,29 @@
         </thead>
 
         <tbody class="tableData" id="product-rows-container">
-        @await Html.PartialAsync("_ProductRows", Model, ViewData)
+        @* @await Html.PartialAsync("_ProductRows", Model, ViewData) *@
         </tbody>
     </table>
 </div>
 
+<div class="toast-container position-fixed bottom-0 end-0 p-3 m-3">
+    <div id="liveToast"
+         class="toast align-items-center text-bg-primary border-0 font-monospace"
+         role="alert"
+         aria-live="assertive"
+         aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="msg-container">
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+
+            </button>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
 <script>
     let isDesc = false;
     let orderBy = "ID";
@@ -87,13 +141,15 @@
 
     function getProducts() {
         $.ajax({
-            url: `/Admin/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
+            url: `/Product/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
                 `&orderBy=${orderBy}` +
                 `&searchString=${searchText}` +
-                `&selectedCategoriesString=${selectedCategoriesString}`,
+                `&selectedCategoriesString=${selectedCategoriesString}` +
+                `&isAdmin=${false}`,
             type: "GET",
             success: function (data) {
                 $("#product-rows-container").html(data);
+                $(".add-to-cart-form").submit(onAddToCart);
             }
         });
     }
@@ -106,7 +162,8 @@
     $(document).on('click', '.category-tag', function() {
         const selectedCategories = $("#selected-category-tag-container")
             .children()
-            .toArray()
+            .toArray();
+
         selectedCategoriesString = selectedCategories.length
             ? selectedCategories
                 .map(function(item) {
@@ -114,10 +171,53 @@
                 })
                 .join(",")
             : "";
+
         getProducts();
     });
 
     $(document).ready(function () {
         getProducts();
     });
+
+    // ============================== Cart related ==============================
+
+    const liveToastElement = $("#liveToast")
+    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToastElement)
+
+    function onAddToCart(e) {
+        e.preventDefault();
+        const form = this;
+        const productId = form.querySelector('input[name="id"]').value;
+        const quantity = form.querySelector('input[name="quantity"]').value;
+
+        $.ajax({
+            url: `/Client/AddToCart?id=${productId}&quantity=${quantity}`,
+            type: "GET",
+            complete: function (data) {
+                const resp = JSON.parse(data.responseText);
+                $('#msg-container').html(resp.message);
+
+                if (resp.success) {
+                    liveToastElement[0].classList.add('text-bg-success');
+                    liveToastElement[0].classList.remove('text-bg-danger');
+                } else {
+                    liveToastElement[0].classList.remove('text-bg-success');
+                    liveToastElement[0].classList.add('text-bg-danger');
+                }
+
+                toastBootstrap.show();
+            },
+        });
+    }
+
+    function getCart() {
+        $.ajax({
+            url: `/Client/GetCart`,
+            type: "GET",
+            success: function (data) {
+                $("#cart-container").html(data);
+            }
+        });
+    }
 </script>
+}

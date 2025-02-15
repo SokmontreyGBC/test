@@ -1,0 +1,48 @@
+@model List<Product>
+
+@functions
+{
+    public string GetStockColor(int stock)
+    {
+        // different levels of stock
+        var colors = new[] { "text-bg-danger", "text-bg-warning", "" };
+        var stockThresholds = (int)ViewData["LowerStockThreshold"];
+        if (stock < stockThresholds / 2) return colors[0];
+        if (stock < stockThresholds) return colors[1];
+        return colors[2];
+    }
+}
+
+@foreach (var product in Model)
+{
+    <tr>
+        <td>@product.ProductId</td>
+        <td>@product.ProductName</td>
+        <td>@product.ProductDescription</td>
+        <td>@product.ProductPrice</td>
+        <td>@product.Category.CategoryName</td>
+        <td class="@(GetStockColor(product.ProductStock))">@product.ProductStock</td>
+        @if (ViewData["IsAdmin"] as bool? == true)
+        {
+            <td>
+                <a asp-action="Delete" asp-route-id="@product.ProductId" class="btn btn-outline-danger btn-sm font-monospace">
+                    <i class="fa-solid fa-trash"></i>
+                </a>
+                <a asp-action="Edit" asp-route-id="@product.ProductId" class="btn btn-outline-dark btn-sm font-monospace me-2">
+                    <i class="fa-solid fa-pen"></i>
+                </a>
+            </td>
+        } else
+        {
+            <td>
+                <form class="add-to-cart-form d-flex" onsubmit="return false;">
+                    <input type="hidden" name="id" value="@product.ProductId" />
+                    <input type="number" name="quantity" value="1" min="1" max="@product.ProductStock" class="form-control font-monospace" style="width: 6rem" />
+                    <button type="submit" class="btn btn-light font-monospace">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+                </form>
+            </td>
+        }
+    </tr>
+}

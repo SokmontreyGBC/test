@@ -54,45 +54,6 @@ public class AdminController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetProducts(
-        string orderType = "desc",
-        string orderBy = "Name",
-        string searchString = "",
-        string selectedCategoriesString = "")
-    {
-        searchString = searchString.ToLower();
-        var selectedCategories = selectedCategoriesString
-            .Split(',');
-
-        var inventory = _context.Products
-            .Include(p => p.Category)
-            .Where(p => String.IsNullOrWhiteSpace(searchString)
-                        || p.ProductName.ToLower().Contains(searchString))
-            .Where(p => String.IsNullOrWhiteSpace(selectedCategoriesString)
-                        || selectedCategories.Contains(p.Category.CategoryName));
-
-        Expression<Func<Product, object>> sortColumnSelector = orderBy switch
-        {
-            "ID" => p => p.ProductId,
-            "Name" => p => p.ProductName,
-            "Price" => p => p.ProductPrice,
-            "Category" => p => p.Category.CategoryName,
-            "ProductStock" => p => p.ProductStock,
-            _ => p => p.ProductId
-        };
-
-        inventory = orderType.ToLower() == "desc"
-            ? inventory.OrderByDescending(sortColumnSelector)
-            : inventory.OrderBy(sortColumnSelector);
-
-        var inventoryList = inventory.ToList();
-
-        ViewData["OrderType"] = orderType;
-        ViewData["LowerStockThreshold"] = 10;
-        return PartialView("_ProductRows", inventoryList);
-    }
-
-    [HttpGet]
     public IActionResult Create()
     {
         ViewBag.Categories = _context.Categories.ToList();

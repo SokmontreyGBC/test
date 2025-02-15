@@ -11,37 +11,12 @@
         <div class="col-12">
             <div class="px-4 py-5 bg-light border-bottom">
                 <h1 class="display-4 fw-bold font-monospace text-start">Client-Facing Inventory</h1>
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-dark font-monospace" type="button"
-                            onclick="getCart()"
-                            data-bs-toggle="offcanvas"
-                            data-bs-target="#offcanvasExample"
-                            aria-controls="offcanvasExample">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                    </button>
-                </div>
             </div>
         </div>
     </div>
 
 
-    <div class="offcanvas offcanvas-end" style="width: 40%;" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-        <div class="offcanvas-header bg-light border-bottom"> 
-            <h5 class="offcanvas-title font-monospace" id="offcanvasExampleLabel">Cart</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body font-monospace" id="cart-container">
-        </div>
 
-        <div class="offcanvas-footer bg-light border-top p-3 d-flex justify-content-end">
-            <a class="btn btn-dark font-monospace"
-               asp-action="CheckoutOrder"
-               asp-controller="Order">
-                Checkout
-            </a>
-        </div>
-    </div>
-  
     <div class="row g-0 mt-4"> 
         <div class="col-12 p-4">
             <div class="bg-white border p-4">
@@ -146,7 +121,7 @@
                 },
             });
         });
-        
+
         function getCart() {
             $.ajax({
                 url: `/Client/GetCart`,
@@ -157,7 +132,7 @@
                 }
             });
         }
-        
+
         function updateTotalCart() {
             $.ajax({
                 url: `/Client/GetTotalCart`,
