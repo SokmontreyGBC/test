@@ -119,7 +119,11 @@ public class ClientController : Controller
     {
         var product = _context.Products.Find(id);
         if (product == null)
+        {
+            TempData["Success"] = false;
+            TempData["Message"] = "Product not found.";
             return RedirectToAction("Index");
+        }
 
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
@@ -135,13 +139,24 @@ public class ClientController : Controller
             cart.Add(cartItem);
         }
 
-        if (quantity > product.ProductStock) // TODO: handle error message
+        if (quantity > product.ProductStock)
+        {
+            TempData["Success"] = false;
+            TempData["Message"] = $"You can't have more than {product.ProductStock} of {product.ProductName} in your cart.";
             return RedirectToAction("Index");
+        }
+
         if (quantity <= 0)
+        {
+            TempData["Success"] = false;
+            TempData["Message"] = $"You can't have zero items. Please delete the item instead.";
             return RedirectToAction("Index");
+        }
 
         cartItem.Quantity = quantity;
         StashCart(cart);
+        TempData["Success"] = true;
+        TempData["Message"] = $"Successfully added {quantity} of {product.ProductName} to cart.";
         return RedirectToAction("Index");
     }
 
@@ -150,7 +165,11 @@ public class ClientController : Controller
     {
         var product = _context.Products.Find(id);
         if (product == null)
+        {
+            TempData["Success"] = false;
+            TempData["Message"] = "Product not found.";
             return RedirectToAction("Index");
+        }
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
         var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson);
         var cartItem = cart.Find(oi => oi.ProductId == product.ProductId);
@@ -159,6 +178,8 @@ public class ClientController : Controller
             cart.Remove(cartItem);
             StashCart(cart);
         }
+        TempData["Success"] = true;
+        TempData["Message"] = $"Successfully removed {product.ProductName} from cart.";
         return RedirectToAction("Index");
     }
 
