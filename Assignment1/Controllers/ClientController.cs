@@ -23,6 +23,7 @@ public class ClientController : Controller
     {
         var products = _context.Products
             .Include(p => p.Category)
+            .Where(p => !p.IsArchived)
             .ToList();
 
         ViewData["Columns"] = new List<string>

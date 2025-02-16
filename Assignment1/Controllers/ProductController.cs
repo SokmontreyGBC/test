@@ -32,7 +32,8 @@ public class ProductController: Controller
             .Where(p => String.IsNullOrWhiteSpace(searchString)
                         || p.ProductName.ToLower().Contains(searchString))
             .Where(p => String.IsNullOrWhiteSpace(selectedCategoriesString)
-                        || selectedCategories.Contains(p.Category.CategoryName));
+                        || selectedCategories.Contains(p.Category.CategoryName))
+            .Where(p => !p.IsArchived);
 
         Expression<Func<Product, object>> sortColumnSelector = orderBy switch
         {

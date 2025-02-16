@@ -25,6 +25,7 @@ public class AdminController : Controller
     {
         var inventory = _context.Products
             .Include(p => p.Category)
+            .Where(p => !p.IsArchived)
             .ToList();
 
         ViewData["Columns"] = new List<string>
@@ -147,7 +148,8 @@ public class AdminController : Controller
         var product = _context.Products.FirstOrDefault(p => p.ProductId == productid);
         if (product != null)
         {
-            _context.Products.Remove(product);
+            product.IsArchived = true;
+            // _context.Products.Remove(product);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
