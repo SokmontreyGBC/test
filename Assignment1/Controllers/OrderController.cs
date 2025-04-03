@@ -15,7 +15,7 @@ public class OrderController : Controller
         _context = context;
     }
 
-    [HttpPost]
+    /*[HttpPost]
     public IActionResult CreateOrder(List<OrderItem> cartItems)
     {
         try
@@ -52,7 +52,7 @@ public class OrderController : Controller
         {
             return BadRequest(ex.Message);
         }
-    }
+    }*/
 
 
     private List<OrderItem> GetOrderItems()
@@ -85,7 +85,7 @@ public class OrderController : Controller
         return View();
     }
 
-    public User GetOrCreateUser(string email, string name)
+    /*public User GetOrCreateUser(string email, string name)
     {
         // find by email
         var user = _context.Users
@@ -102,7 +102,7 @@ public class OrderController : Controller
             _context.SaveChanges();
         }
         return user;
-    }
+    }*/
 
     public Order CreateOrder(int userId)
     {
@@ -150,7 +150,7 @@ public class OrderController : Controller
         _context.SaveChanges();
     }
 
-    [HttpPost]
+    /*[HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult CheckoutOrder(User userForm)
     {
@@ -168,7 +168,7 @@ public class OrderController : Controller
 
         TempData["Name"] = user.UserName;
         return RedirectToAction("CheckoutConfirm", "Order");
-    }
+    }*/
 
     [HttpGet]
     public IActionResult AllOrders()
