@@ -53,52 +53,6 @@ public class ClientController : Controller
     }
 
     [HttpGet]
-    public IActionResult UpdateCartQuantity(int id, int quantity)
-    {
-        var product = _context.Products.Find(id);
-        if (product == null)
-        {
-            TempData["Success"] = false;
-            TempData["Message"] = "Product not found.";
-            return RedirectToAction("Index");
-        }
-
-        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
-        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
-        var cartItem = cart.Find(oi => oi.ProductId == product.ProductId);
-
-        if (cartItem == null)
-        {
-            cartItem = new OrderItem
-            {
-                ProductId = product.ProductId,
-                Quantity = 0
-            };
-            cart.Add(cartItem);
-        }
-
-        if (quantity > product.ProductStock)
-        {
-            TempData["Success"] = false;
-            TempData["Message"] = $"You can't have more than {product.ProductStock} of {product.ProductName} in your cart.";
-            return RedirectToAction("Index");
-        }
-
-        if (quantity <= 0)
-        {
-            TempData["Success"] = false;
-            TempData["Message"] = $"You can't have zero items. Please delete the item instead.";
-            return RedirectToAction("Index");
-        }
-
-        cartItem.Quantity = quantity;
-        StashCart(cart);
-        TempData["Success"] = true;
-        TempData["Message"] = $"Successfully added {quantity} of {product.ProductName} to cart.";
-        return RedirectToAction("Index");
-    }
-
-    [HttpGet]
     public IActionResult DeleteCartItem(int id)
     {
         var product = _context.Products.Find(id);
