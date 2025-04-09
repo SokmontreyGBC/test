@@ -60,7 +60,9 @@
                 <ul class="navbar-nav flex-grow">
                     <li class="nav-item">
                         <a class="nav-link @((string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"
-                           asp-area="" asp-controller="Admin" asp-action="Index">
+                           asp-area=""
+                           asp-controller="Admin"
+                           asp-action="Index">
                             Admin
                         </a>
                     </li>
@@ -78,18 +80,6 @@
                     </li>
                     
                 </ul>
-                @* <ul class="navbar-nav"> *@
-                @*     $1$ <li class="nav-item"> #1# *@
-                @*     $1$     <a href="" class="nav-link" #1# *@
-                @*     $1$        >Sign in</a> #1# *@
-                @*     $1$ </li> #1# *@
-                @*     <li class="nav-item"> *@
-                @*         <a class="nav-link @( (string)ViewData["Page"]! == "About Us" ? "text-primary" : "text-dark")" *@
-                @*             asp-area="" asp-controller="Home" asp-action="AboutUs"> *@
-                @*             About us *@
-                @*         </a> *@
-                @*     </li> *@
-                @* </ul> *@
             </nav>
         </header>
     </div>
@@ -100,12 +90,11 @@
     </div>
 </div>
 
-@* <footer class="border-top footer text-muted"> *@
-@*     <div class="container"> *@
-@*         &copy; 2025 - Assignment1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> *@
-@*     </div> *@
-@* </footer> *@
-
+<footer class="border-top footer text-muted">
+    <div class="container">
+        &copy; 2025 - Assignment1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+</footer>
 
 @await RenderSectionAsync("Scripts", required: false)
 </body>

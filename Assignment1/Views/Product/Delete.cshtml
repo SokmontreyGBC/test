@@ -27,10 +27,18 @@
                     <dd class="col-sm-9 font-monospace">@Html.DisplayFor(model => model.ProductDescription)</dd>
                 </dl>
 
-                <form asp-action="Delete" method="post" class="mt-4">
+                <form
+                    asp-controller="Product"
+                    asp-action="Delete"
+                    method="post"
+                    class="mt-4">
+
                     @Html.HiddenFor(model => model.ProductId)
                     <div class="d-flex justify-content-between align-items-center">
-                        <a asp-action="Index" class="btn btn-outline-secondary font-monospace">Cancel</a>
+                        <a asp-action="Index"
+                           asp-controller="Admin"
+                           asp-area=""
+                           class="btn btn-outline-secondary font-monospace">Cancel</a>
                         <button type="submit" class="btn btn-danger font-monospace">Delete Product</button>
                     </div>
                 </form>
