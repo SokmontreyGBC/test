@@ -53,56 +53,6 @@ public class ClientController : Controller
     }
 
     [HttpGet]
-    public JsonResult AddToCart(int id, int quantity)
-    {
-        var product = _context.Products.Find(id);
-        if (product == null)
-            return new JsonResult(new
-            {
-                success = false,
-                message = "Product not found."
-            });
-
-        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
-        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
-        var cartItem = cart.Find(oi => oi.ProductId == product.ProductId);
-
-        if (cartItem == null)
-        {
-            cartItem = new OrderItem
-            {
-                ProductId = product.ProductId,
-                Quantity = 0
-            };
-            cart.Add(cartItem);
-        }
-
-        var newQuantity = cartItem.Quantity + quantity;
-
-        if (newQuantity > product.ProductStock)
-            return new JsonResult(new
-            {
-                success = false,
-                message = $"You can't have more than {product.ProductStock} of {product.ProductName} in your cart."
-            });
-
-        if (newQuantity <= 0)
-            return new JsonResult(new
-            {
-                success = false,
-                message = $"You can't have zero items. Please delete the item instead."
-            });
-
-        cartItem.Quantity = newQuantity;
-        StashCart(cart);
-        return new JsonResult(new
-        {
-            success = true,
-            message = $"Successfully added {quantity} of {product.ProductName} to cart."
-        });
-    }
-
-    [HttpGet]
     public IActionResult UpdateCartQuantity(int id, int quantity)
     {
         var product = _context.Products.Find(id);
