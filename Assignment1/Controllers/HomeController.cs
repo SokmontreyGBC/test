@@ -7,8 +7,6 @@ namespace Assignment1.Controllers;
 
 public class HomeController : Controller
 {
-    
-    
     private readonly ApplicationDbContext _context;
     private readonly ILogger<HomeController> _logger;
     public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
