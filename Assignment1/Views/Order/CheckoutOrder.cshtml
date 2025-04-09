@@ -1,4 +1,5 @@
-﻿@model User
+﻿@*
+$1$ @model User #1#
 
 @{
     ViewBag.Title = "title";
@@ -44,9 +45,9 @@
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="UserEmail" class="form-label font-monospace">Email</label>
+                $1$<label asp-for="UserEmail" class="form-label font-monospace">Email</label>
                 <input asp-for="UserEmail" class="form-control font-monospace" />
-                <span asp-validation-for="UserEmail" class="text-danger"></span>
+                <span asp-validation-for="UserEmail" class="text-danger"></span>#1#
             </div>
             <div class="d-flex gap-2">
                 <a asp-controller="Client" asp-action="Index" class="btn btn-outline-dark w-50 font-monospace">Go Back</a>
@@ -60,3 +61,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+*@

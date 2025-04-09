@@ -3,6 +3,7 @@ using System;
 using Assignment1.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,13 +12,14 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Assignment1.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250408025906_InitialMigrations")]
+    partial class InitialMigrations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasDefaultSchema("Identity")
                 .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -37,7 +39,7 @@ namespace Assignment1.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Categories", "Identity");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Assignment1.Models.Order", b =>
@@ -59,7 +61,7 @@ namespace Assignment1.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.ToTable("Orders", "Identity");
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Assignment1.Models.OrderItem", b =>
@@ -85,7 +87,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", "Identity");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Assignment1.Models.Product", b =>
@@ -119,7 +121,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", "Identity");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -145,7 +147,7 @@ namespace Assignment1.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("Role", "Identity");
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -170,7 +172,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoleClaims", "Identity");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -234,7 +236,7 @@ namespace Assignment1.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("User", "Identity");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -259,7 +261,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserClaims", "Identity");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -283,7 +285,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogins", "Identity");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -298,7 +300,7 @@ namespace Assignment1.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", "Identity");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -319,7 +321,7 @@ namespace Assignment1.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("UserTokens", "Identity");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("Assignment1.Models.OrderItem", b =>
