@@ -53,19 +53,6 @@ public class ClientController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetCart()
-    {
-        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
-        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
-
-        cart.ForEach(i => i.Product = _context.Products.Find(i.ProductId));
-
-        ViewBag.TotalCart = TotalCart();
-
-        return PartialView("_CartDetails", cart);
-    }
-
-    [HttpGet]
     public JsonResult AddToCart(int id, int quantity)
     {
         var product = _context.Products.Find(id);
@@ -190,18 +177,4 @@ public class ClientController : Controller
         HttpContext.Session.SetString("Cart", cartJson);
     }
     
-    public decimal TotalCart()
-    {
-        var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
-        var cart = JsonSerializer.Deserialize<List<OrderItem>>(cartJson) ?? new List<OrderItem>();
-
-        decimal total = 0;
-        foreach (var item in cart)
-        {
-            var product = _context.Products.Find(item.ProductId);
-            total += product.ProductPrice * item.Quantity;
-        }
-
-        return total;
-    }
 }

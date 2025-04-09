@@ -228,7 +228,7 @@
 
     function getCart() {
         $.ajax({
-            url: `/Client/GetCart`,
+            url: `@Url.Action("GetCart", "Cart")`,
             type: "GET",
             success: function (data) {
                 $("#cart-container").html(data);
