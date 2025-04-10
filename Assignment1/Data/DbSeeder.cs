@@ -11,7 +11,6 @@ namespace Assignment1.Data
             // Get required services
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
             // Create Admin role if it doesn't exist
             string adminRoleName = "Admin";
             var adminRoleExists = await roleManager.RoleExistsAsync(adminRoleName);
@@ -19,7 +18,6 @@ namespace Assignment1.Data
             {
                 await roleManager.CreateAsync(new IdentityRole(adminRoleName));
             }
-
             // Create default admin user if it doesn't exist
             string adminEmail = "admin@brothersoats.com";
             var adminUser = await userManager.FindByEmailAsync(adminEmail);
@@ -40,6 +38,20 @@ namespace Assignment1.Data
                 {
                     await userManager.AddToRoleAsync(adminUser, adminRoleName);
                 }
+            }
+        }
+
+        public static async Task SeedUser(IServiceProvider serviceProvider)
+        {
+            // Get required services
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+            // Create User role if it doesn't exist
+            string userRoleName = "User";
+            var userRoleExists = await roleManager.RoleExistsAsync(userRoleName);
+            if (!userRoleExists)
+            {
+                await roleManager.CreateAsync(new IdentityRole(userRoleName));
             }
         }
     }

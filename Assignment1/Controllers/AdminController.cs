@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Linq.Expressions;
 using Assignment1.Data;
 using Assignment1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace Assignment1.Controllers;
  *  This is the employee inventory controller
  *  It is responsible for non-client facing actions
  */
+[Authorize(Roles = "Admin")]
 public class AdminController : Controller
 {
     private readonly ApplicationDbContext _context;
