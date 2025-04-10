@@ -29,7 +29,6 @@
     <ItemGroup>
         <Folder Include="Areas\Admin\" />
         <Folder Include="Areas\Client\" />
-        <Folder Include="Migrations\"/>
     </ItemGroup>
 
     <ItemGroup>
