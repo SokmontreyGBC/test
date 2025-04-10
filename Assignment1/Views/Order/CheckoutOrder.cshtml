@@ -1,13 +1,18 @@
-﻿@*
-$1$ @model User #1#
-
+﻿@model ApplicationUser
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Checkout";
     Layout = "_Layout";
 
     decimal cost = 0;
     foreach (var items in ViewBag.OrderItems)
         cost += items.Product.ProductPrice * items.Quantity;
+
+    var isLoggedIn = User.Identity.IsAuthenticated;
+
+    // Get the current user's details safely
+    string userName = User.Identity.IsAuthenticated ? User.Identity.Name : null;
+    string userEmail = Model?.Email;
+    string userPhone = Model?.PhoneNumber;
 }
 <div class="d-flex flex-row gap-4">
     <div class="flex-grow-1 bg-white border p-4 card">
@@ -37,18 +42,70 @@ $1$ @model User #1#
     </div>
 
     <div class="flex-grow-1 bg-white border p-4 card">
-        <h3 class="font-monospace">Guest Checkout</h3>
+        <h3 class="font-monospace">@(isLoggedIn ? "Checkout" : "Guest Checkout")</h3>
+
         <form asp-controller="Order" asp-action="CheckoutOrder" method="post">
-            <div class="mb-3">
-                <label asp-for="UserName" class="form-label font-monospace">Name</label>
-                <input asp-for="UserName" class="form-control font-monospace" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+            @if (isLoggedIn)
+            {
+                <div class="card mb-4 border bg-light">
+                    <div class="card-body">
+                        <h5 class="font-monospace mb-3">Your Information</h5>
+
+                        <div class="mb-2">
+                            <span class="fw-bold font-monospace">Email:</span>
+                            <span class="font-monospace">@userName</span>
+                            <input type="hidden" name="UserName" value="@userName" />
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(userEmail))
+                        {
+                            <div class="mb-2">
+                                <span class="fw-bold font-monospace">Email:</span>
+                                <span class="font-monospace">@userEmail</span>
+                                <input type="hidden" name="Email" value="@userEmail" />
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(userPhone))
+                        {
+                            <div class="mb-2">
+                                <span class="fw-bold font-monospace">Phone:</span>
+                                <span class="font-monospace">@userPhone</span>
+                                <input type="hidden" name="PhoneNumber" value="@userPhone" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mb-3">
+                                <label for="PhoneNumber" class="form-label font-monospace">Phone Number (Optional)</label>
+                                <input name="PhoneNumber" id="PhoneNumber" class="form-control font-monospace" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="mb-3">
+                    <label for="UserName" class="form-label font-monospace">Name</label>
+                    <input name="UserName" id="UserName" class="form-control font-monospace" required />
+                    <span class="text-danger font-monospace small field-validation-valid" data-valmsg-for="UserName"></span>
+                </div>
+                <div class="mb-3">
+                    <label for="Email" class="form-label font-monospace">Email</label>
+                    <input type="email" name="Email" id="Email" class="form-control font-monospace" required />
+                </div>
+                <div class="mb-3">
+                    <label for="PhoneNumber" class="form-label font-monospace">Phone Number (Optional)</label>
+                    <input name="PhoneNumber" id="PhoneNumber" class="form-control font-monospace" />
+                </div>
+            }
+
+            <div class="mb-4">
+                <label for="ShippingAddress" class="form-label font-monospace">Shipping Address</label>
+                <textarea name="ShippingAddress" id="ShippingAddress" class="form-control font-monospace" rows="3" required></textarea>
             </div>
-            <div class="mb-3">
-                $1$<label asp-for="UserEmail" class="form-label font-monospace">Email</label>
-                <input asp-for="UserEmail" class="form-control font-monospace" />
-                <span asp-validation-for="UserEmail" class="text-danger"></span>#1#
-            </div>
+
             <div class="d-flex gap-2">
                 <a asp-controller="Client" asp-action="Index" class="btn btn-outline-dark w-50 font-monospace">Go Back</a>
                 <button type="submit" class="btn btn-dark w-50 font-monospace">Place Order</button>
@@ -57,8 +114,6 @@ $1$ @model User #1#
     </div>
 </div>
 
-
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
-*@
