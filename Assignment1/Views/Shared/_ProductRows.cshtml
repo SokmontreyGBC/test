@@ -9,15 +9,19 @@
         <td>@product.ProductPrice</td>
         <td>@product.Category.CategoryName</td>
         <td>
+           
             @{ var stockThresholds = (int)ViewData["LowerStockThreshold"]; }
 
             @if (product.ProductStock < stockThresholds / 2)
             {
                 <i class="fa-solid fa-triangle-exclamation text-danger" style="font-size: 0.8rem;"></i>
-            } else if (product.ProductStock < stockThresholds)
+            }
+            else if (product.ProductStock < stockThresholds)
             {
                 <i class="fa-solid fa-triangle-exclamation text-warning" style="font-size: 0.8rem;"></i>
-            } else {
+            }
+            else
+            {
                 <i class="fa-solid fa-circle-check text-success" style="font-size: 0.8rem;"></i>
             }
             @product.ProductStock

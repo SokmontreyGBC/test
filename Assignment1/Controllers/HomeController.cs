@@ -22,7 +22,8 @@ public class HomeController : Controller
             .OrderByDescending(p => p.ProductStock)
             .Take(3)
             .ToList();
-    
+
+      
         return View(topProducts);
     }
     

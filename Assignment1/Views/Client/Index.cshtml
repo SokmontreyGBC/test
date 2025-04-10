@@ -6,6 +6,8 @@
     string selectedCategoryString = ViewData["SelectedCategoryString"] as string ?? "";
 }
 
+
+
 <div class="row g-0">
     <div class="col-12">
         <div class="px-4 py-2 bg-light border-bottom">
@@ -85,7 +87,7 @@
 </div>
 
 
-<div class="table-responsive border mt-4 rounded-3">
+<div id="temp-hidden" class="table-responsive border mt-4 rounded-3" >
     <table class="table table-borderless font-monospace">
         <thead class="border-bottom">
         <tr>
@@ -97,10 +99,14 @@
         </tr>
         </thead>
 
-        <tbody class="tableData" id="product-rows-container">
+        <tbody class="tableData" id="product-rows-container" >
+        
         @* @await Html.PartialAsync("_ProductRows", Model, ViewData) *@
         </tbody>
     </table>
+    <div id="ajax-spinner" style="display:none; text-align:center; padding:10px;">
+        <i class="fas fa-spinner fa-spin fa-3x"></i>
+    </div>
 </div>
 
 <div class="toast-container position-fixed bottom-0 end-0 p-3 m-3">
@@ -141,7 +147,10 @@
     }
 
     function getProducts() {
-        $.ajax({
+        
+        $('#ajax-spinner').show();
+        setTimeout(function (){ $.ajax({
+
             url: `/Product/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
                 `&orderBy=${orderBy}` +
                 `&searchString=${searchText}` +
@@ -151,8 +160,13 @@
             success: function (data) {
                 $("#product-rows-container").html(data);
                 $(".add-to-cart-form").submit(onAddToCart);
+                $('#ajax-spinner').hide();
+              
             }
         });
+            
+        },1000);
+       
     }
 
     $("#search-input").on("keyup", function () {
@@ -235,5 +249,9 @@
             }
         });
     }
+
+    
+
+  
 </script>
 }

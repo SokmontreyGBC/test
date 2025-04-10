@@ -1,7 +1,6 @@
-﻿
-@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@inject SignInManager<IdentityUser> SignInManager
+@inject SignInManager<ApplicationUser> SignInManager
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,66 +21,7 @@
 <body>
 <div class="d-flex flex-row vh-100">
     <div class="sidebar-width border-end d-flex">
-        <header class="p-4 align-self-stretch d-flex flex-column">
-            <p class="font-monospace ">
-                 Brother's Oats
-            </p>
-            <nav class="flex-grow-1 d-flex flex-column">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
-                        <a class="nav-link @( (string)ViewData["Page"]! == "Home" ? "text-primary" : "text-dark") "
-                           asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @( (string)ViewData["Page"]! == "Products" ? "text-primary" : "text-dark")"
-                           asp-area="" asp-controller="Client" asp-action="Index">Products</a>
-                    </li>
-                    @if (@SignInManager.IsSignedIn(User)){
-
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">
-                            <i class="nav-link @((string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"></i>
-                            Logout</a>
-                    </li>
-                    
-                    }else{
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">
-                            <i class="nav-link @((string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"></i>
-                            Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">
-                            <i class="nav-link @((string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"></i>
-                            Register</a>
-                    </li>
-                    }
-                </ul>
-                <ul class="navbar-nav flex-grow">
-                    <li class="nav-item">
-                        <a class="nav-link @((string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"
-                           asp-area=""
-                           asp-controller="Admin"
-                           asp-action="Index">
-                            Admin
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @((string)ViewData["Page"]! == "Categories" ? "text-primary" : "text-dark")"
-                           asp-area="" asp-controller="Categories" asp-action="Index">
-                            Categories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link @((string)ViewData["Page"]! == "Order History" ? "text-primary" : "text-dark")"
-                           asp-area="" asp-controller="Order" asp-action="AllOrders">
-                            Order History
-                        </a>
-                    </li>
-                    
-                </ul>
-            </nav>
-        </header>
+        @Html.Partial("_Header")
     </div>
     <div class="flex-grow-1 overflow-scroll">
         <main role="main" class="p-4 ">
