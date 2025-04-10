@@ -25,7 +25,10 @@
                                         $@item.Product.ProductPrice
                                     </td>
                                     <td class="d-flex flex-row gap-2 align-items-center">
-                                        <form method="get" asp-controller="Client" asp-action="UpdateCartQuantity" style="display: inline;">
+                                        <form method="get"
+                                              asp-area=""
+                                              asp-controller="Cart"
+                                              asp-action="UpdateCartQuantity" style="display: inline;">
                                             <input type="hidden" name="id" value="@item.ProductId" />
                                             <span>x</span>
                                             <input type="number"
@@ -39,7 +42,10 @@
                                                 Update
                                             </button>
                                         </form>
-                                        <form method="get" asp-controller="Client" asp-action="DeleteCartItem">
+                                        <form method="get"
+                                              asp-area=""
+                                              asp-controller="Cart"
+                                              asp-action="DeleteCartItem">
                                             <input type="hidden" name="id" value="@item.ProductId" />
                                             <button type="submit" class="btn btn-sm btn-light text-danger font-monospace">
                                                 <i class="fa-solid fa-trash"></i>

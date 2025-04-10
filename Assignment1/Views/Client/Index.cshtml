@@ -127,7 +127,7 @@
 
 
 @section Scripts {
-<script>
+    <script>
     let isDesc = false;
     let orderBy = "ID";
     let searchText = "";
@@ -139,7 +139,7 @@
     }
 
     function toggleOrderType() {
-        isDesc = !isDes; 
+        isDesc = !isDes;
         $("#order-arrow-icon").attr("class", isDesc
             ? "fa-solid fa-arrow-up"
             : "fa-solid fa-arrow-down");
@@ -221,7 +221,7 @@
         const quantity = form.querySelector('input[name="quantity"]').value;
 
         $.ajax({
-            url: `/Client/AddToCart?id=${productId}&quantity=${quantity}`,
+            url: `@Url.Action("AddToCart", "Cart")?id=${productId}&quantity=${quantity}`,
             type: "GET",
             complete: function (data) {
                 const resp = JSON.parse(data.responseText);
@@ -242,7 +242,7 @@
 
     function getCart() {
         $.ajax({
-            url: `/Client/GetCart`,
+            url: `@Url.Action("GetCart", "Cart")`,
             type: "GET",
             success: function (data) {
                 $("#cart-container").html(data);

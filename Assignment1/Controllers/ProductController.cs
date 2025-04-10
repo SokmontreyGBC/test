@@ -15,6 +15,7 @@ public class ProductController: Controller
         _context = context;
     }
 
+
     [HttpGet]
     public IActionResult GetProducts(
         string orderType = "desc",
@@ -55,6 +56,108 @@ public class ProductController: Controller
         ViewData["LowerStockThreshold"] = 10;
         ViewData["IsAdmin"] = isAdmin;
         return PartialView("_ProductRows", inventoryList);
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        ViewBag.Categories = _context.Categories.ToList();
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(Product product)
+    {
+        if (ModelState.IsValid)
+        {
+            _context.Products.Add(product);
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Admin", new { area = "" });
+        }
+
+        return View(product);
+    }
+
+    [HttpGet]
+    public IActionResult Edit(int id)
+    {
+        var product = _context.Products.Find(id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        ViewBag.Categories = _context.Categories.ToList();
+        ViewBag.Price = _context.Products.FirstOrDefault(p => p.ProductId == id);
+        return View(product);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(int id,
+        [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,ProductStock")]
+        Product product)
+    {
+        if (id != product.ProductId)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(product);
+                _context.SaveChanges();
+            }
+            catch
+                (DbUpdateConcurrencyException)
+            {
+                if (!ProductsExist(product.ProductId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        return RedirectToAction("Index", "Admin", new { area = "" });
+    }
+
+    public bool ProductsExist(int id)
+    {
+        return _context.Products.Any(e => e.ProductId == id);
+    }
+
+    [HttpGet]
+    public IActionResult Delete(int id)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+        if (product == null)
+        {
+            return NotFound();
+        }
+
+        return View(product);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteConfirmed(int productid)
+    {
+        var product = _context.Products.FirstOrDefault(p => p.ProductId == productid);
+        if (product != null)
+        {
+            product.IsArchived = true;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Admin", new { area = "" });
+        }
+
+        return NotFound();
     }
 
 }
