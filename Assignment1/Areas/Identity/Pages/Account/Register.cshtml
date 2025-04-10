@@ -2,45 +2,65 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
+    ViewData["Page"] = "Account";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container-fluid p-0">
+    <div class="row g-0 justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6 p-4">
+            <h3 class="fw-bold font-monospace text-start">@ViewData["Title"]</h3>
+            <div class="bg-white border card p-4">
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div class="mb-4">
+                        <h5 class="font-monospace">Create a new account</h5>
+                        <hr/>
+                    </div>
+                    <div asp-validation-summary="ModelOnly" class="text-danger font-monospace small" role="alert"></div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr/>
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.FirstName" class="form-control" aria-required="true" placeholder="First Name" />
-                <label asp-for="Input.FirstName">First Name</label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    <div class="mb-4">
+                        <label asp-for="Input.FirstName" class="form-label font-monospace">First Name</label>
+                        <input asp-for="Input.FirstName" class="form-control font-monospace" aria-required="true" placeholder="First Name" />
+                        <span asp-validation-for="Input.FirstName" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.LastName" class="form-label font-monospace">Last Name</label>
+                        <input asp-for="Input.LastName" class="form-control font-monospace" aria-required="true" placeholder="Last Name" />
+                        <span asp-validation-for="Input.LastName" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.Email" class="form-label font-monospace">Email</label>
+                        <input asp-for="Input.Email" class="form-control font-monospace" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                        <span asp-validation-for="Input.Email" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.Password" class="form-label font-monospace">Password</label>
+                        <input asp-for="Input.Password" class="form-control font-monospace" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <span asp-validation-for="Input.Password" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.ConfirmPassword" class="form-label font-monospace">Confirm Password</label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control font-monospace" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger font-monospace small"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mt-5">
+                        <a class="btn btn-outline-secondary font-monospace"
+                           asp-area=""
+                           asp-page="./Login">
+                            Back to Login
+                        </a>
+                        <button id="registerSubmit" type="submit" class="btn btn-outline-dark font-monospace">
+                            Register
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.LastName" class="form-control" aria-required="true" placeholder="Last Name" />
-                <label asp-for="Input.LastName">Last Name</label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
+        </div>
     </div>
-   
 </div>
 
 @section Scripts {

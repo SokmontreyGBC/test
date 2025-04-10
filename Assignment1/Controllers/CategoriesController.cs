@@ -1,5 +1,6 @@
 using Assignment1.Data;
 using Assignment1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment1.Controllers;
@@ -31,7 +32,9 @@ public class CategoriesController : Controller
         }
     }
 
+    
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         try
@@ -50,6 +53,7 @@ public class CategoriesController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public IActionResult Create(Category category)
     {
         try

@@ -20,9 +20,15 @@
             <div class="bg-white border p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="font-monospace m-0">Category List</h2>
-                    <a class="btn btn-outline-dark font-monospace" asp-action="Create" asp-controller="Categories">
-                        Create Category
-                    </a>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-outline-dark font-monospace" asp-action="Create" asp-controller="Categories">
+                            Create Category
+                        </a>
+                    }
+                    else
+                    {<div></div>}
                 </div>
 
                 @if (Model.Any())

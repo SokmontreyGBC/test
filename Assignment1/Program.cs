@@ -55,6 +55,7 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     await DbSeeder.SeedAdmin(services);
+    await DbSeeder.SeedUser(services);
 }
 
 app.MapControllerRoute(
