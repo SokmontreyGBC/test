@@ -3,16 +3,22 @@ using Assignment1.Data;
 using Assignment1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
+using Org.BouncyCastle.Crypto.Engines;
+
 
 namespace Assignment1.Controllers;
-
+//[Route ("[controller]/[action]")]
 public class ProductController: Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<ProductController> _logger;
 
-    public ProductController(ApplicationDbContext context)
+    public ProductController(ApplicationDbContext context, ILogger<ProductController> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
 
@@ -27,58 +33,86 @@ public class ProductController: Controller
         searchString = searchString.ToLower();
         var selectedCategories = selectedCategoriesString
             .Split(',');
-
-        var inventory = _context.Products
-            .Include(p => p.Category)
-            .Where(p => String.IsNullOrWhiteSpace(searchString)
-                        || p.ProductName.ToLower().Contains(searchString))
-            .Where(p => String.IsNullOrWhiteSpace(selectedCategoriesString)
-                        || selectedCategories.Contains(p.Category.CategoryName))
-            .Where(p => !p.IsArchived);
-
-        Expression<Func<Product, object>> sortColumnSelector = orderBy switch
+        try
         {
-            "ID" => p => p.ProductId,
-            "Name" => p => p.ProductName,
-            "Price" => p => p.ProductPrice,
-            "Category" => p => p.Category.CategoryName,
-            "ProductStock" => p => p.ProductStock,
-            _ => p => p.ProductId
-        };
+            var inventory = _context.Products
+                .Include(p => p.Category)
+                .Where(p => String.IsNullOrWhiteSpace(searchString)
+                            || p.ProductName.ToLower().Contains(searchString))
+                .Where(p => String.IsNullOrWhiteSpace(selectedCategoriesString)
+                            || selectedCategories.Contains(p.Category.CategoryName))
+                .Where(p => !p.IsArchived);
 
-        inventory = orderType.ToLower() == "desc"
-            ? inventory.OrderByDescending(sortColumnSelector)
-            : inventory.OrderBy(sortColumnSelector);
+            Expression<Func<Product, object>> sortColumnSelector = orderBy switch
+            {
+                "ID" => p => p.ProductId,
+                "Name" => p => p.ProductName,
+                "Price" => p => p.ProductPrice,
+                "Category" => p => p.Category.CategoryName,
+                "ProductStock" => p => p.ProductStock,
+                _ => p => p.ProductId
+            };
 
-        var inventoryList = inventory.ToList();
+            inventory = orderType.ToLower() == "desc"
+                ? inventory.OrderByDescending(sortColumnSelector)
+                : inventory.OrderBy(sortColumnSelector);
 
-        ViewData["OrderType"] = orderType;
-        ViewData["LowerStockThreshold"] = 10;
-        ViewData["IsAdmin"] = isAdmin;
-        return PartialView("_ProductRows", inventoryList);
+            var inventoryList = inventory.ToList();
+
+
+            ViewData["OrderType"] = orderType;
+            ViewData["LowerStockThreshold"] = 10;
+            ViewData["IsAdmin"] = isAdmin;
+            return PartialView("_ProductRows", inventoryList);
+        }catch(Exception ex)
+        {
+            var user = User.Identity?.Name ?? "Anonymous";
+            _logger.LogError(ex, ex.Message + "\n User:" + user );
+            return RedirectToAction("ServerError", "Error");
+        }
+     
     }
 
     [HttpGet]
     public IActionResult Create()
     {
-        ViewBag.Categories = _context.Categories.ToList();
-        return View();
+        try
+        {
+            ViewBag.Categories = _context.Categories.ToList();
+            return View();
+        }
+        catch (Exception ex)
+        {
+            var user = User.Identity?.Name ?? "Anonymous";
+            _logger.LogError(ex, ex.Message + "\n User:" + user );
+            return RedirectToAction("GetProducts", "Product");
+        }
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Product product)
     {
-        if (ModelState.IsValid)
+        try
         {
-            _context.Products.Add(product);
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Admin", new { area = "" });
+            if (ModelState.IsValid)
+            {
+                _context.Products.Add(product);
+                _context.SaveChanges();
+                return RedirectToAction("Index", "Admin", new { area = "" });
+            }
+
+            return View(product);
         }
+        catch (Exception ex)
+        {
+            
+            var user = User.Identity?.Name ?? "Anonymous";
+            _logger.LogError(ex, ex.Message + "\n User:" + user );
+            return RedirectToAction("ServerError", "Error");
 
-        return View(product);
+        }
     }
-
     [HttpGet]
     public IActionResult Edit(int id)
     {
@@ -101,7 +135,7 @@ public class ProductController: Controller
     {
         if (id != product.ProductId)
         {
-            return NotFound();
+            return RedirectToAction("NotFoundPage","Error");
         }
 
         if (ModelState.IsValid)
@@ -116,11 +150,11 @@ public class ProductController: Controller
             {
                 if (!ProductsExist(product.ProductId))
                 {
-                    return NotFound();
+                    return RedirectToAction("NotFoundPage","Error");
                 }
                 else
                 {
-                    throw;
+                    return RedirectToAction("ServerError","Error");
                 }
             }
         }
@@ -136,28 +170,46 @@ public class ProductController: Controller
     [HttpGet]
     public IActionResult Delete(int id)
     {
-        var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
-        if (product == null)
+        try
         {
-            return NotFound();
-        }
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-        return View(product);
+            return View(product);
+        }
+        catch (Exception ex)
+        {
+            var user = User.Identity?.Name ?? "Anonymous";
+            _logger.LogError(ex, ex.Message + "\n User:" + user );
+            return RedirectToAction("GetProducts", "Product");
+        }
     }
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int productid)
     {
-        var product = _context.Products.FirstOrDefault(p => p.ProductId == productid);
-        if (product != null)
+        try
         {
-            product.IsArchived = true;
-            _context.SaveChanges();
-            return RedirectToAction("Index", "Admin", new { area = "" });
-        }
+            var product = _context.Products.FirstOrDefault(p => p.ProductId == productid);
+            if (product != null)
+            {
+                product.IsArchived = true;
+                _context.SaveChanges();
+                return RedirectToAction("Index", "Admin", new { area = "" });
+            }
 
-        return NotFound();
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            var user = User.Identity?.Name ?? "Anonymous";
+            _logger.LogError(ex, ex.Message + "\n User:" + user );
+            return RedirectToAction("Delete", "Product");
+        }
     }
 
 }

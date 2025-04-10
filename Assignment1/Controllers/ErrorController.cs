@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment1.Controllers;
 
+//[Route ("[controller]/[action]")]
 public class ErrorController : Controller
 {
     [Route("Error/404")]
@@ -14,6 +15,11 @@ public class ErrorController : Controller
     public IActionResult ServerError()
     {
         return View("InternalServerError");
+    }
+    [Route("Error/Unauthorized")]
+    public IActionResult UnauthorizedPage()
+    {
+        return View("Unauthorized");  
     }
 
     [Route("Error/{statusCode}")]

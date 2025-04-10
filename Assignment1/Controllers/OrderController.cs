@@ -6,13 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Assignment1.Controllers;
 
+//[Route ("[controller]/[action]")]
 public class OrderController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<OrderController> _logger;
 
-    public OrderController(ApplicationDbContext context)
+    public OrderController(ApplicationDbContext context , ILogger<OrderController> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     private List<OrderItem> GetOrderItems()
@@ -37,25 +40,37 @@ public class OrderController : Controller
     [HttpGet]
     public IActionResult CheckoutOrder()
     {
-        if (HttpContext.Session.GetString("Cart") == null || HttpContext.Session.GetString("Cart") == "[]")
+        try
         {
+            if (HttpContext.Session.GetString("Cart") == null || HttpContext.Session.GetString("Cart") == "[]")
+            {
+                return RedirectToAction("Index", "Client");
+            }
+
+            ViewBag.OrderItems = GetOrderItems();
+            return View();
+        }
+        catch (Exception ex)
+        {
+            var user = User.Identity?.Name ?? "Anonymous";
+            _logger.LogError(ex, ex.Message + "\n User:" + user );
             return RedirectToAction("Index", "Client");
         }
-        ViewBag.OrderItems = GetOrderItems();
-        return View();
     }
 
     public Order CreateOrder(int userId)
     {
-        var order = new Order
-        {
-            OrderDate = DateTime.UtcNow,
-            OrderStatus = OrderStatus.Pending,
-            UserId = userId
-        };
-        _context.Orders.Add(order);
-        _context.SaveChanges();
-        return order;
+       
+            var order = new Order
+            {
+                OrderDate = DateTime.UtcNow,
+                OrderStatus = OrderStatus.Pending,
+                UserId = userId
+            };
+            _context.Orders.Add(order);
+            _context.SaveChanges();
+            return order;
+            
     }
     
     [HttpGet]
@@ -94,10 +109,19 @@ public class OrderController : Controller
     [HttpGet]
     public IActionResult AllOrders()
     {
-        var orderList = _context.Orders
-            .Include(o => o.OrderItems)
-            .ThenInclude(oi => oi.Product)
-            .ToList();
-        return View(orderList);
+        try
+        {
+            var orderList = _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .ToList();
+            return View(orderList);
+        }
+        catch (Exception ex)
+        {
+            var user = User.Identity?.Name ?? "Anonymous";
+            _logger.LogError(ex, ex.Message + "\n User:" + user );
+            return RedirectToAction("ServerError", "Error");
+        }
     }
 }
