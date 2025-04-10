@@ -1,17 +1,22 @@
 ﻿@{
-    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout != null)
     {
         Layout = parentLayout.ToString();
     }
 }
 
-<h1>Manage your account</h1>
+<div class="container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-12">
+            <div class="px-4 py-2 bg-light border-bottom">
+                <h1 class="display-4 fw-bold font-monospace text-start">Manage your account</h1>
+                <p class="lead mb-4 font-monospace text-start">Change your account settings</p>
+            </div>
+        </div>
+    </div>
 
-<div>
-    <h2>Change your account settings</h2>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
+    <div class="row g-0 mt-4 px-4">
+        <div class="col-md-3 pe-md-4">
             <partial name="_ManageNav" />
         </div>
         <div class="col-md-9">
