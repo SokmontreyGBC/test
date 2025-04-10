@@ -16,6 +16,11 @@ public class ErrorController : Controller
     {
         return View("InternalServerError");
     }
+    [Route("Error/Unauthorized")]
+    public IActionResult UnauthorizedPage()
+    {
+        return View("Unauthorized");  
+    }
 
     [Route("Error/{statusCode}")]
     public IActionResult GlobalError(int statusCode)
