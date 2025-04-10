@@ -9,10 +9,12 @@ namespace Assignment1.Controllers;
 public class ProductController: Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<ProductController> _logger;
 
-    public ProductController(ApplicationDbContext context)
+    public ProductController(ApplicationDbContext context, ILogger<ProductController> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
 
