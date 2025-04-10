@@ -5,6 +5,7 @@ using Assignment1.Models;
 
 namespace Assignment1.Controllers;
 
+
 public class HomeController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -23,7 +24,6 @@ public class HomeController : Controller
             .Take(3)
             .ToList();
 
-      
         return View(topProducts);
     }
     

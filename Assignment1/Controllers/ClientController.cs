@@ -9,6 +9,7 @@ namespace Assignment1.Controllers;
 /*
  *  This is the client inventory controller
  */
+//[Route ("[controller]/[action]")]
 public class ClientController : Controller
 {
     private readonly ApplicationDbContext _context;

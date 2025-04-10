@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Assignment1.Controllers;
 
+//[Route ("[controller]/[action]")]
 public class ErrorController : Controller
 {
     [Route("Error/404")]
