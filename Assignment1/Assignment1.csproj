@@ -27,7 +27,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Migrations\" />
+        <Folder Include="Areas\Admin\" />
+        <Folder Include="Areas\Client\" />
+        <Folder Include="Migrations\"/>
     </ItemGroup>
 
     <ItemGroup>

@@ -15,46 +15,6 @@ public class OrderController : Controller
         _context = context;
     }
 
-    /*[HttpPost]
-    public IActionResult CreateOrder(List<OrderItem> cartItems)
-    {
-        try
-        {
-            // temp guest user
-            var user = new User { UserId = -1, UserEmail = "Test", UserType = UserType.Guest };
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            // create the order first for an id
-            var order = new Order
-            {
-                OrderDate = DateTime.Now,
-                OrderStatus = OrderStatus.Pending,
-                UserId = -1,
-            };
-            _context.Orders.Add(order);
-            _context.SaveChanges();
-
-            foreach (var item in cartItems)
-            {
-                var orderItem = new OrderItem
-                {
-                    OrderId = order.OrderId,
-                    ProductId = item.ProductId,
-                    Quantity = item.Quantity
-                };
-                _context.OrderItems.Add(orderItem);
-            }
-
-            _context.SaveChanges();
-            return Ok(order);
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }*/
-
-
     private List<OrderItem> GetOrderItems()
     {
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
@@ -84,25 +44,6 @@ public class OrderController : Controller
         ViewBag.OrderItems = GetOrderItems();
         return View();
     }
-
-    /*public User GetOrCreateUser(string email, string name)
-    {
-        // find by email
-        var user = _context.Users
-            .FirstOrDefault(u => u.UserEmail == email);
-        if (user == null)
-        {
-            user = new User
-            {
-                UserEmail = email,
-                UserName = name,
-                UserType = UserType.Guest
-            };
-            _context.Users.Add(user);
-            _context.SaveChanges();
-        }
-        return user;
-    }*/
 
     public Order CreateOrder(int userId)
     {
@@ -149,26 +90,6 @@ public class OrderController : Controller
         });
         _context.SaveChanges();
     }
-
-    /*[HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult CheckoutOrder(User userForm)
-    {
-        var cartItems = GetOrderItems();
-        if (!ModelState.IsValid)
-        {
-            ViewBag.OrderItems = cartItems;
-            return View(userForm);
-        }
-
-        var user = GetOrCreateUser(userForm.UserEmail, userForm.UserName ?? "Guest");
-        var order = CreateOrder(user.UserId);
-        var orderItems = CreateOrderItems(order.OrderId, cartItems);
-        UpdateProductStock(orderItems);
-
-        TempData["Name"] = user.UserName;
-        return RedirectToAction("CheckoutConfirm", "Order");
-    }*/
 
     [HttpGet]
     public IActionResult AllOrders()

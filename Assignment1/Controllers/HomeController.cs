@@ -7,8 +7,6 @@ namespace Assignment1.Controllers;
 
 public class HomeController : Controller
 {
-    
-    
     private readonly ApplicationDbContext _context;
     private readonly ILogger<HomeController> _logger;
     public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
@@ -24,7 +22,8 @@ public class HomeController : Controller
             .OrderByDescending(p => p.ProductStock)
             .Take(3)
             .ToList();
-    
+
+      
         return View(topProducts);
     }
     

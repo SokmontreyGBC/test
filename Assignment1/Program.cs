@@ -1,4 +1,5 @@
 using Assignment1.Data;
+using Assignment1.Models;
 using Assignment1.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -24,11 +25,13 @@ builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-
 var app = builder.Build();
+
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -42,10 +45,17 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapRazorPages();
 app.MapStaticAssets();
 
 app.UseSession();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await DbSeeder.SeedAdmin(services);
+}
 
 app.MapControllerRoute(
         name: "areas",

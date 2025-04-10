@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace Assignment1.Data;
 
-public class ApplicationDbContext : IdentityDbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
     
@@ -12,7 +12,6 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Category> Categories{ get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         //Must ensure Identity's configuration are applied first
@@ -20,7 +19,7 @@ public class ApplicationDbContext : IdentityDbContext
         modelBuilder.HasDefaultSchema("Identity");
     
          
-        modelBuilder.Entity<IdentityUser>(entity =>
+        modelBuilder.Entity<ApplicationUser>(entity =>
         {
             entity.ToTable("User");
         });
