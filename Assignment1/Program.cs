@@ -18,6 +18,8 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
 });
 
+// "DefaultConnection" : "Host=localhost;Port=5432;Database=assignment1;Username=postgres;Password=password"
+
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
