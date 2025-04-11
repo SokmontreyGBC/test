@@ -1,4 +1,4 @@
-namespace Assignment1.Models;
+namespace Assignment1.Areas.Models;
 
 public class ErrorViewModel
 {

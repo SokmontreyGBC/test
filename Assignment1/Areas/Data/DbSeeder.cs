@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Assignment1.Data
+namespace Assignment1.Areas.Data
 {
     public static class DbSeeder
     {

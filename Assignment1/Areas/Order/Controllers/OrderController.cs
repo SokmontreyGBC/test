@@ -1,14 +1,13 @@
 using System.Text.Json;
-using Assignment1.Data;
-using Assignment1.Models;
+using Assignment1.Areas.Data;
+using Assignment1.Areas.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Assignment1.Controllers;
+namespace Assignment1.Areas.Order.Controllers;
 
-//[Route ("[controller]/[action]")]
 public class OrderController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -24,7 +23,6 @@ public class OrderController : Controller
         _context = context;
         _logger = logger;
     }
-    
     
     private List<OrderItem> GetOrderItems()
     {
@@ -47,7 +45,6 @@ public class OrderController : Controller
     }
 
     [HttpGet]
-    
     [Authorize(Roles="User,Admin)")]
     public IActionResult CheckoutOrder()
     {

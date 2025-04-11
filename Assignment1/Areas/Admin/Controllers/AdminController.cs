@@ -1,12 +1,12 @@
 using System.Globalization;
 using System.Linq.Expressions;
-using Assignment1.Data;
-using Assignment1.Models;
+using Assignment1.Areas.Data;
+using Assignment1.Areas.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Assignment1.Controllers;
+namespace Assignment1.Areas.Admin.Controllers;
 
 /*
  *  This is the employee inventory controller

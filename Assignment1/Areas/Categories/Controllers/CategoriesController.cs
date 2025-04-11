@@ -3,9 +3,8 @@ using Assignment1.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Assignment1.Controllers;
+namespace Assignment1.Areas.Categories.Controllers;
 
-//[Route ("[controller]/[action]")]
 public class CategoriesController : Controller
 {
     private readonly ApplicationDbContext _context;

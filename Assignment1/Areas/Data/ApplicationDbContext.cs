@@ -2,7 +2,8 @@ using Assignment1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-namespace Assignment1.Data;
+
+namespace Assignment1.Areas.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {

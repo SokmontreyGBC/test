@@ -1,10 +1,9 @@
 using System.Diagnostics;
-using Assignment1.Data;
+using Assignment1.Areas.Data;
 using Microsoft.AspNetCore.Mvc;
-using Assignment1.Models;
+using Assignment1.Areas.Models;
 
-namespace Assignment1.Controllers;
-
+namespace Assignment1.Areas.Home.Controllers;
 
 public class HomeController : Controller
 {

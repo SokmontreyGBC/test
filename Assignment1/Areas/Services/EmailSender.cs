@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using MimeKit;
 using SendGrid.Helpers.Mail;
 using SendGrid;
-namespace Assignment1.Services;
+
+namespace Assignment1.Areas.Services;
 
 public class EmailSender(IConfiguration configuration): IEmailSender
 {

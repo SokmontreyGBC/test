@@ -1,6 +1,6 @@
-using Assignment1.Data;
-using Assignment1.Models;
-using Assignment1.Services;
+using Assignment1.Areas.Data;
+using Assignment1.Areas.Models;
+using Assignment1.Areas.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;

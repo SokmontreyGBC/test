@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
-using Assignment1.Data;
-using Assignment1.Models;
+using Assignment1.Areas.Data;
+using Assignment1.Areas.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Org.BouncyCastle.Crypto.Engines;
 
-
-namespace Assignment1.Controllers;
-//[Route ("[controller]/[action]")]
+namespace Assignment1.Areas.Product.Controllers;
 
 public class ProductController: Controller
 {
@@ -108,8 +106,7 @@ public class ProductController: Controller
             return View(product);
         }
         catch (Exception ex)
-        {
-            
+ {
             var user = User.Identity?.Name ?? "Anonymous";
             _logger.LogError(ex, ex.Message + "\n User:" + user );
             return RedirectToAction("ServerError", "Error");
