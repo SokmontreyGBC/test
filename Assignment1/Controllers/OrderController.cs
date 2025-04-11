@@ -34,6 +34,7 @@ public class OrderController : Controller
                     Quantity = oi.Quantity,
                     Product = p
                 })
+            .Where(item => item.Product != null)
             .ToList();
     }
 
@@ -47,8 +48,9 @@ public class OrderController : Controller
                 return RedirectToAction("Index", "Client");
             }
 
-            ViewBag.OrderItems = GetOrderItems();
-            return View();
+            ViewBag.User = User;
+
+            return View(GetOrderItems());
         }
         catch (Exception ex)
         {
