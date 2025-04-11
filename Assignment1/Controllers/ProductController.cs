@@ -11,7 +11,7 @@ using Org.BouncyCastle.Crypto.Engines;
 
 namespace Assignment1.Controllers;
 //[Route ("[controller]/[action]")]
-[Authorize(Roles = "Admin")]
+
 public class ProductController: Controller
 {
     private readonly ApplicationDbContext _context;
@@ -22,7 +22,6 @@ public class ProductController: Controller
         _context = context;
         _logger = logger;
     }
-
 
     [HttpGet]
     public IActionResult GetProducts(
@@ -74,9 +73,9 @@ public class ProductController: Controller
         }
      
     }
-    
-   
+
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         try
@@ -94,6 +93,7 @@ public class ProductController: Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public IActionResult Create(Product product)
     {
         try
@@ -117,6 +117,7 @@ public class ProductController: Controller
         }
     }
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public IActionResult Edit(int id)
     {
         var product = _context.Products.Find(id);
@@ -132,6 +133,7 @@ public class ProductController: Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public IActionResult Edit(int id,
         [Bind("ProductId,ProductName,ProductPrice,ProductDescription,CategoryId,ProductStock")]
         Product product)
@@ -171,6 +173,7 @@ public class ProductController: Controller
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete(int id)
     {
         try
@@ -193,6 +196,7 @@ public class ProductController: Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "Admin")]
     public IActionResult DeleteConfirmed(int productid)
     {
         try
