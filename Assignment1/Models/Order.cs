@@ -9,6 +9,7 @@ public class Order
     public OrderStatus OrderStatus { get; set; }
     public string UserId { get; set; } = null!;
     public DateTime OrderDate { get; set; }
+    public string Address { get; set; } = null!;
 
     // Navigation Properties
 
