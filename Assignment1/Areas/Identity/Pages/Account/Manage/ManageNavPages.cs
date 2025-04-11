@@ -13,6 +13,7 @@ namespace  Assignment1.Areas.Identity.Pages.Account.Manage
     /// </summary>
     public static class ManageNavPages
     {
+        public static string ChangeName => "ChangeName";
         public static string UserOrder => "UserOrder";
         public static string Phone => "Phone";
         /// <summary>
@@ -67,6 +68,7 @@ namespace  Assignment1.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        public static string ChangeNameNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangeName);
         public static string UserOrderNavClass(ViewContext viewContext) => PageNavClass(viewContext, UserOrder);
         
         public static string PhoneNavClass(ViewContext viewContext) => PageNavClass(viewContext, Phone);
