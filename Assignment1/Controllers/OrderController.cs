@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Assignment1.Data;
 using Assignment1.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,9 +12,14 @@ public class OrderController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly ILogger<OrderController> _logger;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public OrderController(ApplicationDbContext context , ILogger<OrderController> logger)
+    public OrderController(
+        UserManager<ApplicationUser> userManager,
+        ApplicationDbContext context,
+        ILogger<OrderController> logger)
     {
+        _userManager = userManager;
         _context = context;
         _logger = logger;
     }
@@ -48,6 +54,7 @@ public class OrderController : Controller
                 return RedirectToAction("Index", "Client");
             }
 
+            // TODO update this base on _userManager;
             ViewBag.User = User;
 
             return View(GetOrderItems());
@@ -60,25 +67,27 @@ public class OrderController : Controller
         }
     }
 
-    public Order CreateOrder(int userId)
-    {
-       
-            var order = new Order
-            {
-                OrderDate = DateTime.UtcNow,
-                OrderStatus = OrderStatus.Pending,
-                UserId = userId
-            };
-            _context.Orders.Add(order);
-            _context.SaveChanges();
-            return order;
-            
-    }
-    
-    [HttpGet]
-    public IActionResult CheckoutConfirm()
+    [HttpPost]
+    public async Task<IActionResult> CheckoutConfirm()
     {
         ViewBag.OrderItems = GetOrderItems();
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Unauthorized("User not found.");
+        }
+
+        var order = new Order
+        {
+            OrderDate = DateTime.UtcNow,
+            OrderStatus = OrderStatus.Pending,
+            UserId = user.Id
+        };
+
+        _context.Orders.Add(order);
+        await _context.SaveChangesAsync();
+
         HttpContext.Session.Remove("Cart");
         return View();
     }
