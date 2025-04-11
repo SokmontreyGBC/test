@@ -19,9 +19,7 @@ public class UnitTest
             .Options;
 
         var context = new ApplicationDbContext(options);
-
         var logger = new Mock<ILogger<ProductController>>().Object;
-
         var controller = new ProductController(context, logger);
 
         var product = new Product
