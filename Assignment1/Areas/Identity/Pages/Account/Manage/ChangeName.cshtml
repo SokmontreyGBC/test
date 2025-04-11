@@ -1,0 +1,39 @@
+﻿@page
+@model Assignment1.Areas.Identity.Pages.Account.Manage.ChangeNameModel
+@{
+    ViewData["Title"] = "Manage Name";
+    ViewData["ActivePage"] = ManageNavPages.ChangeName; // You might need to add this to ManageNavPages
+    ViewData["Page"] = "Account";
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="bg-white border card p-4">
+    <form id="name-form" method="post">
+        <div asp-validation-summary="All" class="text-danger font-monospace small" role="alert"></div>
+        <div class="row mb-4">
+            <div class="col">
+                <label asp-for="Input.NewFirstName" class="form-label font-monospace">New First Name</label>
+                <input asp-for="Input.NewFirstName" class="form-control font-monospace" value="@Model.FirstName" />
+                <span asp-validation-for="Input.NewFirstName" class="text-danger font-monospace small"></span>
+            </div>
+
+            <div class="col">
+                <label asp-for="Input.NewLastName" class="form-label font-monospace">New Last Name</label>
+                <input asp-for="Input.NewLastName" class="form-control font-monospace" value="@Model.LastName" />
+                <span asp-validation-for="Input.NewLastName" class="text-danger font-monospace small"></span>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-5">
+            <button id="update-name-button" type="submit"
+                    class="btn btn-outline-dark font-monospace">
+                Update name
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
