@@ -3,11 +3,11 @@
     <ul class="navbar-nav flex-grow-1">
         <li class="nav-item">
             <a class="nav-link @( (string)ViewData["Page"]! == "Home" ? "text-primary" : "text-dark") "
-               asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+               asp-area="" asp-controller="Home" asp-action="Index">  <i class="fa-solid fa-house text-dark"></i> Home </a>
         </li>
         <li class="nav-item">
             <a class="nav-link @( (string)ViewData["Page"]! == "Products" ? "text-primary" : "text-dark")"
-               asp-area="" asp-controller="Client" asp-action="Index">Products</a>
+               asp-area="" asp-controller="Client" asp-action="Index"> <i class="fa-solid fa-cart-shopping text-dark"></i> Products</a>
         </li>
         @Html.Partial("_LoginPartial")
     </ul>
@@ -17,13 +17,13 @@
         <ul class="navbar-nav flex-grow">
             <li class="nav-item">
                 <a class="nav-link @((string)ViewData["Page"]! == "Admin" ? "text-primary" : "text-dark")"
-                   asp-area="" asp-controller="Admin" asp-action="Index">
+                   asp-area="" asp-controller="Admin" asp-action="Index"><i class="fa-solid fa-user-tie text-dark"></i>
                     Admin
                 </a>
             </li>
             <li class="nav-item mb-5">
                 <a class="nav-link @((string)ViewData["Page"]! == "Categories" ? "text-primary" : "text-dark")"
-                   asp-area="" asp-controller="Categories" asp-action="Index">
+                   asp-area="" asp-controller="Categories" asp-action="Index"><i class="fa-solid fa-list text-dark"></i>
                     Categories
                 </a>
             </li>
