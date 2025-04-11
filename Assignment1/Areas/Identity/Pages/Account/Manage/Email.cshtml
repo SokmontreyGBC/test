@@ -11,34 +11,10 @@
 <div class="bg-white border card p-4">
     <form id="email-form" method="post">
         <div asp-validation-summary="All" class="text-danger font-monospace small" role="alert"></div>
-
-        @if (Model.IsEmailConfirmed)
-        {
-            <div class="mb-4">
-                <label asp-for="Email" class="form-label font-monospace">Current Email</label>
-                <div class="input-group">
-                    <input asp-for="Email" class="form-control font-monospace" placeholder="Please enter your email." disabled />
-                    <span class="input-group-text border font-monospace text-success">✓</span>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="mb-4">
-                <label asp-for="Email" class="form-label font-monospace">Current Email</label>
-                <input asp-for="Email" class="form-control font-monospace" placeholder="Please enter your email." disabled />
-                <div class="mt-2">
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail"
-                            class="btn btn-outline-secondary font-monospace btn-sm">
-                        Send verification email
-                    </button>
-                </div>
-            </div>
-        }
-
+        
         <div class="mb-4">
-            <label asp-for="Input.NewEmail" class="form-label font-monospace">New Email</label>
-            <input asp-for="Input.NewEmail" class="form-control font-monospace" autocomplete="email" aria-required="true" placeholder="Please enter new email." />
+            <label asp-for="Input.NewEmail" class="form-label font-monospace">Change Email</label>
+            <input asp-for="Input.NewEmail" class="form-control font-monospace" autocomplete="email" aria-required="true" value="@Model.Email" />
             <span asp-validation-for="Input.NewEmail" class="text-danger font-monospace small"></span>
         </div>
 
