@@ -11,7 +11,7 @@ using Org.BouncyCastle.Crypto.Engines;
 
 namespace Assignment1.Controllers;
 //[Route ("[controller]/[action]")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class ProductController: Controller
 {
     private readonly ApplicationDbContext _context;

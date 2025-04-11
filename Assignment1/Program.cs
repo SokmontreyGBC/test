@@ -31,7 +31,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Error/Unauthorized"; // ⚠ This replaces the login page!
+    options.AccessDeniedPath = "/Error/Unauthorized";
 });
 
 var app = builder.Build();
