@@ -1,0 +1,111 @@
+﻿@page
+@model Assignment1.Areas.Identity.Pages.Account.Manage.UserOrderModel
+@{
+    ViewData["Title"] = "My Orders";
+    ViewData["ActivePage"] = ManageNavPages.UserOrder;
+    ViewData["Page"] = "Account";
+}
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="bg-white border card p-4">
+    <h5 class="font-monospace mb-3">Order History</h5>
+
+    @if (!Model.Orders.Any())
+    {
+        <div class="alert alert-info font-monospace">
+            You haven't placed any orders yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr class="font-monospace small">
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var order in Model.Orders)
+                {
+                    decimal orderTotal = order.OrderItems.Sum(oi => oi.Product?.ProductPrice * oi.Quantity ?? 0);
+
+                    <tr class="font-monospace">
+                        <td>@order.OrderId</td>
+                        <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                        <td>@order.OrderItems.Count</td>
+                        <td>@orderTotal.ToString("C")</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-dark font-monospace"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#orderDetails-@order.OrderId">
+                                Details
+                            </button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+
+        @foreach (var order in Model.Orders)
+        {
+            decimal orderTotal = order.OrderItems.Sum(oi => oi.Product?.ProductPrice * oi.Quantity ?? 0);
+
+            <div class="modal fade" id="orderDetails-@order.OrderId" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title font-monospace">Order #@order.OrderId Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <p class="font-monospace"><strong>Date:</strong> @order.OrderDate.ToString("MMMM dd, yyyy HH:mm")</p>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr class="font-monospace small">
+                                        <th>Product</th>
+                                        <th class="text-end">Price</th>
+                                        <th class="text-end">Quantity</th>
+                                        <th class="text-end">Subtotal</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (var item in order.OrderItems)
+                                    {
+                                        decimal subtotal = item.Product?.ProductPrice * item.Quantity ?? 0;
+                                        <tr class="font-monospace">
+                                            <td>@item.Product?.ProductName</td>
+                                            <td class="text-end">@(item.Product?.ProductPrice.ToString("C") ?? "$0.00")</td>
+                                            <td class="text-end">@item.Quantity</td>
+                                            <td class="text-end">@subtotal.ToString("C")</td>
+                                        </tr>
+                                    }
+                                    </tbody>
+                                    <tfoot>
+                                    <tr class="font-monospace">
+                                        <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                        <td class="text-end"><strong>@orderTotal.ToString("C")</strong></td>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-dark font-monospace" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
