@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Assignment1.Data;
 using Assignment1.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,8 @@ public class OrderController : Controller
         _context = context;
         _logger = logger;
     }
-
+    
+    
     private List<OrderItem> GetOrderItems()
     {
         var cartJson = HttpContext.Session.GetString("Cart") ?? "[]";
@@ -45,6 +47,8 @@ public class OrderController : Controller
     }
 
     [HttpGet]
+    
+    [Authorize(Roles="User,Admin)")]
     public IActionResult CheckoutOrder()
     {
         try
@@ -68,7 +72,8 @@ public class OrderController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken] // Add this to prevent CSRF attacks
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles="User,Admin)")]
     public async Task<IActionResult> CheckoutConfirm(string address)
     {
         if (string.IsNullOrEmpty(address))
@@ -133,6 +138,7 @@ public class OrderController : Controller
     }
 
     [HttpGet]
+    [Authorize(Roles="Admin)")]
     public IActionResult AllOrders()
     {
         try
