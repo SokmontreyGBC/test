@@ -1,3 +1,4 @@
+@inject SignInManager<ApplicationUser> SignInManager
 @model List<Product>
 @{
     ViewData["Page"] = "Products";
@@ -78,16 +79,30 @@
     </div>
 
     <div class="offcanvas-footer bg-light border-top p-3 d-flex justify-content-end">
-        <a class="btn btn-dark font-monospace"
-           asp-action="CheckoutOrder"
-           asp-controller="Order">
-            Checkout
-        </a>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            <a class="btn btn-dark font-monospace"
+               asp-action="CheckoutOrder"
+               asp-controller="Order">
+                Checkout
+            </a>
+        }
+        else
+        {
+            <a
+                class="btn btn-outline-dark font-monospace"
+                id="login"
+                asp-area="Identity"
+                asp-page="/Account/Login"
+                asp-route-returnUrl="@Url.Action("Index", "Client", null)">
+                Login to Checkout
+            </a>
+        }
     </div>
 </div>
 
 
-<div id="temp-hidden" class="table-responsive border mt-4 rounded-3" >
+<div id="temp-hidden" class="table-responsive border mt-4 rounded-3">
     <table class="table table-borderless font-monospace">
         <thead class="border-bottom">
         <tr>
@@ -99,8 +114,8 @@
         </tr>
         </thead>
 
-        <tbody class="tableData" id="product-rows-container" >
-        
+        <tbody class="tableData" id="product-rows-container">
+
         @* @await Html.PartialAsync("_ProductRows", Model, ViewData) *@
         </tbody>
     </table>
@@ -118,7 +133,8 @@
         <div class="d-flex">
             <div class="toast-body" id="msg-container">
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close">
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close">
 
             </button>
         </div>
@@ -128,130 +144,129 @@
 
 @section Scripts {
     <script>
-    let isDesc = false;
-    let orderBy = "ID";
-    let searchText = "";
-    let selectedCategoriesString = "@selectedCategoryString";
+        let isDesc = false;
+        let orderBy = "ID";
+        let searchText = "";
+        let selectedCategoriesString = "@selectedCategoryString";
 
-    function orderByColumn(column) {
-        orderBy = column;
-        getProducts();
-    }
-
-    function toggleOrderType() {
-        isDesc = !isDes;
-        $("#order-arrow-icon").attr("class", isDesc
-            ? "fa-solid fa-arrow-up"
-            : "fa-solid fa-arrow-down");
-        getProducts();
-    }
-
-    function getProducts() {
-        
-        $('#ajax-spinner').show();
-        setTimeout(function (){ $.ajax({
-
-            url: `/Product/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
-                `&orderBy=${orderBy}` +
-                `&searchString=${searchText}` +
-                `&selectedCategoriesString=${selectedCategoriesString}` +
-                `&isAdmin=${false}`,
-            type: "GET",
-            success: function (data) {
-                $("#product-rows-container").html(data);
-                $(".add-to-cart-form").submit(onAddToCart);
-                $('#ajax-spinner').hide();
-              
-            }
-        });
-            
-        },1000);
-       
-    }
-
-    $("#search-input").on("keyup", function () {
-        searchText = $(this).val();
-        getProducts();
-    });
-
-    $(document).on('click', '.category-tag', function() {
-        const selectedCategories = $("#selected-category-tag-container")
-            .children()
-            .toArray();
-
-        selectedCategoriesString = selectedCategories.length
-            ? selectedCategories
-                .map(function(item) {
-                    return item.name;
-                })
-                .join(",")
-            : "";
-
-        getProducts();
-    });
-
-    $(document).ready(function () {
-        getProducts();
-    });
-
-    // ============================== Cart related ==============================
-
-    const liveToastElement = $("#liveToast")
-    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToastElement)
-
-    const message = "@TempData["Message"]";
-    const isSuccess = "@TempData["Success"]" === "True";
-
-    if (message) {
-        $("#msg-container").html(message);
-        if (isSuccess) {
-            liveToastElement[0].classList.add('text-bg-success');
-            liveToastElement[0].classList.remove('text-bg-danger');
-        } else {
-            liveToastElement[0].classList.add('text-bg-danger');
-            liveToastElement[0].classList.remove('text-bg-success');
+        function orderByColumn(column) {
+            orderBy = column;
+            getProducts();
         }
-        toastBootstrap.show();
-    }
 
-    function onAddToCart(e) {
-        e.preventDefault();
-        const form = this;
-        const productId = form.querySelector('input[name="id"]').value;
-        const quantity = form.querySelector('input[name="quantity"]').value;
+        function toggleOrderType() {
+            isDesc = !isDes;
+            $("#order-arrow-icon").attr("class", isDesc
+                ? "fa-solid fa-arrow-up"
+                : "fa-solid fa-arrow-down");
+            getProducts();
+        }
 
-        $.ajax({
-            url: `@Url.Action("AddToCart", "Cart")?id=${productId}&quantity=${quantity}`,
-            type: "GET",
-            complete: function (data) {
-                const resp = JSON.parse(data.responseText);
-                $('#msg-container').html(resp.message);
+        function getProducts() {
 
-                if (resp.success) {
-                    liveToastElement[0].classList.add('text-bg-success');
-                    liveToastElement[0].classList.remove('text-bg-danger');
-                } else {
-                    liveToastElement[0].classList.remove('text-bg-success');
-                    liveToastElement[0].classList.add('text-bg-danger');
-                }
+            $('#ajax-spinner').show();
+            setTimeout(function () {
+                $.ajax({
 
-                toastBootstrap.show();
-            },
+                    url: `/Product/GetProducts?orderType=${isDesc ? "desc" : "asc"}` +
+                        `&orderBy=${orderBy}` +
+                        `&searchString=${searchText}` +
+                        `&selectedCategoriesString=${selectedCategoriesString}` +
+                        `&isAdmin=${false}`,
+                    type: "GET",
+                    success: function (data) {
+                        $("#product-rows-container").html(data);
+                        $(".add-to-cart-form").submit(onAddToCart);
+                        $('#ajax-spinner').hide();
+
+                    }
+                });
+
+            }, 1000);
+
+        }
+
+        $("#search-input").on("keyup", function () {
+            searchText = $(this).val();
+            getProducts();
         });
-    }
 
-    function getCart() {
-        $.ajax({
-            url: `@Url.Action("GetCart", "Cart")`,
-            type: "GET",
-            success: function (data) {
-                $("#cart-container").html(data);
+        $(document).on('click', '.category-tag', function () {
+            const selectedCategories = $("#selected-category-tag-container")
+                .children()
+                .toArray();
+
+            selectedCategoriesString = selectedCategories.length
+                ? selectedCategories
+                    .map(function (item) {
+                        return item.name;
+                    })
+                    .join(",")
+                : "";
+
+            getProducts();
+        });
+
+        $(document).ready(function () {
+            getProducts();
+        });
+
+        // ============================== Cart related ==============================
+
+        const liveToastElement = $("#liveToast")
+        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(liveToastElement)
+
+        const message = "@TempData["Message"]";
+        const isSuccess = "@TempData["Success"]" === "True";
+
+        if (message) {
+            $("#msg-container").html(message);
+            if (isSuccess) {
+                liveToastElement[0].classList.add('text-bg-success');
+                liveToastElement[0].classList.remove('text-bg-danger');
+            } else {
+                liveToastElement[0].classList.add('text-bg-danger');
+                liveToastElement[0].classList.remove('text-bg-success');
             }
-        });
-    }
+            toastBootstrap.show();
+        }
 
-    
+        function onAddToCart(e) {
+            e.preventDefault();
+            const form = this;
+            const productId = form.querySelector('input[name="id"]').value;
+            const quantity = form.querySelector('input[name="quantity"]').value;
 
-  
-</script>
+            $.ajax({
+                url: `@Url.Action("AddToCart", "Cart")?id=${productId}&quantity=${quantity}`,
+                type: "GET",
+                complete: function (data) {
+                    const resp = JSON.parse(data.responseText);
+                    $('#msg-container').html(resp.message);
+
+                    if (resp.success) {
+                        liveToastElement[0].classList.add('text-bg-success');
+                        liveToastElement[0].classList.remove('text-bg-danger');
+                    } else {
+                        liveToastElement[0].classList.remove('text-bg-success');
+                        liveToastElement[0].classList.add('text-bg-danger');
+                    }
+
+                    toastBootstrap.show();
+                },
+            });
+        }
+
+        function getCart() {
+            $.ajax({
+                url: `@Url.Action("GetCart", "Cart")`,
+                type: "GET",
+                success: function (data) {
+                    $("#cart-container").html(data);
+                }
+            });
+        }
+
+
+    </script>
 }
