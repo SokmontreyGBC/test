@@ -1,13 +1,10 @@
-@using Microsoft.AspNetCore.Http.Features
-@* @model User *@
+@model Order
 
 @{
     ViewBag.Title = "Order Confirmation";
     Layout = "_Layout";
-    decimal cost = 0;
-    foreach (var items in ViewBag.OrderItems)
-        cost += items.Product.ProductPrice * items.Quantity;
-    
+    var cost = Model.OrderItems.Sum(items =>
+        items.Product!.ProductPrice * items.Quantity);
 }
 
 <div class="container-fluid p-0 mt-5 mb-5">
@@ -15,7 +12,7 @@
         <div class="col-12 col-md-8 p-4">
             <div class="bg-white border p-5 shadow-sm">
                 <h3 class="display-6 fw-bold font-monospace text-start">Your Order Confirmed!</h3>
-                <h4 class="fw-bold font-monospace d-block mt-4">Thanks @TempData["Name"]!</h4>
+                <h4 class="fw-bold font-monospace d-block mt-4">Thanks for your order!</h4>
                 <p class="font-monospace">Your order has been confirmed and will be shipped soon!</p>
 
                 <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
@@ -25,20 +22,15 @@
                                 <td>
                                     <div class="py-2">
                                         <span class="d-block text-muted font-monospace">Order Date</span>
-                                        <span class="font-monospace">@DateTime.Now.ToString("MMMM dd, yyyy")</span>
+                                        <span class="font-monospace">@Model.OrderDate</span>
                                     </div>
                                 </td>
-                                @* <td> *@
-                                @*     <div class="py-2"> *@
-                                @*         <span class="d-block text-muted font-monospace">Order No</span> *@
-                                @*         <span class="font-monospace">To be inserted later</span> *@
-                                @*     </div> *@
-                                @* </td> *@
                                 <td></td>
                                 <td>
                                     <div class="py-2">
                                         <span class="d-block text-muted font-monospace">Shipping Address</span>
-                                        <span class="font-monospace">Generic 123 Street, K1K 1K1</span>
+
+                                        <span class="font-monospace">@Model.Address</span>
                                     </div>
                                 </td>
                             </tr>
@@ -48,18 +40,18 @@
 
                 <div class="product border-bottom table-responsive">
                     <table class="table table-borderless">
-                        @foreach (var item in ViewBag.OrderItems)
+                        @foreach (var item in Model.OrderItems)
                         {
                             <tbody>
                                 <tr>
-                                    <td width="60%">
-                                        <span class="fw-bold font-monospace h5">@item.Product.ProductName</span>
+                                    <td style="width: 60%;">
+                                        <span class="fw-bold font-monospace h5">@item.Product!.ProductName</span>
                                         <div class="product-qty">
                                             <span class="d-block font-monospace">@item.Product.ProductDescription</span>
                                             <span class="font-monospace">Quantity: @item.Quantity</span>
                                         </div>
                                     </td>
-                                    <td width="20%">
+                                    <td style="width:20%">
                                         <div class="text-end">
                                             <span class="fw-bold font-monospace">$@item.Product.ProductPrice</span>
                                         </div>
@@ -92,7 +84,9 @@
                 </div>
 
                 <p class="font-monospace">We will be sending a shipping confirmation email when the item has shipped successfully!</p>
-                <a asp-action="Index" asp-controller="Home" class="btn btn-dark font-monospace">Back to Home</a>
+                <a asp-action="Index"
+                   asp-controller="Client"
+                   class="btn btn-dark font-monospace">Back to Home</a>
             </div>
         </div>
     </div>

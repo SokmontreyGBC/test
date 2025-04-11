@@ -55,18 +55,25 @@
             }
         </div>
 
-        <form class="d-flex flex-row gap-2 mt-4"
+        <form class="d-flex flex-column gap-3 mt-4"
               asp-controller="Order"
               asp-action="CheckoutConfirm"
               method="post">
-            <a asp-controller="Client"
-               asp-action="Index"
-               class="btn btn-outline-dark w-100 font-monospace">
-                Go Back
-            </a>
-            <button type="submit" class="btn btn-dark font-monospace w-100">
-                Place Order
-            </button>
+            <div class="mb-3">
+                <label for="address" class="form-label font-monospace">Delivery Address</label>
+                <input type="text" class="form-control font-monospace" id="address" name="address" required>
+            </div>
+            
+            <div class="d-flex flex-row gap-2">
+                <a asp-controller="Client"
+                   asp-action="Index"
+                   class="btn btn-outline-dark w-100 font-monospace">
+                    Go Back
+                </a>
+                <button type="submit" class="btn btn-dark font-monospace w-100">
+                    Place Order
+                </button>
+            </div>
         </form>
     </div>
 </div>

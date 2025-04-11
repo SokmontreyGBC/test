@@ -68,9 +68,13 @@ public class OrderController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> CheckoutConfirm()
+    [ValidateAntiForgeryToken] // Add this to prevent CSRF attacks
+    public async Task<IActionResult> CheckoutConfirm(string address)
     {
-        ViewBag.OrderItems = GetOrderItems();
+        if (string.IsNullOrEmpty(address))
+        {
+            return BadRequest("Address is required");
+        }
 
         var user = await _userManager.GetUserAsync(User);
         if (user == null)
@@ -78,18 +82,29 @@ public class OrderController : Controller
             return Unauthorized("User not found.");
         }
 
+        // Check if cart is empty
+        var cartItems = GetOrderItems();
+        if (cartItems.Count == 0)
+        {
+            return RedirectToAction("Index", "Client");
+        }
+
         var order = new Order
         {
             OrderDate = DateTime.UtcNow,
             OrderStatus = OrderStatus.Pending,
-            UserId = user.Id
+            UserId = user.Id,
+            Address = address
         };
 
         _context.Orders.Add(order);
         await _context.SaveChangesAsync();
 
+        var orderItems = CreateOrderItems(order.OrderId, cartItems);
+        UpdateProductStock(orderItems);
+
         HttpContext.Session.Remove("Cart");
-        return View();
+        return View(order);
     }
 
     public List<OrderItem> CreateOrderItems(int orderId, List<OrderItem> cartItems)
