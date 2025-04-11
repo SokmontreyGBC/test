@@ -4,12 +4,14 @@ using Assignment1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Org.BouncyCastle.Crypto.Engines;
 
 
 namespace Assignment1.Controllers;
 //[Route ("[controller]/[action]")]
+[Authorize]
 public class ProductController: Controller
 {
     private readonly ApplicationDbContext _context;
@@ -72,7 +74,8 @@ public class ProductController: Controller
         }
      
     }
-
+    
+   
     [HttpGet]
     public IActionResult Create()
     {

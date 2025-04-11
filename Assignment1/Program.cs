@@ -29,6 +29,11 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Error/Unauthorized"; // ⚠ This replaces the login page!
+});
+
 var app = builder.Build();
 
 app.UseStatusCodePagesWithReExecute("/Error/{0}");
