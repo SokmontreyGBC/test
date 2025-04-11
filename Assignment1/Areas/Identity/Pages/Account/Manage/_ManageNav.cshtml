@@ -1,46 +1,31 @@
 @using Assignment1.Models
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-
 <div class="bg-white border card p-3 mb-4">
     <h5 class="font-monospace mb-3">Account Settings</h5>
     <div class="list-group font-monospace">
-        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.IndexNavClass(ViewContext))"
+        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.IndexNavClass(ViewContext) == "active" ? "bg-secondary bg-opacity-10" : "")"
            id="profile"
            asp-page="./Index">
             Profile
         </a>
-        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.EmailNavClass(ViewContext))"
+        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.EmailNavClass(ViewContext) == "active" ? "bg-secondary bg-opacity-10" : "")"
            id="email"
            asp-page="./Email">
             Email
         </a>
-        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.ChangePasswordNavClass(ViewContext))"
+        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.PhoneNavClass(ViewContext) == "active" ? "bg-secondary bg-opacity-10" : "")"
+           id="phone"
+           asp-page="./Phone">
+            Phone
+        </a>
+        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.ChangePasswordNavClass(ViewContext) == "active" ? "bg-secondary bg-opacity-10" : "")"
            id="change-password"
            asp-page="./ChangePassword">
             Password
-        </a>
-        @if (hasExternalLogins)
-        {
-            <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.ExternalLoginsNavClass(ViewContext))"
-               id="external-login"
-               asp-page="./ExternalLogins">
-                External logins
-            </a>
-        }
-        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext))"
-           id="two-factor"
-           asp-page="./TwoFactorAuthentication">
-            Two-factor authentication
-        </a>
-        <a class="list-group-item list-group-item-action border-0 @(ManageNavPages.PersonalDataNavClass(ViewContext))"
-           id="personal-data"
-           asp-page="./PersonalData">
-            Personal data
         </a>
     </div>
 </div>
