@@ -54,7 +54,7 @@ namespace Assignment1.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(ApplicationUser user)
         {
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var phoneNumber = user.PhoneNumber;
             
             PhoneNumber = phoneNumber;
 

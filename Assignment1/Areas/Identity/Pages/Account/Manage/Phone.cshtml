@@ -13,13 +13,8 @@
         <div asp-validation-summary="All" class="text-danger font-monospace small" role="alert"></div>
 
         <div class="mb-4">
-            <label class="form-label font-monospace">Current Phone Number</label>
-            <input type="text" class="form-control font-monospace" value="@Model.PhoneNumber" readonly disabled/>
-        </div>
-
-        <div class="mb-4">
             <label asp-for="Input.NewPhoneNumber" class="form-label font-monospace">New Phone Number</label>
-            <input asp-for="Input.NewPhoneNumber" class="form-control font-monospace" placeholder="Enter new phone number" />
+            <input asp-for="Input.NewPhoneNumber" class="form-control font-monospace" value="@Model.PhoneNumber" />
             <span asp-validation-for="Input.NewPhoneNumber" class="text-danger font-monospace small"></span>
         </div>
 
