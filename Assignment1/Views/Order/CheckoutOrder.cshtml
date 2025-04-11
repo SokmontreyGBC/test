@@ -1,25 +1,24 @@
-﻿@*
-$1$ @model User #1#
+﻿@model List<OrderItem>
 
 @{
     ViewBag.Title = "title";
     Layout = "_Layout";
 
-    decimal cost = 0;
-    foreach (var items in ViewBag.OrderItems)
-        cost += items.Product.ProductPrice * items.Quantity;
+    var cost = Model.Sum(items =>
+        items.Product!.ProductPrice * items.Quantity);
 }
-<div class="d-flex flex-row gap-4">
+
+<div class="d-flex flex-column gap-4">
     <div class="flex-grow-1 bg-white border p-4 card">
         <h3 class="font-monospace">Order Summary</h3>
         <br>
-        @foreach (var items in ViewBag.OrderItems)
+        @foreach (var items in Model)
         {
             <div class="card mb-3 border ">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <h5 class="font-monospace">@items.Product.ProductName</h5>
+                            <h5 class="font-monospace">@items.Product!.ProductName</h5>
                             <p class="small mb-0 font-monospace text-muted">@items.Product.ProductDescription</p>
                         </div>
                         <div class="text-end">
@@ -37,28 +36,42 @@ $1$ @model User #1#
     </div>
 
     <div class="flex-grow-1 bg-white border p-4 card">
-        <h3 class="font-monospace">Guest Checkout</h3>
-        <form asp-controller="Order" asp-action="CheckoutOrder" method="post">
-            <div class="mb-3">
-                <label asp-for="UserName" class="form-label font-monospace">Name</label>
-                <input asp-for="UserName" class="form-control font-monospace" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                $1$<label asp-for="UserEmail" class="form-label font-monospace">Email</label>
-                <input asp-for="UserEmail" class="form-control font-monospace" />
-                <span asp-validation-for="UserEmail" class="text-danger"></span>#1#
-            </div>
-            <div class="d-flex gap-2">
-                <a asp-controller="Client" asp-action="Index" class="btn btn-outline-dark w-50 font-monospace">Go Back</a>
-                <button type="submit" class="btn btn-dark w-50 font-monospace">Place Order</button>
-            </div>
+        <h3 class="font-monospace">Account</h3>
+        <br>
+
+        <div class="d-flex flex-column gap-2">
+            @if (ViewBag.User != null)
+            {
+                <div class="card mb-3 border">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="font-monospace">User Information</h5>
+                                <p class="small mb-0 font-monospace">Email: @ViewBag.User.Identity?.Name</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <form class="d-flex flex-row gap-2 mt-4"
+              asp-controller="Order"
+              asp-action="CheckoutConfirm"
+              method="post">
+            <a asp-controller="Client"
+               asp-action="Index"
+               class="btn btn-outline-dark w-100 font-monospace">
+                Go Back
+            </a>
+            <button type="submit" class="btn btn-dark font-monospace w-100">
+                Place Order
+            </button>
         </form>
     </div>
 </div>
 
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }
-*@

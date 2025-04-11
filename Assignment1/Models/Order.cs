@@ -7,8 +7,11 @@ public class Order
     [Key]
     public int OrderId { get; set; }
     public OrderStatus OrderStatus { get; set; }
-    public int UserId { get; set;}
+    public string UserId { get; set; } = null!;
     public DateTime OrderDate { get; set; }
-    // public User? User { get; set; }
+
+    // Navigation Properties
+
+    public ApplicationUser? User { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 }
