@@ -93,10 +93,11 @@ namespace Assignment1.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.NewPhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.NewPhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                user.PhoneNumber = Input.NewPhoneNumber;
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
                 {
-                    StatusMessage = "Error: Unexpected error when trying to set phone number.";
+                    StatusMessage = "Error: Unexpected error when trying to update phone number.";
                     return RedirectToPage();
                 }
             }
