@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Http.Features
-@model ApplicationUser
+@* @model User *@
 
 @{
     ViewBag.Title = "Order Confirmation";
@@ -7,9 +7,7 @@
     decimal cost = 0;
     foreach (var items in ViewBag.OrderItems)
         cost += items.Product.ProductPrice * items.Quantity;
-
-    // Get the shipping address from TempData
-    var shippingAddress = TempData["ShippingAddress"] != null ? TempData["ShippingAddress"].ToString() : "Address not provided";
+    
 }
 
 <div class="container-fluid p-0 mt-5 mb-5">
@@ -23,21 +21,27 @@
                 <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
                     <table class="table table-borderless">
                         <tbody>
-                        <tr>
-                            <td>
-                                <div class="py-2">
-                                    <span class="d-block text-muted font-monospace">Order Date</span>
-                                    <span class="font-monospace">@DateTime.Now.ToString("MMMM dd, yyyy")</span>
-                                </div>
-                            </td>
-                            <td></td>
-                            <td>
-                                <div class="py-2">
-                                    <span class="d-block text-muted font-monospace">Shipping Address</span>
-                                    <span class="font-monospace">@shippingAddress</span>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    <div class="py-2">
+                                        <span class="d-block text-muted font-monospace">Order Date</span>
+                                        <span class="font-monospace">@DateTime.Now.ToString("MMMM dd, yyyy")</span>
+                                    </div>
+                                </td>
+                                @* <td> *@
+                                @*     <div class="py-2"> *@
+                                @*         <span class="d-block text-muted font-monospace">Order No</span> *@
+                                @*         <span class="font-monospace">To be inserted later</span> *@
+                                @*     </div> *@
+                                @* </td> *@
+                                <td></td>
+                                <td>
+                                    <div class="py-2">
+                                        <span class="d-block text-muted font-monospace">Shipping Address</span>
+                                        <span class="font-monospace">Generic 123 Street, K1K 1K1</span>
+                                    </div>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -47,20 +51,20 @@
                         @foreach (var item in ViewBag.OrderItems)
                         {
                             <tbody>
-                            <tr>
-                                <td width="60%">
-                                    <span class="fw-bold font-monospace h5">@item.Product.ProductName</span>
-                                    <div class="product-qty">
-                                        <span class="d-block font-monospace">@item.Product.ProductDescription</span>
-                                        <span class="font-monospace">Quantity: @item.Quantity</span>
-                                    </div>
-                                </td>
-                                <td width="20%">
-                                    <div class="text-end">
-                                        <span class="fw-bold font-monospace">$@item.Product.ProductPrice</span>
-                                    </div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td width="60%">
+                                        <span class="fw-bold font-monospace h5">@item.Product.ProductName</span>
+                                        <div class="product-qty">
+                                            <span class="d-block font-monospace">@item.Product.ProductDescription</span>
+                                            <span class="font-monospace">Quantity: @item.Quantity</span>
+                                        </div>
+                                    </td>
+                                    <td width="20%">
+                                        <div class="text-end">
+                                            <span class="fw-bold font-monospace">$@item.Product.ProductPrice</span>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         }
                     </table>
@@ -70,18 +74,18 @@
                     <div class="col-md-5">
                         <table class="table table-borderless">
                             <tbody class="totals">
-                            <tr>
-                                <td>
-                                    <div class="text-start">
-                                        <span class="text-muted font-monospace">Total</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="text-end">
-                                        <span class="font-monospace">$@cost</span>
-                                    </div>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>
+                                        <div class="text-start">
+                                            <span class="text-muted font-monospace">Total</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="text-end">
+                                            <span class="font-monospace">$@cost</span>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
